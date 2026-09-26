@@ -95,8 +95,9 @@ Exact candidate evidence must establish what was actually run. The API reference
 covers all 17 modules and 54 native display sites, including classes, constructors
 and fields; it is distinct from a complete private/generated proof inventory.
 Full release proof/rights review and measured build/check resource evidence remain
-separate requirements, not passes inferred from these commands. See the guide
-for performance expectations and limits.
+separate requirements, not passes inferred from these commands. The guide's
+[build and audit baseline](docs/Guide.md#build-and-audit-resource-baseline) gives
+measured costs, environment/cache context and explicitly qualified planning estimates.
 
 ## References, credit and development status
 

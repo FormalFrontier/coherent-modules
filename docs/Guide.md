@@ -76,9 +76,46 @@ historical public axiom list is intentionally not a private/generated proof cens
 This docs-only assembly preserves every Lean file and dependency pin from accepted
 development revision `91e1a1e8881ef55c045b3a5eb5285875be21a00d`.
 
+### Build and audit resource baseline
+
+The first-release baseline below was measured on September 25, 2026, using
+Lean `v4.34.0-rc2` (compiler `6a10ac8c22beadecabdbb0919c2b50214762f91d`),
+mathlib `83abb3e776bdefcbc447a1e44d0debe4010039e5` and the nine-package
+`lake-manifest.json`. All 17 Lean files and three Lean/Lake configuration inputs
+here are byte-identical to measured source revision
+`91e1a1e8881ef55c045b3a5eb5285875be21a00d`; documentation-only changes do not
+represent another benchmark. The Linux worker had a reported 15 GiB runtime memory
+limit. Build and proof processes set `LEAN_NUM_THREADS=1` and `LAKE_JOBS=1`;
+the cache-verification process left these variables unset. CPU model, clock and storage throughput
+were not recorded, so this is a workload baseline, not a hardware-normalized rate.
+
+| Workload | Observed result and scope |
+| --- | --- |
+| `lake --wfail build` | 24.865 seconds wall time, with matching mathlib cache installed and no previous project outputs; all 17 library/test modules built. Largest child maximum RSS was 1,328,464 KiB, not aggregate process-tree or machine memory. |
+| Matching-cache verification | 5.336 seconds for `lake exe cache get` **after** successful installation/download. This is not the time for a first download. |
+| Separate stored-proof audit | One nonempty project module per process: 150 raw declarations, 141 stored bodies and nine structural items in total. Maximum sampled cgroup working memory was 8,252,477,440 bytes (about 7.69 GiB), and anonymous memory 4,714,618,880 bytes (about 4.39 GiB); these are shared cgroup measurements, not per-process RSS. Imported dependencies were byte-bound, not proof-rechecked. |
+
+For planning, expect **tens of seconds to a few minutes** for this project's
+default build once the matching dependency cache is ready on a comparable worker;
+this range is an estimate, not another measurement or a guaranteed upper bound.
+Initial downloads/decompression require additional network time and disk space;
+their cold-install cost was not measured by the cache-verification receipt.
+Keep the default library and test targets enabled. Follow the README's cache-first
+commands; do not silently replace a failed cache fetch with a mathlib source build.
+
+The separate audit used a 15 GiB environment with per-process safety stops at
+11 GiB cgroup working memory, 10 GiB anonymous memory or 720 seconds. Use that
+environment and conservative sequential scheduling as a starting budget if
+reproducing the audit; these limits are not a proven minimum or sufficient bound
+for another machine or larger library. Working memory means
+`max(0, memory.current - inactive_file)`, sampled every 0.25 seconds. Some runs
+recorded `memory.events:max` increments (up to 718); measured OOM/kill increments
+were zero. The baseline therefore does not establish an unconstrained memory
+peak or absence of limit pressure. A normal build is not this separate audit.
+
 This is proof-oriented infrastructure; it promises no efficient executable
 algorithm or runtime complexity. Build/check cost depends on the pinned compiler,
-dependency cache, machine and selected audit. Exact measured command receipts
-belong to release evidence, not a portable performance guarantee. The library
+dependency cache, machine and selected audit. These existing measurements provide
+standalone planning guidance, not a portable performance guarantee. The library
 does not yet supply a general coherent-sheaf theory or claim complete coverage
 of any mathematical source. See the root README for review and release status.
