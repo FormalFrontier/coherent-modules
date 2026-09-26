@@ -1,0 +1,17 @@
+{
+  "IsCoherentRing.toIsCoherent": "The typeclass instance extracts coherence of the ring as a module over itself from the coherent-ring property.",
+  "IsCoherentRing.coherent": "This class-field projection returns the stored coherence proof for the ring viewed as its own module.",
+  "IsCoherentRing.mk": "The constructor packages coherence of the ring as a module over itself into the coherent-ring property. Its native source range is the class declaration.",
+  "Module.IsCoherent.toFinite": "The typeclass instance extracts finite generation from a coherent module; no coherent-ring hypothesis is required.",
+  "Module.IsCoherent.finitePresentation_submodule": "This field of the coherence property supplies finite presentation of a submodule when a proof of finite generation of that submodule is given.",
+  "Module.IsCoherent.finite": "This class-field projection extracts the finite-generation component of the coherence property.",
+  "Module.IsCoherent.mk": "The constructor packages finite generation and finite presentation of every finitely generated submodule. Its native source range is the class declaration, not a separate source-level mk definition.",
+  "ModuleCat.isCoherentIsClosedUnderFiniteProducts": "The coherent-module object property is closed under finite products, using the binary-product and zero-object instances. The base ring need not be coherent.",
+  "ModuleCat.isCoherentIsClosedUnderBinaryProducts": "A binary product of coherent objects of ModuleCat is coherent. This closure is part of the inherited full-subcategory construction.",
+  "ModuleCat.isCoherentIsClosedUnderCokernels": "Cokernels of morphisms between coherent ModuleCat objects remain coherent, by the quotient-by-range construction.",
+  "ModuleCat.isCoherentIsClosedUnderKernels": "Kernels of morphisms between coherent ModuleCat objects remain coherent, using the underlying linear-map kernel and its categorical comparison.",
+  "ModuleCat.isCoherentContainsZero": "The coherent-module object property contains a zero object, represented here by the subsingleton module PUnit.",
+  "ModuleCat.isCoherentIsClosedUnderIsomorphisms": "An isomorphism in ModuleCat transports coherence through its underlying linear equivalence.",
+  "IsUniversallyCoherent.isCoherentRing": "This field returns coherence of a finitely presented commutative algebra in the class's specified target universe. The target universe is independent of the base-ring universe.",
+  "IsUniversallyCoherent.mk": "The constructor packages coherence of every finitely presented commutative algebra in the chosen target universe. Its native source range is the class declaration."
+}

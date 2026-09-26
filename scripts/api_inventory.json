@@ -1,0 +1,488 @@
+{
+  "CoherentModuleCat": {
+    "display_kind": "abbrev",
+    "doc_sha256": "711701e2a51923d631cb715d965459774716683302051f519482ac1cf3df766b",
+    "end": 110,
+    "header_sha256": "d159bdc18ca56149a80ccae93e32bea16082f3b1eb140bdf81415549055f29f1",
+    "kind": "def",
+    "module": "CoherentModules.ModuleCat",
+    "start": 105
+  },
+  "IsCoherentRing": {
+    "display_kind": "class",
+    "doc_sha256": "34514d8122f2531e2e49a0d1accbccc6b910ea1505bd4d8ff2f488597df7abbe",
+    "end": 289,
+    "header_sha256": "2bea08bf71bb7b6753fe17391392a94fd25f5f87c16247c9173baa720592720c",
+    "kind": "class",
+    "module": "CoherentModules.Basic",
+    "start": 287
+  },
+  "IsCoherentRing.coherent": {
+    "display_kind": "theorem",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 289,
+    "header_sha256": "b6bc284ac0f503e0dcf02cfc6c27dbfb371189e1d68e06c8d8e85038f3e30d88",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 289
+  },
+  "IsCoherentRing.mk": {
+    "display_kind": "constructor",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 289,
+    "header_sha256": "0ca9bf8bb8654720bae39c3161a2c2036e8e0d7cf230f83c58300ba83aa12e6f",
+    "kind": "ctor",
+    "module": "CoherentModules.Basic",
+    "start": 287
+  },
+  "IsCoherentRing.of_isNoetherian": {
+    "display_kind": "instance",
+    "doc_sha256": "8df44e7056bdcb821a41ed293622be5b9bf62219570efde7f0423a85c7f0f7c4",
+    "end": 297,
+    "header_sha256": "6a87c8057c00b1163bca64f600fa84f632ce010568d34f38de5513f7c9606cd6",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 294
+  },
+  "IsCoherentRing.toIsCoherent": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 292,
+    "header_sha256": "0527e6f6ab3438ff4b0651474262fba67a541a54b08f7ef82cdb1804aba84a3d",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 291
+  },
+  "IsUniversallyCoherent": {
+    "display_kind": "class",
+    "doc_sha256": "1aa537b06f8244f561c2b1faf223ac95097b13aabc3f41b5c7c238b54cd4de48",
+    "end": 38,
+    "header_sha256": "29dfd789aba3fff555bf3a03540ebc0173cc80f8c4160c135419f21e43beb226",
+    "kind": "class",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 31
+  },
+  "IsUniversallyCoherent.isCoherentRing": {
+    "display_kind": "theorem",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 37,
+    "header_sha256": "bbbadecb95629847d8da81b2b0a3f79516eeb7f81244a475495892e4a917a67b",
+    "kind": "theorem",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 37
+  },
+  "IsUniversallyCoherent.isCoherentRing_of_algEquiv": {
+    "display_kind": "theorem",
+    "doc_sha256": "ac6a4c50bef27fea3e13645734d1f2a1fba64fafac333376c9e60f11b9eef789",
+    "end": 54,
+    "header_sha256": "335f491ca33975a7244be5935c37fa018166d3ea7ac640a72d64b47f9815c553",
+    "kind": "theorem",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 47
+  },
+  "IsUniversallyCoherent.mk": {
+    "display_kind": "constructor",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 38,
+    "header_sha256": "0f6d170f3b397f4f57690fb56ce4c7cbd396abf3b9242ebe095adc8f68e4e875",
+    "kind": "ctor",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 31
+  },
+  "IsUniversallyCoherent.of_isNoetherian": {
+    "display_kind": "instance",
+    "doc_sha256": "8a811f7d0aff57e64d659615a16ea88ec71087b1a18ce00edf925dc48355e189",
+    "end": 62,
+    "header_sha256": "413245b1f1cc6503da1bbed3f4e2169c35371f8cece2f163d259d4a935508510",
+    "kind": "instance",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 56
+  },
+  "IsUniversallyCoherent.toIsCoherentRing": {
+    "display_kind": "instance",
+    "doc_sha256": "a4a4b6aeb62ead5b8d0de41a37d797a1735e1082152d54e5c43491505e72df54",
+    "end": 45,
+    "header_sha256": "d4b0892eb1fa62a02f91e5590a41ca6fbe17cacc3c080d13930ee7c848d12cd8",
+    "kind": "instance",
+    "module": "CoherentModules.UniversallyCoherent",
+    "start": 42
+  },
+  "Module.FinitePresentation.isCoherent": {
+    "display_kind": "theorem",
+    "doc_sha256": "5f0d103ffc27e41c1d7d84e9e0f79b7c3d6108382808b6615355bdb77ea376a7",
+    "end": 51,
+    "header_sha256": "8e32df85b82dc437ebe86177b4551e8ea9ad3aed844670c0c5c64b29b783d99a",
+    "kind": "theorem",
+    "module": "CoherentModules.FinitePresentation",
+    "start": 44
+  },
+  "Module.FinitePresentation.ker": {
+    "display_kind": "theorem",
+    "doc_sha256": "adc73e88e620f6f8b7be12d60021c21170e8e9b62409f52f1653f0f213f3eddd",
+    "end": 61,
+    "header_sha256": "1a3c2a5519fc3853860746b44cb546c3de0a9eaa578460d9317d5412843b4ffc",
+    "kind": "theorem",
+    "module": "CoherentModules.FinitePresentation",
+    "start": 53
+  },
+  "Module.FinitePresentation.of_exact_five": {
+    "display_kind": "theorem",
+    "doc_sha256": "2a8eb525d79d6d6a4e5888f8e1e44e504463fae2e7d49036fd5cefbf55a9b535",
+    "end": 99,
+    "header_sha256": "2014b1c3e731d36e65e25ca9e65325eb1a19f4848ec5a55e4927301c3af8f8b8",
+    "kind": "theorem",
+    "module": "CoherentModules.FinitePresentation",
+    "start": 63
+  },
+  "Module.IsCoherent": {
+    "display_kind": "class",
+    "doc_sha256": "84e5913e59ba80faeb54722f51f21cf8906a12ccbcd794fc90d5a392b88cc539",
+    "end": 47,
+    "header_sha256": "42196a0ae9912d79ec7b4d64596bce7df3f1427ee0913d665645f659d94eb8ce",
+    "kind": "class",
+    "module": "CoherentModules.Basic",
+    "start": 42
+  },
+  "Module.IsCoherent.away": {
+    "display_kind": "theorem",
+    "doc_sha256": "cb3c7fb8121386c7f461a3b0e23abcbd5905365bcf67f438f6b3482efa08f581",
+    "end": 95,
+    "header_sha256": "4d97b7a8b6a7620e511983efe8a5e7510e8546edd03b0f3531557d5d97769cdf",
+    "kind": "theorem",
+    "module": "CoherentModules.Localization",
+    "start": 90
+  },
+  "Module.IsCoherent.cokernel": {
+    "display_kind": "theorem",
+    "doc_sha256": "e1808460f759629a98941d27de99d01bdef56eeccfb29870c7444ce379d52d50",
+    "end": 200,
+    "header_sha256": "fe6e03c1d020aba50be7e6c5be3d1c3bdd71dd21f6d1feef433ec2559016f680",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 196
+  },
+  "Module.IsCoherent.equiv_iff": {
+    "display_kind": "theorem",
+    "doc_sha256": "109fb54d4a1595d66852a61281926b2f04439f9eb25efc703d4e62f971f0bd3a",
+    "end": 218,
+    "header_sha256": "ee641cc996ca0e7d56f4055df9befc0a40f97432a29566bf29e36ba81c1571d5",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 215
+  },
+  "Module.IsCoherent.finite": {
+    "display_kind": "theorem",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 45,
+    "header_sha256": "ef14a0e0f82927688ec8fcf36300cff37e9ee52d8700b33adbd3363499eab4ad",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 45
+  },
+  "Module.IsCoherent.finitePresentation_ker": {
+    "display_kind": "theorem",
+    "doc_sha256": "f080c92e8d9e31eb6613b02e9eb96415af1aa4e8919df9e4a459095adbda0920",
+    "end": 163,
+    "header_sha256": "63c730eb805c84497b9a2c345d6c5bc20e766a08f152eff03e9d19ca59fed259",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 158
+  },
+  "Module.IsCoherent.finitePresentation_submodule": {
+    "display_kind": "theorem",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 46,
+    "header_sha256": "9f107efb91ad0e9ba13b0f5d1da47de818304262ca7228ec178e4882f5afed81",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 46
+  },
+  "Module.IsCoherent.iff_finite_and_fg_ker": {
+    "display_kind": "theorem",
+    "doc_sha256": "2cc6f82ae3b34bfcea0b921aa7b07ea9ffdef7075a5b417251a43d5765315f09",
+    "end": 85,
+    "header_sha256": "968d0c5258ca9ce7dd3f8feffc72f3415e7972e0479820b8aac0a1d9aecff66a",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 61
+  },
+  "Module.IsCoherent.ker": {
+    "display_kind": "theorem",
+    "doc_sha256": "deaca3eddbcbca64f08f070960c2186f8630e79823a65b606d55cbdca8f558d2",
+    "end": 156,
+    "header_sha256": "779890c560f014d6c735a5c628ef40e22142102f3cf47cbfd4b1c21f8d78152d",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 147
+  },
+  "Module.IsCoherent.linearMap": {
+    "display_kind": "theorem",
+    "doc_sha256": "6695f671c231519dc222467729ad2455a0c0685576e39a431a84f87b94559085",
+    "end": 48,
+    "header_sha256": "02198d464c72506ce63697ba362752fb6d1af3cdf4209695c0356c42c3d06326",
+    "kind": "theorem",
+    "module": "CoherentModules.Hom",
+    "start": 32
+  },
+  "Module.IsCoherent.localizedModule": {
+    "display_kind": "instance",
+    "doc_sha256": "6a07c926d7d374508f5c05484268f8b256d8164dd65d93f155b00871f59aa134",
+    "end": 88,
+    "header_sha256": "d34601369c744830531d15236531bfcf5ac059e6cd1f81105f233744eb3f7495",
+    "kind": "instance",
+    "module": "CoherentModules.Localization",
+    "start": 83
+  },
+  "Module.IsCoherent.mk": {
+    "display_kind": "constructor",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 47,
+    "header_sha256": "6560ceb0e99a0afdd40ade2c0f9fbce8138fe821db236f109431aec67c6ad988",
+    "kind": "ctor",
+    "module": "CoherentModules.Basic",
+    "start": 42
+  },
+  "Module.IsCoherent.of_equiv": {
+    "display_kind": "theorem",
+    "doc_sha256": "768fe00ccf353252f6925a6f56b051a9f9c599dbba3596498b36780f536665e4",
+    "end": 213,
+    "header_sha256": "6e7f90852dcae857abbe4051f9046d8dd229e6d82534d536b4a6b1a851810444",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 202
+  },
+  "Module.IsCoherent.of_exact": {
+    "display_kind": "theorem",
+    "doc_sha256": "8f056908f0e9da3a6fd35dfa792ea2d8603b816bbb6bf20ab83df082075cb7d5",
+    "end": 145,
+    "header_sha256": "4057d0635dce9150abb7759d2c79f01b928674205201054f1db660b2f4c541cd",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 107
+  },
+  "Module.IsCoherent.of_free": {
+    "display_kind": "theorem",
+    "doc_sha256": "2c519820ac1410befff58d27c5907048abd62949ee1ee43c18ce305b37e68952",
+    "end": 313,
+    "header_sha256": "86083a526c115969f16057e09ffdbd2dec7fe454f2e4a63d2d2d5764cc4e5997",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 308
+  },
+  "Module.IsCoherent.of_isLocalizedModule": {
+    "display_kind": "theorem",
+    "doc_sha256": "9da078d94f94716bf31103255bd48c2f7c34d2dc32e32d2136ab397ee7849d62",
+    "end": 81,
+    "header_sha256": "3d22d19ce9753b88ffd9afff87abd5de667c0122eff50c9e8b475c55d9808201",
+    "kind": "theorem",
+    "module": "CoherentModules.Localization",
+    "start": 40
+  },
+  "Module.IsCoherent.of_isNoetherian": {
+    "display_kind": "instance",
+    "doc_sha256": "0c27102fa70ea6936d5cf793c853a953faabccf16ddc0edca0e1491cdf70a6d0",
+    "end": 232,
+    "header_sha256": "6fed1926f48e1d62bb77ab2a1a5084b7118e4276384325aa9f2d97600d88ff3c",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 226
+  },
+  "Module.IsCoherent.of_localizationSpan": {
+    "display_kind": "theorem",
+    "doc_sha256": "cea8bf41926705539afbf30d76aa3a9704c0d20750774936ab9759dc3a45e15e",
+    "end": 135,
+    "header_sha256": "5fcd256e1a7ccd236967e59c033d5878bdb8d10c3191327effc3d99a0282b1e7",
+    "kind": "theorem",
+    "module": "CoherentModules.Localization",
+    "start": 126
+  },
+  "Module.IsCoherent.of_localizationSpan'": {
+    "display_kind": "theorem",
+    "doc_sha256": "6a6672a91ddd4603ad95e901e0475f16977086663494120a8b855a5a4c2432f5",
+    "end": 124,
+    "header_sha256": "0ddb69e96bc9cfb3220595609ff92fd46a385c32ea76363911d971dd9d2ba87d",
+    "kind": "theorem",
+    "module": "CoherentModules.Localization",
+    "start": 97
+  },
+  "Module.IsCoherent.of_subsingleton": {
+    "display_kind": "instance",
+    "doc_sha256": "7e70e50d037da5c20d6a63b66a0dce23b2164f50a404927389886a3631e39557",
+    "end": 224,
+    "header_sha256": "ebf3684fe7bb67dc5fcf1fe18ff4f07a6817512f30bbf7723dd1473bc3ae4a5a",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 220
+  },
+  "Module.IsCoherent.pi": {
+    "display_kind": "instance",
+    "doc_sha256": "3b6bb974c98826763f971eb32df2075f5eac3c6bc5c2a34e9692682697907e87",
+    "end": 277,
+    "header_sha256": "efd99063aab64cf6db73adfaea18d40329690775997a9d9b6f06aa921098d15c",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 270
+  },
+  "Module.IsCoherent.prod": {
+    "display_kind": "instance",
+    "doc_sha256": "c977be03f0165314b1d8990b4111f7d0600e8a9ce4a71bca0ca6342f7437a3ec",
+    "end": 266,
+    "header_sha256": "5068cd2da913e32cb3370b62468dfb5ba68052180cb385e00756e929403216bf",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 234
+  },
+  "Module.IsCoherent.quotient": {
+    "display_kind": "theorem",
+    "doc_sha256": "ed1a9ec85cedf6a8d5d6e60e95e621fada4fb741df5fcb1c8c78e230ac5589ed",
+    "end": 194,
+    "header_sha256": "8f742e203863647419ae1c7b66770e800f9bc9f2a63cb1ae2c7e703cb9827c4b",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 165
+  },
+  "Module.IsCoherent.range": {
+    "display_kind": "theorem",
+    "doc_sha256": "2056a6044cac99b5da87504a3a349bc813b3b736a28ddad1c0768c84563cb069",
+    "end": 105,
+    "header_sha256": "1334664e37cd295e271c04b679cf91a18cea98d0cf0889e56e88c4cd0bfe48e2",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 101
+  },
+  "Module.IsCoherent.submodule": {
+    "display_kind": "theorem",
+    "doc_sha256": "68c049b1f879755e55b0792abef04dd14a98a6542ce0869e1bec28395b5bc234",
+    "end": 99,
+    "header_sha256": "ec4960a5e38c47cff5afb6b94e8dd0b0a662414e8091daeb9eb89bc72c949bed",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 87
+  },
+  "Module.IsCoherent.tensorProduct": {
+    "display_kind": "theorem",
+    "doc_sha256": "90c249a99b8f2d8c310beca431993325a922400bf081d22882decd49eb5a1899",
+    "end": 51,
+    "header_sha256": "b7a123dc5d72676fd35fb80129f104b75a7492be68aa63954d43a04234f2353f",
+    "kind": "theorem",
+    "module": "CoherentModules.TensorProduct",
+    "start": 35
+  },
+  "Module.IsCoherent.toFinite": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 52,
+    "header_sha256": "ba2484584d39ba41c2c410eadfefa519fac0823e79dbd7cc1ed8d7d232e3c2f5",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 51
+  },
+  "Module.IsCoherent.toFinitePresentation": {
+    "display_kind": "instance",
+    "doc_sha256": "e821f6a6eb92e0d4fa8557a95131a51323bb239fc3cdf075a45bb1230be721e3",
+    "end": 59,
+    "header_sha256": "9cab10a04150b4318e61a2f95c836732ff9fbf8356d971a2eb638526bb952fbc",
+    "kind": "instance",
+    "module": "CoherentModules.Basic",
+    "start": 54
+  },
+  "Module.finitePresentation_ker_of_free": {
+    "display_kind": "theorem",
+    "doc_sha256": "87bc7f512df3fe89e297c851617bc279bac0215619520d344314073a4cd375a7",
+    "end": 324,
+    "header_sha256": "c5cdeb8c211227e207457fc7ae34b5ef695f35a4136afa7510781630d694a8f7",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 315
+  },
+  "Module.isCoherent_iff_finitePresentation": {
+    "display_kind": "theorem",
+    "doc_sha256": "a1adbb82cd7731b8a59da3c25bae640ee5238311b1e469afc000f186fcf27062",
+    "end": 114,
+    "header_sha256": "99b0be65a9ac057826cbdd27ccf1bc750c65bf333cad6947c2a7bed53ea4a7ce",
+    "kind": "theorem",
+    "module": "CoherentModules.FinitePresentation",
+    "start": 103
+  },
+  "ModuleCat.isCoherent": {
+    "display_kind": "def",
+    "doc_sha256": "df40feaa8c32dc83619f3405dfc4f502fdc504eca9f02a49aaf8c4126b38570b",
+    "end": 39,
+    "header_sha256": "567c207f6e49fd4399c647b8dc1034f23031543155412fbd96c13fd3cbd277cc",
+    "kind": "def",
+    "module": "CoherentModules.ModuleCat",
+    "start": 37
+  },
+  "ModuleCat.isCoherentContainsZero": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 58,
+    "header_sha256": "63e060b892809008113e16a00606a440805ad80dba4a2be600ea572f87ff64e5",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 53
+  },
+  "ModuleCat.isCoherentIsClosedUnderBinaryProducts": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 97,
+    "header_sha256": "78b924ba629d1d0eaec9a298c4f1b199b2faab116aac1e98610a296f38a60b63",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 84
+  },
+  "ModuleCat.isCoherentIsClosedUnderCokernels": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 82,
+    "header_sha256": "3c62c74c277c15279abf147f070637acdcbc3260ad9a2884d22468f679f3e908",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 71
+  },
+  "ModuleCat.isCoherentIsClosedUnderFiniteProducts": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 101,
+    "header_sha256": "247a21b28d891c43b2ad6125e5f151d1e004c63b47185ea519784f5ee29cb3bd",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 99
+  },
+  "ModuleCat.isCoherentIsClosedUnderIsomorphisms": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 51,
+    "header_sha256": "87e57514554b63f64c9c21ff0b1e265d5a136104d7497355ccec26ccf7172155",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 47
+  },
+  "ModuleCat.isCoherentIsClosedUnderKernels": {
+    "display_kind": "instance",
+    "doc_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "end": 69,
+    "header_sha256": "53e4ffde2cde920e626c2f4a3a72a740d4596b3da2710903ba42a06c56fe73f7",
+    "kind": "instance",
+    "module": "CoherentModules.ModuleCat",
+    "start": 60
+  },
+  "ModuleCat.isCoherent_iff": {
+    "display_kind": "theorem",
+    "doc_sha256": "4797699959ade65f5b79c289aaf22c0474dc427a1a05cd016fd728bce6c708a1",
+    "end": 45,
+    "header_sha256": "8cd53aabddde45e02582bd284a8cb0bbc836d86c04f7384718901e25858b2eb0",
+    "kind": "theorem",
+    "module": "CoherentModules.ModuleCat",
+    "start": 42
+  },
+  "isCoherentRing_iff": {
+    "display_kind": "theorem",
+    "doc_sha256": "158936d935e9cc004a11f5a91d691c3113e5883ca959e6dca043003c991a8191",
+    "end": 306,
+    "header_sha256": "9ac3c4cb85ee0d6122df0646d47172b6878d3e5e28a3b15aaadac810da244416",
+    "kind": "theorem",
+    "module": "CoherentModules.Basic",
+    "start": 299
+  }
+}

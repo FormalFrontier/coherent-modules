@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/v0.4.schema.json
+version: "v0.4"
+
+project:
+  name: "coherent-modules"
+  description: >-
+    Coherent rings and modules, finite-presentation criteria, exact-sequence
+    closure, localization and descent, coherent-module categories, universal
+    coherence, and Hom and tensor-product closure in Lean.
+  authors:
+    - "Formal Frontier Agents"
+  responsible_maintainers:
+    - "Formal Frontier source-maintainer team"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Coherent rings, coherent modules and finite presentation"
+    type: "folklore"
+    relationship: "independently-proves"
+    note: >-
+      Classical mathematical constructions using native mathlib modules,
+      finite presentations, exactness, localization and category theory.
+      No mathematical novelty or human-author endorsement is claimed.
+  - title: "Foundations of Rigid Geometry I"
+    authors:
+      - "Kazuhiro Fujiwara"
+      - "Fumiharu Kato"
+    id: "https://arxiv.org/abs/1308.4734v5"
+    type: "book"
+    relationship: "background"
+    note: >-
+      Motivating coherent-ring/module mathematics. Exact passage correspondence,
+      additional source hypotheses and remaining gaps are recorded separately;
+      this metadata makes no source-coverage or whole-source completion claim.
+
+related_formalizations:
+  - id: "https://github.com/leanprover-community/mathlib4"
+    relationship: "builds-on"
+    note: >-
+      Native module, finite-presentation, localization, tensor and category APIs
+      at revision 83abb3e776bdefcbc447a1e44d0debe4010039e5,
+      with Lean v4.34.0-rc2 and the complete pinned Lake dependency graph.
+
+automation:
+  methods:
+    - method: "agent"
+      tool_setup: >-
+        Formal Frontier AI agents using Lean, Lake, Git and Hive for original
+        development, independent agent review, assembly and maintenance.
+  notes: >-
+    Substantive candidates are authored and independently reviewed by different
+    agent executions. Actual original contributions and execution identities
+    are retained in the development review records and standalone docs/CREDITS.md.
+    Unverified model identities, costs and performance claims are omitted.
+
+status:
+  scope: >-
+    Reusable coherence and finite-presentation results with each declaration's
+    actual Ring or CommRing hypotheses and independent module universes.
+    Universal coherence explicitly records its target-algebra universe.
+    Hom/tensor closure remains theorem-based, with a finitely presented first
+    argument and coherent second argument. No nontriviality or nonzero-module
+    assumptions, complete theory, source coverage or official release is asserted.
+
+review:
+  status: "other: revision-specific independent development reviews recorded below"
+  notes: >-
+    Accepted development main 91e1a1e8881ef55c045b3a5eb5285875be21a00d
+    contains independently reviewed units from PRs 2, 4, 6, 8, 10, 12, 14, 15,
+    17, 19 and 21, and the module/example/readiness assembly from PR 23.
+    The latter has independent Worker B review 2994 on candidate
+    65a847d9d5af897a565cd1890d6adfdba44289dc, Task
+    hive-request-33afb8038b543442d6213ad2b87a864726f542f8,
+    UID bfd2f5e0-0632-4e41-a559-2167231e6b06; owner acceptance 40452,
+    integration 40468 and main verification 40474 are separate records.
+    Earlier tensor review 2596 is pinned to candidate
+    98c41bc53252be6557ebcd473ecc5ed066eff78a, Worker B Task
+    hive-request-256e6036ef3a8fcd38927dc107afd72afd501410,
+    UID 03cc84eb-12a9-43f4-a0ae-a83f1427edd9. That bounded review is not
+    approval of later changes. The documentation/license/metadata assembly retains
+    all 17 Lean sources and three configuration/pin inputs from that accepted main.
+    The named historical reviews did not assess this later assembly. Full-release
+    acceptance must bind an exact artifact and its applicable independent semantic,
+    proof, rights, documentation and artifact review; it is distinct from
+    promotion or publication. This metadata does not self-certify those decisions.
+
+acknowledgements: >-
+  Lean and mathlib authors for the proof assistant and native infrastructure;
+  Anchor and the attributed Formalization Worker A and B executions for original
+  development, review and later adaptations. Collective project credit does not
+  identify a copyright holder or clear third-party material for redistribution.
