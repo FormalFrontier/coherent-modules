@@ -45,13 +45,12 @@ automation:
   methods:
     - method: "agent"
       tool_setup: >-
-        Formal Frontier AI agents using Lean, Lake, Git and Hive for original
-        development, independent agent review, assembly and maintenance.
+        Formal Frontier AI agents using Lean, Lake and Git for development,
+        assembly, review and maintenance.
   notes: >-
-    Substantive candidates are authored and independently reviewed by different
-    agent executions. Actual original contributions and execution identities
-    are retained in the development review records and standalone docs/CREDITS.md.
-    Unverified model identities, costs and performance claims are omitted.
+    Original project contributions and upstream/tooling provenance are summarized
+    in docs/CREDITS.md. Review and verification apply to exact revisions; AI-agent
+    participation does not imply human peer review or source-author endorsement.
 
 status:
   scope: >-
@@ -60,32 +59,20 @@ status:
     Universal coherence explicitly records its target-algebra universe.
     Hom/tensor closure remains theorem-based, with a finitely presented first
     argument and coherent second argument. No nontriviality or nonzero-module
-    assumptions, complete theory, source coverage or official release is asserted.
+    assumptions or complete source coverage is asserted.
 
 review:
-  status: "other: revision-specific independent development reviews recorded below"
+  status: "other: revision-specific independent AI-agent review"
   notes: >-
-    Accepted development main 91e1a1e8881ef55c045b3a5eb5285875be21a00d
-    contains independently reviewed units from PRs 2, 4, 6, 8, 10, 12, 14, 15,
-    17, 19 and 21, and the module/example/readiness assembly from PR 23.
-    The latter has independent Worker B review 2994 on candidate
-    65a847d9d5af897a565cd1890d6adfdba44289dc, Task
-    hive-request-33afb8038b543442d6213ad2b87a864726f542f8,
-    UID bfd2f5e0-0632-4e41-a559-2167231e6b06; owner acceptance 40452,
-    integration 40468 and main verification 40474 are separate records.
-    Earlier tensor review 2596 is pinned to candidate
-    98c41bc53252be6557ebcd473ecc5ed066eff78a, Worker B Task
-    hive-request-256e6036ef3a8fcd38927dc107afd72afd501410,
-    UID 03cc84eb-12a9-43f4-a0ae-a83f1427edd9. That bounded review is not
-    approval of later changes. The documentation/license/metadata assembly retains
-    all 17 Lean sources and three configuration/pin inputs from that accepted main.
-    The named historical reviews did not assess this later assembly. Full-release
-    acceptance must bind an exact artifact and its applicable independent semantic,
-    proof, rights, documentation and artifact review; it is distinct from
-    promotion or publication. This metadata does not self-certify those decisions.
+    Review and acceptance are recorded for exact revisions in the project's
+    maintained release records. Changes require independent review and
+    applicable build, proof-integrity, rights and provenance evidence before
+    acceptance; this field does not certify any arbitrary checkout or replace
+    that evidence. AI-agent review is not human peer review, legal certification,
+    source-author endorsement or complete source formalization.
 
 acknowledgements: >-
   Lean and mathlib authors for the proof assistant and native infrastructure;
-  Anchor and the attributed Formalization Worker A and B executions for original
-  development, review and later adaptations. Collective project credit does not
-  identify a copyright holder or clear third-party material for redistribution.
+  Anchor and other Formal Frontier AI-agent contributors for original development,
+  review and later adaptations. Collective author credit does not identify a
+  copyright holder or itself resolve third-party redistribution rights.

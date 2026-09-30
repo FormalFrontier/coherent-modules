@@ -7,9 +7,9 @@ The aggregate and nine test/audit modules are included in the complete
 The test modules are not re-exported by `CoherentModules`.
 
 Read the [mathematical guide](Guide.md) for hypotheses and usage and
-[CREDITS.md](CREDITS.md) for provenance. Native display sites are not the complete
+[CREDITS.md](CREDITS.md) for provenance. Native display sites are not a complete
 kernel-declaration inventory: private examples, helpers and generated declarations
-also belong to the separate raw/stored-proof audit.
+also require complete transitive standard-axiom checking for acceptance.
 
 ## Preserved information
 
@@ -27,13 +27,40 @@ whole class declaration. Twelve additional nonprivate raw names, such as generat
 recursors, have no native display site; the separate proof inventory accounts for
 them rather than inventing documentation signatures.
 
-This release ships Markdown, source links and JSON provenance, not the native HTML
+This library ships Markdown, source links and JSON provenance, not the native HTML
 website, JavaScript, styles, fonts, search or dependency documentation. No external
 documentation host is required to read its own API. Historical native source URLs
-are checked as exact strings, not claimed to be live public web links. All shipped
-API source links are relative to this same checkout.
+use the original analyzed development revision and are checked as exact strings,
+not claimed to be live public web links. The [historical release snapshot](https://github.com/FormalFrontier/coherent-modules/tree/15f0ec72ac0fc053e4243d856c56add4e06b29ce)
+provides source navigation for all original inputs when that repository is
+accessible; the API's source links are relative to this same checkout. Current
+source-range targets remain valid because the subsequent eight header edits
+preserve the line count, but the eight *source-byte hashes* differ. This is
+not evidence of native generation on the current candidate.
 
-## Native reproduction
+## Historical native reproduction
+
+The [frozen manifest](api-manifest.json) records native generation against
+development revision `91e1a1e8881ef55c045b3a5eb5285875be21a00d`. Its 20
+source/pin hashes, three tooling-input hashes and generated-API digest also
+matched the complete independent public-release snapshot at
+`15f0ec72ac0fc053e4243d856c56add4e06b29ce`. To reproduce this **historical**
+binding, check out exactly that public-release commit in a *separate* clone,
+not this header-modified successor:
+
+```sh
+git clone https://github.com/FormalFrontier/coherent-modules.git coherent-api-snapshot
+cd coherent-api-snapshot
+git checkout --detach 15f0ec72ac0fc053e4243d856c56add4e06b29ce
+```
+
+This GitHub history is independent of the analyzed development revision; if the
+original object is absent, the adapter requires exact equality of all 20
+manifest source/pin hashes rather than pretending native generation took place
+at the public-release commit. The native URLs still name the original revision.
+Do not run this recipe on the header-modified successor and claim it reproduced
+the frozen manifest: eight source-file hashes differ even though their `module`
+lines onward and all historical source-line targets are unchanged.
 
 Use a separate unchanged doc-gen4 checkout at
 `97d4ecdfc8e09e7f511724c25e303d448de6a3db`, including its committed manifest,
@@ -73,8 +100,12 @@ repository, full revision, module-specific path and recorded bounded range.
 `api-manifest.json` binds all 17 source files and three configuration/pin files,
 module paths, tool/source revisions, three adapter/inventory/note hashes, canonical
 native-record hashes, exact display names and the generated API hash. Documentation-
-only successors can reuse native evidence through exact equality of all 20 inputs.
-Changed mathematical sources or pins require renewed affected native checks.
+only successors can reuse native evidence through exact equality of all 20 inputs;
+this successor's eight header changes do **not** meet that byte-equality condition.
+The remaining nine Lean files, three pins and three tooling inputs remain unchanged.
+Renew affected native checks before claiming an updated manifest or native
+reproduction of this successor; the frozen reference and manifest are intentionally
+not silently retargeted or regenerated here.
 
 When the historical source commit exists, the adapter compares every input against
 that Git object. A parentless public release need not contain development history.

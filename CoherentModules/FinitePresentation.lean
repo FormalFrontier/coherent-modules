@@ -1,7 +1,7 @@
 /-
 SPDX-License-Identifier: Apache-2.0
 Authors: Formal Frontier Agents
-Contributors: Formalization Worker A, Formalization Worker B
+Contributors: Formal Frontier AI agents
 -/
 module
 

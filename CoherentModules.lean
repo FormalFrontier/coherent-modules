@@ -1,7 +1,7 @@
 /-
 SPDX-License-Identifier: Apache-2.0
 Authors: Formal Frontier Agents
-Contributors: Anchor and the attributed formalization-worker executions
+Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 

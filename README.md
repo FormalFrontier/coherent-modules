@@ -1,139 +1,97 @@
 # coherent-modules
 
-Reusable Lean theory of coherent rings and modules, finite presentation,
-localization and closure constructions.
+Reusable Lean library for coherent modules and rings, finite presentation,
+localization, and closure constructions. Import `CoherentModules` for all seven
+mathematical leaves; the nine test modules are separate. See the [mathematical
+guide](docs/Guide.md), [API reference](docs/API.md), [API provenance](docs/README.md)
+and [credits](docs/CREDITS.md). Original project contributions are distributed
+under [Apache-2.0](LICENSE).
 
-Authors: Formal Frontier Agents. Original project contributions are licensed
-under [Apache-2.0](LICENSE). Review evidence is revision-specific; the historical
-development records below do not certify later artifacts or complete source
-formalization. Release tags are deferred. Read the [mathematical guide](docs/Guide.md), complete
-[native API reference](docs/API.md), [generation instructions](docs/README.md) and
-[contributor/provenance record](docs/CREDITS.md).
+Authors: Formal Frontier Agents
 
-## Mathematical scope
+## Headline results
 
-A module is coherent when it is finitely generated and each finitely generated
-submodule is finitely presented. The library characterizes coherence by finitely
-generated kernels of maps from finite-rank free modules and proves closure under
-finitely generated submodules, linear equivalences, finite products, kernels,
-quotients by finitely generated submodules, cokernels and extensions.
+- **Coherent modules and kernels.** [`Module.IsCoherent`](CoherentModules/Basic.lean)
+  means finite generation together with finite presentation of every finitely
+  generated submodule. [`Module.IsCoherent.iff_finite_and_fg_ker`](CoherentModules/Basic.lean)
+  characterizes this by finitely generated kernels of *all* linear maps from
+  finite-rank free modules, including rank zero. The same leaf proves closure
+  under finitely generated submodules, finite products, kernels and cokernels,
+  quotients by finitely generated submodules, and extensions (with the stated
+  exactness and endpoint conditions).
+- **Finite presentation over coherent rings.** [`Module.isCoherent_iff_finitePresentation`](CoherentModules/FinitePresentation.lean)
+  identifies the two properties over an `IsCoherentRing R`, yielding finite
+  presentation of kernels between finitely presented modules. The
+  [`of_exact_five` criterion](CoherentModules/FinitePresentation.lean) gives finite
+  presentation of `M₃` in `M₁ → M₂ → M₃ → M₄ → M₅` when the sequence is exact
+  at `M₂`, `M₃`, `M₄`, `M₁` is finite, and `M₂`, `M₄`, `M₅` are finitely
+  presented. It requires neither endpoint injectivity nor surjectivity.
+- **Localization and descent.** [`of_isLocalizedModule`](CoherentModules/Localization.lean)
+  transports coherence along an arbitrary commutative-ring/module localization
+  realized by its universal property, not a surjective map. The
+  [`of_localizationSpan'` theorem](CoherentModules/Localization.lean) descends
+  coherence from localizations away from a family whose ideal span is `⊤`.
+- **Hom, tensor, and categories.** [`linearMap`](CoherentModules/Hom.lean) and
+  [`tensorProduct`](CoherentModules/TensorProduct.lean) make the Hom module and
+  tensor product coherent when the first argument is finitely presented and
+  the second coherent. Neither theorem assumes a coherent or Noetherian base;
+  they are not global instances. [`CoherentModuleCat`](CoherentModules/ModuleCat.lean)
+  is a transparent full subcategory with abelian structure obtained through
+  generic category constructions.
+- **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
+  asserts coherence for finitely presented commutative algebras in an independently
+  chosen target universe; the library derives base coherence at `v = u` and
+  supplies the Noetherian case.
 
-Over a coherent ring, finite presentation is equivalent to coherence. Kernels of
-maps between finitely presented modules are then finitely presented. A five-term
-sequence exact at its three middle terms gives finite presentation of the middle
-module when the first module is finite and the second, fourth and fifth are
-finitely presented; no exactness at either endpoint is required.
+The foundation, finite-presentation and category results allow arbitrary `Ring`;
+localization, Hom, tensor and universal coherence use `CommRing`. Module carrier
+universes are independent where stated. Zero rings/modules, empty indexing sets
+and rank-zero finite free modules are not excluded. Consult the linked source
+statements and [guide](docs/Guide.md) for exact hypotheses. This is not a
+coherent-sheaf theory or a claim to formalize an entire source.
 
-Over a commutative ring, localization preserves coherence, and coherence descends
-from localizations away from a set spanning the unit ideal. Linear maps from a
-finitely presented module to a coherent module form a coherent module. The tensor
-product of a finitely presented left factor and a coherent right factor is also
-coherent. The Hom and tensor results are theorems, not automatic instances, and
-do not assume that the base ring itself is coherent or Noetherian.
+## Use and verification
 
-The library constructs the abelian full subcategory `CoherentModuleCat R` of
-`ModuleCat R`. It also defines universally coherent commutative rings with an
-explicit target-algebra universe and proves the Noetherian case.
+For `[CommRing R]`, `[Module.FinitePresentation R M]` and
+`[Module.IsCoherent R N]`, apply `Module.IsCoherent.linearMap` to `M →ₗ[R] N`
+or `Module.IsCoherent.tensorProduct` to `M ⊗[R] N`. The
+[Hom](CoherentModulesTest/Hom.lean), [tensor](CoherentModulesTest/TensorProduct.lean),
+[category](CoherentModulesTest/ModuleCat.lean) and
+[finite-presentation](CoherentModulesTest/FinitePresentationZero.lean) clients
+include degenerate cases.
 
-The foundation, finite-presentation and category APIs retain arbitrary `Ring`;
-the localization, Hom, tensor and universal-coherence interfaces use `CommRing`.
-Module carrier universes are independent where stated. In
-`IsUniversallyCoherent.{u, v} R`, `u` is the base-ring universe and `v` is the
-target-algebra universe; coherence of the base itself uses the `v = u` instance.
-Zero rings/modules and empty/rank-zero finite free modules are not excluded.
-Always consult the declaration type for its exact assumptions.
-
-## Public entry points
-
-Use `import CoherentModules` for the full public API, or import a subject leaf.
-The root re-exports all seven leaves; examples are kept in a separate test library.
-
-| Leaf (prefix `CoherentModules.`) | Representative public API |
-| --- | --- |
-| `Basic` | `Module.IsCoherent`, `IsCoherentRing`, `Module.IsCoherent.iff_finite_and_fg_ker`, `Module.IsCoherent.of_exact` |
-| `FinitePresentation` | `Module.FinitePresentation.isCoherent`, `Module.isCoherent_iff_finitePresentation`, `Module.FinitePresentation.ker`, `Module.FinitePresentation.of_exact_five` |
-| `Hom` | `Module.IsCoherent.linearMap` |
-| `Localization` | `Module.IsCoherent.of_isLocalizedModule`, `Module.IsCoherent.of_localizationSpan'` and their canonical specializations |
-| `ModuleCat` | `ModuleCat.isCoherent`, `CoherentModuleCat` and the inherited abelian structure |
-| `TensorProduct` | `Module.IsCoherent.tensorProduct` |
-| `UniversallyCoherent` | `IsUniversallyCoherent`, `IsUniversallyCoherent.isCoherentRing_of_algEquiv` |
-
-For example, given `[CommRing R]`, modules `M` and `N`,
-`[Module.FinitePresentation R M]` and `[Module.IsCoherent R N]`, use
-`Module.IsCoherent.linearMap` for `M →ₗ[R] N` or
-`Module.IsCoherent.tensorProduct` for `M ⊗[R] N`. No additional coherence instance
-for `R` is needed. The tracked examples exercise these exact interfaces as well as
-degenerate cases. They use stable private declarations so their proof bodies can
-be checked without becoming a second public API.
-
-## Build and checks
-
-Use elan with the exact `lean-toolchain`: `leanprover/lean4:v4.34.0-rc2`.
-The direct mathlib revision is
-`83abb3e776bdefcbc447a1e44d0debe4010039e5`; `lake-manifest.json` pins the complete
-nine-package dependency graph. No other Formal Frontier deliverable or source
-research checkout is required. The Lake package version is not an official tag.
-
-Fetch the matching cache successfully before building; a failed fetch must not
-silently become a full mathlib source rebuild:
+The exact `lean-toolchain` is `leanprover/lean4:v4.34.0-rc2`; mathlib is pinned
+at `83abb3e776bdefcbc447a1e44d0debe4010039e5`, with the resolved dependency
+graph in `lake-manifest.json`. No source-research checkout or other Formal
+Frontier deliverable is a dependency. Fetch the matching precompiled mathlib
+cache successfully before building; do not silently rebuild mathlib from source
+if the fetch fails:
 
 ```sh
 lake exe cache get
 lake --wfail build
 ```
 
-The default build includes both `CoherentModules` and `CoherentModulesTest`.
-The latter reaches all nine tracked test/audit files. They can also be built with
-`lake --wfail build CoherentModulesTest`. Individual files can be checked with,
-for example, `lake env lean -DwarningAsError=true CoherentModulesTest/Basic.lean`.
+The default build covers the aggregate and all nine test modules. For an
+individual test, run `lake env lean -DwarningAsError=true CoherentModulesTest/Basic.lean`.
+The 39 `#print axioms` checks in
+[`CoherentModulesTest/Axioms.lean`](CoherentModulesTest/Axioms.lean) are a historical
+*selected public* list, not a complete transitive axiom audit. Acceptance requires
+an applicable successful build and a complete transitive check including private
+and generated declarations; only `propext`, `Classical.choice` and `Quot.sound`
+are allowed. The [guide's measured cost baseline](docs/Guide.md#build-and-audit-resource-baseline)
+is historical and qualified, not a present-day resource guarantee.
 
-The historical public audit selects 39 declarations, including one imported
-category construction. Named example checks supplement that list; neither is a
-complete inventory of public, private or generated declarations. A successful
-build or `-T0` elaboration is not a compatible separate stored-body proof recheck.
-Exact candidate evidence must establish what was actually run. The API reference
-covers all 17 modules and 54 native display sites, including classes, constructors
-and fields; it is distinct from a complete private/generated proof inventory.
-Full release proof/rights review and measured build/check resource evidence remain
-separate requirements, not passes inferred from these commands. The guide's
-[build and audit baseline](docs/Guide.md#build-and-audit-resource-baseline) gives
-measured costs, environment/cache context and explicitly qualified planning estimates.
+## References and credit
 
-## References, credit and development status
-
-These are classical coherent-ring/module constructions, implemented using Lean and
-mathlib's native modules, finite presentations, exact sequences, localizations,
-tensor products and full subcategories. Background includes Kazuhiro Fujiwara and
-Fumiharu Kato, *Foundations of Rigid Geometry I*,
-[arXiv:1308.4734v5](https://arxiv.org/abs/1308.4734v5). No source PDF or substantial
-source excerpt is bundled. Detailed passage correspondence and coverage belong
-to source-metadata repositories, not to this library's public interface.
-
-Formal Frontier AI agents developed and reviewed this library. Anchor contributed
-the original coherent-module foundation, kernel closure and universal-coherence
-units and coordinates integration. Attributed Worker B executions contributed the
-finite-free characterization, quotient/category construction and exact-five
-criterion. Attributed Worker A executions contributed localization/descent, the
-finite-presentation bridge, extension closure, Hom and tensor closure. Later
-assembly retains and adapts those contributions; collective credit does not erase
-the original contributor record or assert legal copyright ownership.
-
-The exact original candidates and execution identities are preserved in the
-standalone [credits](docs/CREDITS.md); detailed development review records are
-retained separately by the project.
-Worker identities denote separate AI executions, not human authors or reviewers.
-No human peer review, mathematical novelty or source-author endorsement is claimed.
-
-Accepted development revision `91e1a1e8881ef55c045b3a5eb5285875be21a00d` includes
-those units and the independently reviewed module/example/readiness assembly
-(review 2994, acceptance 40452, integration 40468 and main verification 40474).
-All 17 Lean files and three dependency/configuration inputs are unchanged here.
-The recorded development review did not assess the later documentation/license/
-metadata assembly. Full-release acceptance must bind the exact artifact and its
-applicable independent review; public-API semantics, complete proof integrity,
-rights/provenance, documentation and promotion are separate decisions. Historical
-unsupported project-owner labels were corrected with their origins recorded;
-history and actual contributor credit are preserved, not replaced by another owner.
-
-See `formalization.yaml` for the bounded project self-report. Schema validity is
-not mathematical, legal or release certification.
+These classical constructions use Lean and mathlib's modules, exact sequences,
+localization, tensor products and categorical infrastructure. Mathematical
+background includes Kazuhiro Fujiwara and Fumiharu Kato,
+[*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5).
+No source PDF or substantial excerpt is bundled; this citation does not assert
+complete source correspondence or endorsement. Anchor contributed the original
+foundation, kernel closure and universal-coherence units and coordinated
+integration; other Formal Frontier AI agents contributed the subsequent
+constructions, tests and independent reviews. See [credits](docs/CREDITS.md)
+for mathematical and tooling provenance. No legal copyright owner is inferred
+from collective author credit.
