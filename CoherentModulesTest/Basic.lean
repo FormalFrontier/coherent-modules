@@ -5,8 +5,8 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules
-import Mathlib.Data.ZMod.Basic
+public import CoherentModules
+public import Mathlib.Data.ZMod.Basic
 
 /-!
 External-use checks for the foundational coherent-module API.
@@ -21,10 +21,12 @@ open Module
 private theorem finiteOfCoherent (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
     [Module.IsCoherent R M] : Module.Finite R M := inferInstance
 
-private theorem finitePresentationOfCoherent (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private theorem finitePresentationOfCoherent (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Module.IsCoherent R M] : Module.FinitePresentation R M := inferInstance
 
-private theorem finiteKernelCriterion (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M] :
+private theorem finiteKernelCriterion (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M] :
     Module.IsCoherent R M ↔
       Module.Finite R M ∧
         ∀ (n : ℕ) (f : (Fin n → R) →ₗ[R] M), (LinearMap.ker f).FG :=
@@ -35,13 +37,15 @@ private theorem finiteFreeKernel (R : Type u) [Ring R] (M : Type v) [AddCommGrou
     (LinearMap.ker f).FG :=
   (Module.IsCoherent.iff_finite_and_fg_ker.mp (inferInstance : Module.IsCoherent R M)).2 n f
 
-private theorem coherentOfFiniteKernels (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private theorem coherentOfFiniteKernels (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Module.Finite R M]
     (hker : ∀ (n : ℕ) (f : (Fin n → R) →ₗ[R] M), (LinearMap.ker f).FG) :
     Module.IsCoherent R M :=
   Module.IsCoherent.iff_finite_and_fg_ker.mpr ⟨inferInstance, hker⟩
 
-private theorem subsingletonCoherent (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private theorem subsingletonCoherent (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Subsingleton M] : Module.IsCoherent R M := inferInstance
 
 private theorem linearEquivalenceCriterion (R : Type u) [Ring R] (M : Type v) (N : Type w)
@@ -49,7 +53,8 @@ private theorem linearEquivalenceCriterion (R : Type u) [Ring R] (M : Type v) (N
     (e : M ≃ₗ[R] N) : Module.IsCoherent R M ↔ Module.IsCoherent R N :=
   Module.IsCoherent.equiv_iff e
 
-private theorem noetherianRingCoherent (R : Type u) [Ring R] [IsNoetherianRing R] : IsCoherentRing R := inferInstance
+private theorem noetherianRingCoherent (R : Type u) [Ring R] [IsNoetherianRing R] :
+    IsCoherentRing R := inferInstance
 
 private theorem productCoherent (R : Type u) [Ring R] (M : Type v) (N : Type w)
     [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
@@ -107,11 +112,13 @@ private theorem cokernelCoherent (R : Type u) [Ring R] (M : Type v) (N : Type w)
     Module.IsCoherent R (N ⧸ LinearMap.range f) :=
   Module.IsCoherent.cokernel f
 
-private theorem bottomQuotientCoherent (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private theorem bottomQuotientCoherent (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Module.IsCoherent R M] : Module.IsCoherent R (M ⧸ (⊥ : Submodule R M)) :=
   Module.IsCoherent.quotient ⊥ Submodule.fg_bot
 
-private theorem zeroMapCokernelCoherent (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private theorem zeroMapCokernelCoherent (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Module.IsCoherent R M] :
     Module.IsCoherent R (M ⧸ LinearMap.range (0 : PUnit →ₗ[R] M)) :=
   Module.IsCoherent.cokernel 0
@@ -148,11 +155,13 @@ private theorem zeroRingExtension : Module.IsCoherent (ZMod 1) (ZMod 1) :=
         exact Subsingleton.elim _ _)
     (fun _ _ _ ↦ Subsingleton.elim _ _) (fun y ↦ ⟨0, Subsingleton.elim _ y⟩)
 
-private theorem zeroRingFiniteKernel : (LinearMap.ker (0 : (Fin 0 → ZMod 1) →ₗ[ZMod 1] ZMod 1)).FG :=
+private theorem zeroRingFiniteKernel :
+    (LinearMap.ker (0 : (Fin 0 → ZMod 1) →ₗ[ZMod 1] ZMod 1)).FG :=
   (Module.IsCoherent.iff_finite_and_fg_ker.mp
     (inferInstance : Module.IsCoherent (ZMod 1) (ZMod 1))).2 0 0
 
-private theorem nonSurjectiveFiniteKernel :
+/-- A zero map from a rank-one free module has a finite kernel without being surjective. -/
+public theorem nonSurjectiveFiniteKernel :
     (LinearMap.ker (0 : (Fin 1 → ℤ) →ₗ[ℤ] ℤ)).FG ∧
       ¬Function.Surjective (0 : (Fin 1 → ℤ) →ₗ[ℤ] ℤ) := by
   constructor

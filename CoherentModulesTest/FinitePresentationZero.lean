@@ -5,8 +5,8 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules
-import Mathlib.Data.ZMod.Basic
+public import CoherentModules
+public import Mathlib.Data.ZMod.Basic
 
 /-!
 Zero-universe and subsingleton checks for the finite-presentation/coherence
@@ -28,7 +28,8 @@ private theorem zeroRingKernel : Module.FinitePresentation (ZMod 1)
       (0 : (Fin 0 → ZMod 1) →ₗ[ZMod 1] (Fin 0 → ZMod 1))) :=
   Module.FinitePresentation.ker 0
 
-private theorem zeroRingExactFive : Module.FinitePresentation (ZMod 1) PUnit.{1} := by
+/-- The exact-five criterion applies even when all five modules are over the zero ring. -/
+public theorem zeroRingExactFive : Module.FinitePresentation (ZMod 1) PUnit.{1} := by
   apply Module.FinitePresentation.of_exact_five
       (0 : PUnit.{1} →ₗ[ZMod 1] PUnit.{1}) (0 : PUnit.{1} →ₗ[ZMod 1] PUnit.{1})
       (0 : PUnit.{1} →ₗ[ZMod 1] PUnit.{1}) (0 : PUnit.{1} →ₗ[ZMod 1] PUnit.{1})

@@ -1,10 +1,12 @@
 # coherent-modules
 
 Reusable Lean library for coherent modules and rings, finite presentation,
-localization, and closure constructions. Import `CoherentModules` for all seven
-mathematical leaves; the nine test modules are separate. See the [mathematical
-guide](docs/Guide.md), [API reference](docs/API.md), [API provenance](docs/README.md)
-and [credits](docs/CREDITS.md). Original project contributions are distributed
+localization, closure constructions, finite square-zero extensions, and
+ideal-to-module transfer. Import `CoherentModules` for all nine mathematical
+leaves; the ten test modules are separate. See the [mathematical guide](docs/Guide.md),
+the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
+and [credits](docs/CREDITS.md). The finite-idealization declarations are linked
+to their current source below. Original project contributions are distributed
 under [Apache-2.0](LICENSE).
 
 Authors: Formal Frontier Agents
@@ -42,13 +44,34 @@ Authors: Formal Frontier Agents
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
   supplies the Noetherian case.
+- **Square-zero kernels and projection base change.** For a commutative semiring
+  `R` and an additive commutative `R`-module `M`,
+  [`TrivSqZeroExt.kerIdealLinearEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
+  identifies the projection kernel with `M`. If `M` is finite over `R`,
+  [`kerIdeal_finite`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean) makes the
+  kernel finite over the **whole extension**.
+  [`kerIdealBaseChange`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
+  identifies the projection-base-changed kernel with `M` **without** a finiteness
+  assumption; its pure-tensor and inverse formulas are simp lemmas.
+- **Finite-type ideal/module transfer.** Over a commutative base ring,
+  [`Ideal.ideal_property_iff_module_property`](CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
+  equates a property on all finitely generated ideals with one on all finite
+  modules over finite-type algebras. The property must be invariant under
+  compatible algebra/module isomorphisms and descend along **every** compatible
+  surjective square-zero algebra map for finite source modules. The base universe
+  is independent of the common algebra/module universe. Finite type does not
+  mean module-finite over the base, and arbitrary ideals need not be finitely
+  generated.
 
 The foundation, finite-presentation and category results allow arbitrary `Ring`;
-localization, Hom, tensor and universal coherence use `CommRing`. Module carrier
-universes are independent where stated. Zero rings/modules, empty indexing sets
-and rank-zero finite free modules are not excluded. Consult the linked source
-statements and [guide](docs/Guide.md) for exact hypotheses. This is not a
-coherent-sheaf theory or a claim to formalize an entire source.
+localization, Hom, tensor and universal coherence use `CommRing`. The square-zero
+kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the predicate
+transfer uses `CommRing` and `AddCommGroup`. No coherence or projectivity
+assumption is imposed on the new results. Module carrier universes are independent
+where stated. Zero rings/modules, empty indexing sets and rank-zero finite free
+modules are not excluded. Consult the linked source statements and
+[guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
+or a claim to formalize an entire source.
 
 ## Use and verification
 
@@ -58,7 +81,13 @@ or `Module.IsCoherent.tensorProduct` to `M ⊗[R] N`. The
 [Hom](CoherentModulesTest/Hom.lean), [tensor](CoherentModulesTest/TensorProduct.lean),
 [category](CoherentModulesTest/ModuleCat.lean) and
 [finite-presentation](CoherentModulesTest/FinitePresentationZero.lean) clients
-include degenerate cases.
+include degenerate cases. For the square-zero results, import
+`CoherentModules.Algebra.TrivSqZeroExt.Finite`; the ideal/module theorem is in
+`CoherentModules.RingTheory.Ideal.FiniteModuleTransfer`. Use
+`open scoped TrivSqZeroExt` for the canonical opposite and central scalar actions.
+The [finite-idealization client](CoherentModulesTest/Algebra/TrivSqZeroExt/Finite.lean)
+exercises finite nonfree torsion, zero modules, the semiring base-change formulas,
+and independently verified invariance and descent premises for predicate transfer.
 
 The exact `lean-toolchain` is `leanprover/lean4:v4.34.0-rc2`; mathlib is pinned
 at `83abb3e776bdefcbc447a1e44d0debe4010039e5`, with the resolved dependency
@@ -72,10 +101,10 @@ lake exe cache get
 lake --wfail build
 ```
 
-The default build covers the aggregate and all nine test modules. For an
+The default build covers the aggregate and all ten test modules. For an
 individual test, run `lake env lean -DwarningAsError=true CoherentModulesTest/Basic.lean`.
-The 39 `#print axioms` checks in
-[`CoherentModulesTest/Axioms.lean`](CoherentModulesTest/Axioms.lean) are a historical
+The 38 `#print axioms` checks in
+[`CoherentModulesTest/Axioms.lean`](CoherentModulesTest/Axioms.lean) are a
 *selected public* list, not a complete transitive axiom audit. Acceptance requires
 an applicable successful build and a complete transitive check including private
 and generated declarations; only `propext`, `Classical.choice` and `Quot.sound`

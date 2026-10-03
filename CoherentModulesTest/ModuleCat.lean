@@ -5,9 +5,9 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules
-import Mathlib.CategoryTheory.Abelian.Subcategory
-import Mathlib.Data.ZMod.Basic
+public import CoherentModules
+public import Mathlib.CategoryTheory.Abelian.Subcategory
+public import Mathlib.Data.ZMod.Basic
 
 /-!
 External-use checks for the coherent-module object property and its abelian
@@ -46,10 +46,12 @@ private theorem finiteProductClosure (R : Type u) [Ring R] :
   inferInstance
 
 @[instance_reducible]
-private noncomputable def abelianCategory (R : Type u) [Ring R] : Abelian (CoherentModuleCat.{u, v} R) :=
+private noncomputable def abelianCategory (R : Type u) [Ring R] :
+    Abelian (CoherentModuleCat.{u, v} R) :=
   inferInstance
 
-private noncomputable def coherentObject (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
+private noncomputable def coherentObject (R : Type u) [Ring R] (M : Type v)
+    [AddCommGroup M] [Module R M]
     [Module.IsCoherent R M] : CoherentModuleCat.{u, v} R :=
   ⟨ModuleCat.of R M, (ModuleCat.isCoherent_iff _).2 inferInstance⟩
 
@@ -95,7 +97,7 @@ private theorem objectPropertyReduction (R : Type u) [Ring R] (M : ModuleCat.{v}
     ModuleCat.isCoherent R M ↔ Module.IsCoherent R M := Iff.rfl
 
 /-- The public category abbreviation retains its underlying full subcategory. -/
-private theorem categoryReduction (R : Type u) [Ring R] :
+public theorem categoryReduction (R : Type u) [Ring R] :
     CoherentModuleCat.{u, v} R = (ModuleCat.isCoherent.{u, v} R).FullSubcategory := rfl
 
 -- Selected named-client axiom checks, not a complete release census.

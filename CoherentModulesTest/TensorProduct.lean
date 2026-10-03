@@ -5,7 +5,7 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules.TensorProduct
+public import CoherentModules.TensorProduct
 
 /-!
 # Tensor-product public-use examples
@@ -27,7 +27,9 @@ private theorem tensorCoherent (R : Type u) [CommRing R]
 private theorem integerTensor : Module.IsCoherent ℤ (ℤ ⊗[ℤ] ℤ) :=
   Module.IsCoherent.tensorProduct
 
-private theorem zeroRingIndependentUniverses : Module.IsCoherent (ZMod 1) (PUnit.{1} ⊗[ZMod 1] PUnit.{2}) :=
+/-- Tensor closure applies over the zero ring with independently sized module carriers. -/
+public theorem zeroRingIndependentUniverses :
+    Module.IsCoherent (ZMod 1) (PUnit.{1} ⊗[ZMod 1] PUnit.{2}) :=
   Module.IsCoherent.tensorProduct
 
 private theorem rankZeroTensor (R : Type u) [CommRing R]

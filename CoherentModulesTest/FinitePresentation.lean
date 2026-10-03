@@ -5,7 +5,7 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules
+public import CoherentModules
 
 /-!
 External-use checks for the finite-presentation/coherence bridge.
@@ -57,7 +57,7 @@ private theorem exactFivePresentation (R : Type u) [Ring R] [IsCoherentRing R]
   Module.FinitePresentation.of_exact_five f12 f23 f34 f45 h2 h3 h4
 
 /-- A nonzero five-term sequence with alternating identity and zero maps. -/
-private theorem alternatingIdentitySequence : Module.FinitePresentation ℤ ℤ := by
+public theorem alternatingIdentitySequence : Module.FinitePresentation ℤ ℤ := by
   apply Module.FinitePresentation.of_exact_five
       (LinearMap.id : ℤ →ₗ[ℤ] ℤ) 0
       (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (0 : ℤ →ₗ[ℤ] ℤ)

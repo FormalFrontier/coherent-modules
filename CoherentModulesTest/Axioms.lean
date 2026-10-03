@@ -10,8 +10,8 @@ import CoherentModules
 /-!
 # Selected public declaration axiom checks
 
-These 39 checks retain the historical selection, including one imported category
-construction. They are not a complete public/private/generated declaration audit.
+These 38 checks cover selected library declarations. They are not a complete
+public/private/generated declaration audit, including imported dependencies.
 -/
 
 #print axioms Module.IsCoherent.submodule
@@ -48,7 +48,6 @@ construction. They are not a complete public/private/generated declaration audit
 #print axioms ModuleCat.isCoherentIsClosedUnderBinaryProducts
 #print axioms ModuleCat.isCoherentIsClosedUnderFiniteProducts
 #print axioms CoherentModuleCat
-#print axioms CategoryTheory.ObjectProperty.instAbelianFullSubcategoryOfContainsZeroOfIsClosedUnderKernelsOfIsClosedUnderCokernelsOfIsClosedUnderFiniteProducts
 #print axioms IsUniversallyCoherent.isCoherentRing
 #print axioms IsUniversallyCoherent.toIsCoherentRing
 #print axioms IsUniversallyCoherent.isCoherentRing_of_algEquiv

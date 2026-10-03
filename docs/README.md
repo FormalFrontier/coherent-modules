@@ -1,10 +1,14 @@
 # API reference generation
 
-[API.md](API.md) documents all 54 native display sites in the seven mathematical
-leaves: classes, constructors, class fields, instances, definitions and theorems.
-The aggregate and nine test/audit modules are included in the complete
-17-module inventory even though they have no public native display sites.
-The test modules are not re-exported by `CoherentModules`.
+[API.md](API.md) is a frozen historical reference for 54 native display sites in
+seven mathematical leaves: classes, constructors, class fields, instances,
+definitions and theorems. Its original aggregate and nine test/audit modules
+belong to a historical 17-module inventory, not the current nine-leaf,
+ten-test-module library. The current
+[`TrivSqZeroExt` finite-kernel and base-change API](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
+and [`Ideal` finite-module transfer API](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
+are documented in their source files and the [mathematical guide](Guide.md),
+not in the frozen reference. Test modules are not re-exported by `CoherentModules`.
 
 Read the [mathematical guide](Guide.md) for hypotheses and usage and
 [CREDITS.md](CREDITS.md) for provenance. Native display sites are not a complete
@@ -13,8 +17,9 @@ also require complete transitive standard-axiom checking for acceptance.
 
 ## Preserved information
 
-The bounded adapter preserves all native visible header tokens, including implicit
-arguments and literal modifiers, normalizing whitespace only. It verifies each
+For the historical inventory, the bounded adapter preserves native visible
+header tokens, including implicit arguments and literal modifiers, normalizing
+whitespace only. It verifies each
 module/name/kind, signature hash, docstring hash and source range against the fixed
 inventory. Native pretty-printing depends on source namespaces, notation and type
 inference; displayed fragments are not promised to elaborate in isolation.
@@ -33,10 +38,11 @@ documentation host is required to read its own API. Historical native source URL
 use the original analyzed development revision and are checked as exact strings,
 not claimed to be live public web links. The [historical release snapshot](https://github.com/FormalFrontier/coherent-modules/tree/15f0ec72ac0fc053e4243d856c56add4e06b29ce)
 provides source navigation for all original inputs when that repository is
-accessible; the API's source links are relative to this same checkout. Current
-source-range targets remain valid because the subsequent eight header edits
-preserve the line count, but the eight *source-byte hashes* differ. This is
-not evidence of native generation on the current candidate.
+accessible; the API's relative source links point into this checkout for the
+original seven leaves. The earlier header edits preserved their source line
+counts but changed their *source-byte hashes*. Additional current source and
+configuration changes also differ from the historical snapshot. This is not
+evidence of native generation on the current library.
 
 ## Historical native reproduction
 
@@ -46,7 +52,7 @@ source/pin hashes, three tooling-input hashes and generated-API digest also
 matched the complete independent public-release snapshot at
 `15f0ec72ac0fc053e4243d856c56add4e06b29ce`. To reproduce this **historical**
 binding, check out exactly that public-release commit in a *separate* clone,
-not this header-modified successor:
+not the current library:
 
 ```sh
 git clone https://github.com/FormalFrontier/coherent-modules.git coherent-api-snapshot
@@ -58,9 +64,10 @@ This GitHub history is independent of the analyzed development revision; if the
 original object is absent, the adapter requires exact equality of all 20
 manifest source/pin hashes rather than pretending native generation took place
 at the public-release commit. The native URLs still name the original revision.
-Do not run this recipe on the header-modified successor and claim it reproduced
-the frozen manifest: eight source-file hashes differ even though their `module`
-lines onward and all historical source-line targets are unchanged.
+Do not run this recipe on the current library and claim it reproduced the frozen
+manifest: the earlier eight header edits changed eight source-file hashes, and
+the current aggregate imports, added modules and Lake options change more inputs.
+The original seven leaves still provide the linked historical source ranges.
 
 Use a separate unchanged doc-gen4 checkout at
 `97d4ecdfc8e09e7f511724c25e303d448de6a3db`, including its committed manifest,
@@ -68,7 +75,7 @@ with Lean `v4.34.0-rc2`. Build that core-only tool with `lake build doc-gen4`.
 Do not add it to this library or change the mathematical dependency pins.
 In the library checkout, first successfully fetch the matching mathlib cache and
 build all default targets as described in the root README. The following Bash
-commands require Python3 and all 17 built modules:
+commands require Python3 and all 17 historical built modules:
 
 ```sh
 docgen_executable=/absolute/path/to/doc-gen4
@@ -97,15 +104,15 @@ repository, full revision, module-specific path and recorded bounded range.
 
 ## Independent public history and data checks
 
-`api-manifest.json` binds all 17 source files and three configuration/pin files,
+`api-manifest.json` binds the original 17 source files and three configuration/pin files,
 module paths, tool/source revisions, three adapter/inventory/note hashes, canonical
-native-record hashes, exact display names and the generated API hash. Documentation-
-only successors can reuse native evidence through exact equality of all 20 inputs;
-this successor's eight header changes do **not** meet that byte-equality condition.
-The remaining nine Lean files, three pins and three tooling inputs remain unchanged.
-Renew affected native checks before claiming an updated manifest or native
-reproduction of this successor; the frozen reference and manifest are intentionally
-not silently retargeted or regenerated here.
+native-record hashes, exact display names and the generated API hash. Checkouts
+with unchanged inputs can reuse native evidence through exact equality of
+all 20 historical inputs; the current library has different source and Lake
+configuration inputs and **does not** meet that byte-equality condition. The
+frozen reference and manifest are not a current native-generation or complete-API
+claim. A new complete API reference would require its own reviewed inventory and
+native checks; the historical generated files remain unchanged.
 
 When the historical source commit exists, the adapter compares every input against
 that Git object. A parentless public release need not contain development history.

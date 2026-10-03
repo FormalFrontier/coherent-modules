@@ -6,7 +6,8 @@ project:
   description: >-
     Coherent rings and modules, finite-presentation criteria, exact-sequence
     closure, localization and descent, coherent-module categories, universal
-    coherence, and Hom and tensor-product closure in Lean.
+    coherence, Hom and tensor-product closure, finite square-zero kernels and
+    projection base change, and finite-type ideal/module transfer in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -19,7 +20,8 @@ sources:
     relationship: "independently-proves"
     note: >-
       Classical mathematical constructions using native mathlib modules,
-      finite presentations, exactness, localization and category theory.
+      finite presentations, exactness, localization, square-zero extensions,
+      tensor products and category theory.
       No mathematical novelty or human-author endorsement is claimed.
   - title: "Foundations of Rigid Geometry I"
     authors:
@@ -58,8 +60,14 @@ status:
     actual Ring or CommRing hypotheses and independent module universes.
     Universal coherence explicitly records its target-algebra universe.
     Hom/tensor closure remains theorem-based, with a finitely presented first
-    argument and coherent second argument. No nontriviality or nonzero-module
-    assumptions or complete source coverage is asserted.
+    argument and coherent second argument. Square-zero kernel and projection
+    base-change results hold over commutative semirings and additive commutative
+    modules; kernel finiteness requires a finite module, while base change does
+    not. Ideal/module predicate transfer is over finite-type algebras of a
+    commutative ring, assuming isomorphism invariance and descent along every
+    compatible surjective square-zero algebra map. The base universe is independent
+    of the common algebra/module universe. No coherence, projectivity,
+    nontriviality or nonzero-module assumption or complete source coverage is asserted.
 
 review:
   status: "other: revision-specific independent AI-agent review"

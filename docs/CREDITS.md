@@ -4,7 +4,7 @@ Authors: Formal Frontier Agents. Original project contributions are provided
 under the [Apache-2.0 license](../LICENSE). These are contributions by AI
 agents; collective author credit does not identify a legal copyright owner.
 No human peer review, source-author endorsement or mathematical novelty is
-implied. Review of a predecessor is not review of later changes.
+implied. Review applies to the exact version reviewed, not later changes.
 
 ## Mathematical work
 
@@ -14,23 +14,28 @@ standalone guide. Other Formal Frontier AI-agent contributors developed the
 finite-free kernel characterization, quotient and cokernel closure, coherent
 module category, localization and descent, finite-presentation bridge and
 exact-five criterion, extension closure, and Hom and tensor closure. The
-tracked examples, aggregate imports and subsequent adaptations are collective
-project work. The concise contributor lines in the Lean files credit that work
+finite square-zero kernel equivalence, whole-extension finiteness, projection
+base change and finite-type ideal/module transfer, together with their zero and
+torsion examples, are original Formal Frontier AI-agent contributions. The
+tracked examples, aggregate imports and adaptations are collective project work.
+The concise contributor lines in the Lean files credit that work
 without treating pooled execution identifiers as human names. Original
 revision-specific authorship and review records are maintained separately;
-this document neither transfers credit to the integrator nor declares this
-candidate reviewed.
+this document does not transfer credit to the integrator.
 
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from
 earlier Formal Frontier work in algebraic-direct-limits, itself adapted from
 ideal-completion, under the same original-project Apache-2.0 authorization.
-The adapter inventories seven mathematical leaves, an aggregate and nine
-test modules; it binds 54 native library display sites to source ranges and
-distinguishes 39 source docstrings from 15 authored API notes. The
-[reference](API.md) contains this project's native signatures, docstrings and
-notes rather than vendored documentation-site assets.
+The preserved historical adapter inventory covers seven mathematical leaves,
+an aggregate and nine test modules; it binds 54 native library display sites to
+source ranges and distinguishes 39 source docstrings from 15 authored API notes. The
+[reference](API.md) contains those historical native signatures, docstrings and
+notes rather than vendored documentation-site assets. The current
+[square-zero](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean) and
+[ideal/module transfer](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
+modules supply their own source documentation.
 
 Lean, mathlib and doc-gen4 are independent tools or dependencies; their
 authors and notices remain with their upstream projects and no dependency

@@ -5,8 +5,8 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
-import CoherentModules.Hom
-import Mathlib.Data.ZMod.Basic
+public import CoherentModules.Hom
+public import Mathlib.Data.ZMod.Basic
 
 /-!
 External-use checks for coherence of linear-map modules.
@@ -30,7 +30,8 @@ private theorem rankZeroLinearMap (R : Type u) [CommRing R]
   Module.IsCoherent.linearMap
 
 /-- The API remains valid over the zero ring, with source and target in independent universes. -/
-private theorem zeroRingIndependentUniverses : Module.IsCoherent (ZMod 1) (PUnit.{1} →ₗ[ZMod 1] PUnit.{2}) :=
+public theorem zeroRingIndependentUniverses :
+    Module.IsCoherent (ZMod 1) (PUnit.{1} →ₗ[ZMod 1] PUnit.{2}) :=
   Module.IsCoherent.linearMap
 
 -- Selected named-client axiom checks, not a complete release census.
