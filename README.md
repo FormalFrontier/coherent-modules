@@ -134,6 +134,20 @@ the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.le
 uses nonfinite free abelian groups in independent universes and an empty-index
 boundary.
 
+For the supporting surjection constructor, import
+`CoherentModules.RingTheory.Flat.FaithfullyFlat` and apply
+[`Module.FaithfullyFlat.of_surjective`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
+to `f : M →ₗ[R] N` and a proof of `Function.Surjective f`. It requires
+`[CommRing R]`, `[AddCommGroup M]`, `[AddCommGroup N]`, the two `R`-module
+structures, `[Module.Flat R M]` and `[Module.FaithfullyFlat R N]`, and concludes
+`Module.FaithfullyFlat R M`. The three universes are independent; no finiteness,
+projectivity, splitting or algebra structure is required. Source flatness,
+surjectivity and target faithful flatness are all material: faithful scalar
+action alone on the target does not suffice. The
+[surjection clients](CoherentModulesTest/RingTheory/Flat/FaithfullyFlat.lean)
+include a projection onto a nonfinite free abelian group, linear-equivalence
+transport, and the rational, empty-index and integer-torsion boundaries.
+
 ### Building and checking
 
 The exact `lean-toolchain` is `leanprover/lean4:v4.34.0-rc2`; mathlib is pinned

@@ -12,6 +12,7 @@ public import CoherentModules.FinitePresentation
 public import CoherentModules.Hom
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
+public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.TensorProduct
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.TensorProduct
