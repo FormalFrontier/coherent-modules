@@ -56,6 +56,13 @@ Authors: Formal Frontier Agents
   components need not individually be faithfully flat. The ring, index and
   carrier universes are independent, and empty indexing types are allowed.
   One faithfully flat component is sufficient when every component is flat.
+- **Families of principal localizations.** For a `CommRing R` and any family
+  `s : ι → R`,
+  [`Module.FaithfullyFlat.directSum_away_iff`](CoherentModules/RingTheory/Flat/Localization.lean)
+  characterizes faithful flatness of `⨁ i, Localization.Away (s i)` by
+  `Ideal.span (Set.range s) = ⊤`. The ring and index universes are independent;
+  neither finite nor nonempty indexing is required, and zero rings are allowed.
+  The localizations need not individually be faithfully flat.
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
@@ -142,6 +149,13 @@ faithful-flatness criterion, import `CoherentModules.RingTheory.Flat.TensorProdu
 the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.lean)
 uses nonfinite free abelian groups in independent universes and an empty-index
 boundary.
+
+For a family of principal localizations, import
+`CoherentModules.RingTheory.Flat.Localization` and apply
+`Module.FaithfullyFlat.directSum_away_iff R s`. The
+[integer localization examples](CoherentModulesTest/RingTheory/Flat/Localization.lean)
+include a jointly faithfully flat sum whose two components are not faithfully
+flat, reciprocal and quotient-tensor values, and empty-index boundaries.
 
 For the supporting surjection constructor, import
 `CoherentModules.RingTheory.Flat.FaithfullyFlat` and apply
