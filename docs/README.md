@@ -3,8 +3,7 @@
 [API.md](API.md) is a frozen historical reference for 54 native display sites in
 seven mathematical leaves: classes, constructors, class fields, instances,
 definitions and theorems. Its original aggregate and nine test/audit modules
-belong to a historical 17-module inventory, not the current nine-leaf,
-ten-test-module library. The current
+belong to a historical 17-module inventory, not the current library. The current
 [`TrivSqZeroExt` finite-kernel and base-change API](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
 and [`Ideal` finite-module transfer API](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
 are documented in their source files and the [mathematical guide](Guide.md),

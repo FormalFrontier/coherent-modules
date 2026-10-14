@@ -56,13 +56,51 @@ Authors: Formal Frontier Agents
   components need not individually be faithfully flat. The ring, index and
   carrier universes are independent, and empty indexing types are allowed.
   One faithfully flat component is sufficient when every component is flat.
+- **Finitely generated ideals and dependent products.** Over a `CommSemiring R`,
+  [`Submodule.smul_pi_of_fg`](CoherentModules/LinearAlgebra/Pi.lean) says that
+  multiplication by a finitely generated ideal commutes with the full dependent
+  product of submodules of additive commutative `R`-modules. The index type is
+  arbitrary, including empty, and the semiring, index and carrier universes are
+  independent.
+- **Faithful flatness of unital algebras.** For a `CommRing R` and a unital
+  `R`-algebra `A` whose underlying ring may be noncommutative,
+  [`Module.FaithfullyFlat.algebra_iff_flat_and_fg_proper_ideal`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
+  characterizes faithful flatness by flatness and
+  `I • (⊤ : Submodule R A) ≠ ⊤` for every finitely generated proper ideal `I`.
+  The algebra structure is material; this finitely generated ideal criterion
+  is not asserted for arbitrary modules.
+- **Faithfully flat products of algebras.** Over a `CommRing R`, for an arbitrary
+  dependent family of unital, possibly noncommutative `R`-algebras `A i`,
+  [`Module.FaithfullyFlat.pi_algebra_iff`](CoherentModules/RingTheory/Flat/Pi.lean)
+  characterizes faithful flatness of `Π i, A i` by flatness of the **whole
+  product** and a nontrivial fiber `(R ⧸ I) ⊗[R] A i` in some component for
+  every finitely generated proper ideal `I`. The detecting component may depend
+  on the ideal. Componentwise flatness cannot replace whole-product flatness,
+  and the components need not individually be faithfully flat. The ring, index
+  and carrier universes are independent, and empty products are allowed.
+- **Products of localizations at submonoids.** For a `CommRing R`, arbitrary
+  submonoids `S i` and commutative `R`-algebras `A i` realizing the localizations
+  at `S i`,
+  [`Module.FaithfullyFlat.pi_localization_iff`](CoherentModules/RingTheory/Flat/Localization.lean)
+  characterizes faithful flatness of `Π i, A i` by flatness of the **whole
+  product** and, for every finitely generated proper ideal `I`, disjointness
+  of `I` from some `S i`. These are products with the common diagonal `R`-action;
+  neither finite nor nonempty indexing is required, and zero rings are allowed.
 - **Families of principal localizations.** For a `CommRing R` and any family
   `s : ι → R`,
   [`Module.FaithfullyFlat.directSum_away_iff`](CoherentModules/RingTheory/Flat/Localization.lean)
   characterizes faithful flatness of `⨁ i, Localization.Away (s i)` by
-  `Ideal.span (Set.range s) = ⊤`. The ring and index universes are independent;
-  neither finite nor nonempty indexing is required, and zero rings are allowed.
-  The localizations need not individually be faithfully flat.
+  `Ideal.span (Set.range s) = ⊤`, without finite or nonempty indexing.
+  For **finite** index types,
+  [`Module.FaithfullyFlat.pi_away_iff`](CoherentModules/RingTheory/Flat/Localization.lean)
+  gives the same unit-span criterion for `Π i, Localization.Away (s i)`.
+  The localizations need not individually be faithfully flat; zero rings and
+  independent ring and index universes are allowed. The finite-index hypothesis
+  for the product unit-span criterion is essential: the
+  [coordinate-idempotent product](CoherentModulesTest/RingTheory/Flat/LocalizationProductInfinite.lean)
+  is faithfully flat although its generators span a proper ideal. The
+  [ideal-detection consequences](CoherentModulesTest/RingTheory/Flat/LocalizationProductCriteria.lean)
+  show that this ideal is not finitely generated.
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
@@ -99,8 +137,10 @@ localization, Hom, tensor and universal coherence use `CommRing`. The square-zer
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
 bimodule actions. The predicate transfer uses `CommRing` and `AddCommGroup`.
-No coherence or projectivity assumption is imposed on the new results. Module carrier universes are independent
-where stated. Zero rings/modules, empty indexing sets and rank-zero finite free
+The ideal/product identity uses `CommSemiring` and `AddCommMonoid`; the
+faithful-flatness criteria use `CommRing` and require no coherence or projectivity
+assumption. Module carrier universes are independent where stated.
+Zero rings/modules, empty indexing sets and rank-zero finite free
 modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
 or a claim to formalize an entire source.
@@ -152,10 +192,18 @@ boundary.
 
 For a family of principal localizations, import
 `CoherentModules.RingTheory.Flat.Localization` and apply
-`Module.FaithfullyFlat.directSum_away_iff R s`. The
+`Module.FaithfullyFlat.directSum_away_iff R s`, or
+`Module.FaithfullyFlat.pi_away_iff R s` for finite products. The
 [integer localization examples](CoherentModulesTest/RingTheory/Flat/Localization.lean)
 include a jointly faithfully flat sum whose two components are not faithfully
 flat, reciprocal and quotient-tensor values, and empty-index boundaries.
+For arbitrary products of localizations at submonoids, use
+`Module.FaithfullyFlat.pi_localization_iff R S A`, retaining the whole-product
+flatness hypothesis. The
+[product-criterion examples](CoherentModulesTest/RingTheory/Flat/LocalizationProductCriteria.lean)
+recover the finite product over `ZMod 6` from its jointly faithfully flat direct
+sum, prove that the coordinate-idempotent span in `ℕ → ZMod 2` is not finitely
+generated, and obtain proper ideal action on a noncommutative matrix product.
 
 For the supporting surjection constructor, import
 `CoherentModules.RingTheory.Flat.FaithfullyFlat` and apply
@@ -199,8 +247,10 @@ is historical and qualified, not a present-day resource guarantee.
 ## References and credit
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
-localization, tensor products and categorical infrastructure. Mathematical
-background includes Kazuhiro Fujiwara and Fumiharu Kato,
+localization, tensor products and categorical infrastructure. The ideal and
+product criteria reuse mathlib's dependent submodules, ideal multiples,
+quotient-tensor equivalences and `DirectSum.linearEquivFunOnFintype`.
+Mathematical background includes Kazuhiro Fujiwara and Fumiharu Kato,
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5).
 No source PDF or substantial excerpt is bundled; this citation does not assert
 complete source correspondence or endorsement. Anchor contributed the original
