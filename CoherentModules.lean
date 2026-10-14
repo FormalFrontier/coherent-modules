@@ -12,6 +12,7 @@ public import CoherentModules.FinitePresentation
 public import CoherentModules.Hom
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
+public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.TensorProduct
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
@@ -24,5 +25,5 @@ public import CoherentModules.UniversallyCoherent
 Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, the coherent-module category, universal coherence,
-and Hom/tensor closure.
+Hom/tensor closure, and faithful flatness of tensor products and direct sums.
 -/

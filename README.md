@@ -47,6 +47,15 @@ Authors: Formal Frontier Agents
   says that `C ⊗[R] D` is faithfully flat over `R` if and only if both `C` and
   `D` are faithfully flat over `R`. The ring and the two module universes are
   independent; no finiteness, projectivity or nontriviality assumption is needed.
+- **Faithfully flat dependent direct sums.** For arbitrary families of additive
+  commutative groups with module structures over a `CommRing R`,
+  [`Module.FaithfullyFlat.directSum_iff`](CoherentModules/RingTheory/Flat/DirectSum.lean)
+  characterizes faithful flatness of the direct sum by flatness of every
+  component and a nontrivial quotient-tensor fiber in some component for each
+  proper ideal of `R`. The detecting component may depend on the ideal; the
+  components need not individually be faithfully flat. The ring, index and
+  carrier universes are independent, and empty indexing types are allowed.
+  One faithfully flat component is sufficient when every component is flat.
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
