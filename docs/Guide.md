@@ -1,6 +1,6 @@
 # Using coherent modules
 
-Import `CoherentModules` for the complete library, or one of the nine leaves in
+Import `CoherentModules` for the complete library, or one of the leaves in
 the table below. Its only mathematical dependency is the pinned mathlib. The
 [historical generated API](API.md) covers the original seven leaves; follow the
 source links below for the square-zero and ideal/module declarations. The Lean
@@ -16,6 +16,7 @@ statements are authoritative about hypotheses and universes.
 | `CoherentModules.TensorProduct` | Tensor closure over a `CommRing`, with finitely presented first factor and coherent second factor. |
 | `CoherentModules.UniversallyCoherent` | Coherence of every finitely presented commutative algebra in a specified target universe. |
 | [`CoherentModules.Algebra.TrivSqZeroExt.Finite`](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean) | Projection-kernel equivalence, whole-extension kernel finiteness and projection base change over a commutative semiring. |
+| [`CoherentModules.Algebra.TrivSqZeroExt.Noetherian`](../CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean) | Left Noetherianity of a square-zero extension iff the base ring is left Noetherian and the coefficient bimodule is finite on the left. |
 | [`CoherentModules.RingTheory.Ideal.FiniteModuleTransfer`](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean) | Transfer of isomorphism-invariant, square-zero-descent-stable properties from finite ideals to finite modules over finite-type algebras. |
 
 ## Foundation and finite presentation
@@ -86,6 +87,25 @@ rules specify the pure-tensor and inverse values. Use `open scoped TrivSqZeroExt
 for the canonical opposite action and central scalar structure; the projection
 algebra remains local to the construction.
 
+### Left Noetherianity
+
+For `[Ring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]`
+and `[SMulCommClass R Rᵐᵒᵖ M]`,
+[`TrivSqZeroExt.isNoetherianRing_iff`](../CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean)
+states that `IsNoetherianRing (TrivSqZeroExt R M)` is equivalent to
+`IsNoetherianRing R ∧ Module.Finite R M`. These are **left** Noetherianity
+and finite generation as a **left** `R`-module, not finite generation as a
+bimodule or as a right module. Equivalently,
+`TrivSqZeroExt.isNoetherianRing_iff_isNoetherian` uses
+`IsNoetherianRing R ∧ IsNoetherian R M` on the right-hand side.
+
+The coefficient ring need not be commutative, and the two module actions need
+not be central; they must commute with each other. The carrier universes of
+`R` and `M` are independent. No separate `AddCommGroup M` hypothesis is needed.
+Import `CoherentModules.Algebra.TrivSqZeroExt.Noetherian` for these criteria.
+
+### Ideal/module transfer
+
 For `[CommRing A]`,
 [`Ideal.ideal_property_iff_module_property`](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
 tests a predicate on finite modules over finite-type `A`-algebras via finitely
@@ -102,57 +122,32 @@ isomorphism and descent hypotheses before applying transfer.
 
 ## Checks, cost and limits
 
-The default Lake targets include the aggregate and all ten `CoherentModulesTest`
+The default Lake targets include the aggregate and all `CoherentModulesTest`
 modules. Stable private test declarations exercise hypotheses, independent
 universes and degenerate cases without creating another exported API. The
 historical public axiom list is intentionally not a private/generated proof census.
-A complete transitive audit of *actual* declarations,
-including private and generated ones, is a separate acceptance condition; ordinary
-builds check proofs, without a mandatory separate stored-body replay.
+A complete transitive audit also checks private and generated declarations and
+their dependencies against the allowed axioms: `propext`, `Classical.choice` and
+`Quot.sound`. A successful build checks proofs but does not by itself establish
+this closure; a separate stored-body replay is not required for ordinary builds.
 
 ### Build and audit resource baseline
 
-The historical first-release baseline below was measured on September 25, 2026, using
-Lean `v4.34.0-rc2` (compiler `6a10ac8c22beadecabdbb0919c2b50214762f91d`),
-mathlib `83abb3e776bdefcbc447a1e44d0debe4010039e5` and the nine-package
-`lake-manifest.json`. At the original measurement, all 17 Lean files and three
-Lean/Lake inputs matched source revision `91e1a1e8881ef55c045b3a5eb5285875be21a00d`
-byte for byte; they also match the historical public snapshot linked in the
-[API provenance](README.md). The current library has nine mathematical leaves,
-ten test modules, two additional aggregate imports and core Lake options; the
-historical complete-input binding no longer applies. The measurement is **not**
-a new benchmark of the current sources. The Linux worker had a reported 15 GiB
-runtime memory limit.
-The build and audit recorded `LEAN_NUM_THREADS=1` and `LAKE_JOBS=1` as set;
-`LAKE_JOBS` did not provide effective Lake parallelism control, and
-`LEAN_NUM_THREADS` is not a global memory cap. The cache-verification process
-left those variables unset. CPU model, clock and storage throughput were not
-recorded, so this is a workload baseline, not a hardware-normalized rate.
+A historical cache-ready build of the original 17 library/test modules took
+24.865 seconds on a worker with a reported 15 GiB runtime memory limit, using
+Lean `v4.34.0-rc2` (compiler `6a10ac8c22beadecabdbb0919c2b50214762f91d`) and
+mathlib `83abb3e776bdefcbc447a1e44d0debe4010039e5`. This is not a benchmark of
+the current library, a memory requirement or a portable performance guarantee.
+Cold dependency downloads and decompression were not included. Follow the
+README's cache-first commands and keep the default library and test targets
+enabled; do not replace a failed cache fetch with a mathlib source build.
 
-| Workload | Observed result and scope |
-| --- | --- |
-| `lake --wfail build` | 24.865 seconds wall time, with matching mathlib cache installed and no previous project outputs; all 17 historical library/test modules built. Largest child maximum RSS was 1,328,464 KiB, not aggregate process-tree or machine memory. |
-| Matching-cache verification | 5.336 seconds for `lake exe cache get` **after** successful installation/download. This is not the time for a first download. |
-| Historical separate stored-proof audit | One nonempty project module per process: 150 raw declarations, 141 stored bodies and nine structural items in total. Maximum sampled cgroup working memory was 8,252,477,440 bytes (about 7.69 GiB), and anonymous memory 4,714,618,880 bytes (about 4.39 GiB); these are shared cgroup measurements, not per-process RSS. Imported dependencies were byte-bound, not proof-rechecked. This historical replay is not required for an ordinary build. |
-
-For planning, expect **tens of seconds to a few minutes** for this project's
-default build once the matching dependency cache is ready on a comparable worker;
-this range is an estimate, not another measurement or a guaranteed upper bound.
-Initial downloads/decompression require additional network time and disk space;
-their cold-install cost was not measured by the cache-verification receipt.
-Keep the default library and test targets enabled. Follow the README's cache-first
-commands; do not silently replace a failed cache fetch with a mathlib source build.
-
-The historical separate audit used a 15 GiB environment with per-process safety
-stops at 11 GiB cgroup working memory, 10 GiB anonymous memory or 720 seconds.
-These historical limits are not a proven minimum or sufficient bound for another
-machine or larger library. Working memory means
-`max(0, memory.current - inactive_file)`, sampled every 0.25 seconds. Some runs
-recorded `memory.events:max` increments (up to 718); measured OOM/kill increments
-were zero. The baseline therefore does not establish an unconstrained memory
-peak or absence of limit pressure. Required complete transitive standard-axiom
-checking remains distinct from the 38 current selected public `#print axioms`
-checks (39 in the historical snapshot) and this stored-proof measurement.
+The historical `LAKE_JOBS=1` setting did not provide effective Lake parallelism
+control, and `LEAN_NUM_THREADS=1` is not a global memory cap. Build and audit
+memory depends on the workload and machine; neither these settings nor the
+historical limit promises a sufficient bound. A complete private/generated
+transitive axiom check remains distinct from the 38 selected public checks
+and from the historical stored-proof measurement.
 
 This is proof-oriented infrastructure; it promises no efficient executable
 algorithm or runtime complexity. Build/check cost depends on the pinned compiler,

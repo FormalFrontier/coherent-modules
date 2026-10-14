@@ -1,9 +1,10 @@
 # coherent-modules
 
 Reusable Lean library for coherent modules and rings, finite presentation,
-localization, closure constructions, finite square-zero extensions, and
-ideal-to-module transfer. Import `CoherentModules` for all nine mathematical
-leaves; the ten test modules are separate. See the [mathematical guide](docs/Guide.md),
+localization, closure constructions, finite square-zero extensions, left
+Noetherianity of square-zero extensions, and ideal-to-module transfer.
+Import `CoherentModules` for the mathematical library; test modules are separate.
+See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
 and [credits](docs/CREDITS.md). The finite-idealization declarations are linked
 to their current source below. Original project contributions are distributed
@@ -53,6 +54,14 @@ Authors: Formal Frontier Agents
   [`kerIdealBaseChange`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
   identifies the projection-base-changed kernel with `M` **without** a finiteness
   assumption; its pure-tensor and inverse formulas are simp lemmas.
+- **Left Noetherian square-zero extensions.** For a possibly noncommutative
+  `Ring R` and an `AddCommMonoid M` with commuting left and right `R`-module
+  actions, [`TrivSqZeroExt.isNoetherianRing_iff`](CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean)
+  characterizes `IsNoetherianRing (TrivSqZeroExt R M)` by
+  `IsNoetherianRing R ∧ Module.Finite R M`. Finiteness here is as a **left**
+  `R`-module. The companion `TrivSqZeroExt.isNoetherianRing_iff_isNoetherian`
+  replaces `Module.Finite R M` by `IsNoetherian R M`. Centrality is not required,
+  and the two carrier universes are independent.
 - **Finite-type ideal/module transfer.** Over a commutative base ring,
   [`Ideal.ideal_property_iff_module_property`](CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean)
   equates a property on all finitely generated ideals with one on all finite
@@ -65,15 +74,38 @@ Authors: Formal Frontier Agents
 
 The foundation, finite-presentation and category results allow arbitrary `Ring`;
 localization, Hom, tensor and universal coherence use `CommRing`. The square-zero
-kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the predicate
-transfer uses `CommRing` and `AddCommGroup`. No coherence or projectivity
-assumption is imposed on the new results. Module carrier universes are independent
+kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
+square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
+bimodule actions. The predicate transfer uses `CommRing` and `AddCommGroup`.
+No coherence or projectivity assumption is imposed on the new results. Module carrier universes are independent
 where stated. Zero rings/modules, empty indexing sets and rank-zero finite free
 modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
 or a claim to formalize an entire source.
 
+## Using the library
+
+Add the library to your `lakefile.toml`:
+
+```toml
+[[require]]
+name = "coherent-modules"
+git = "https://github.com/FormalFrontier/coherent-modules.git"
+rev = "main"
+```
+
+GitHub `main` tracks reviewed releases. Lake resolves its commit when you first
+add or update the dependency; `lake-manifest.json` keeps that revision until the
+next update. To pin a particular release, replace `main` with its full published
+commit. Dependencies between deliverable libraries should use full release pins.
+
+```lean
+import CoherentModules
+```
+
 ## Use and verification
+
+### API and focused imports
 
 For `[CommRing R]`, `[Module.FinitePresentation R M]` and
 `[Module.IsCoherent R N]`, apply `Module.IsCoherent.linearMap` to `M →ₗ[R] N`
@@ -88,6 +120,11 @@ include degenerate cases. For the square-zero results, import
 The [finite-idealization client](CoherentModulesTest/Algebra/TrivSqZeroExt/Finite.lean)
 exercises finite nonfree torsion, zero modules, the semiring base-change formulas,
 and independently verified invariance and descent premises for predicate transfer.
+For the left Noetherian criterion, import
+`CoherentModules.Algebra.TrivSqZeroExt.Noetherian`; its two equivalences also
+apply to noncommutative coefficient rings and noncentral bimodules.
+
+### Building and checking
 
 The exact `lean-toolchain` is `leanprover/lean4:v4.34.0-rc2`; mathlib is pinned
 at `83abb3e776bdefcbc447a1e44d0debe4010039e5`, with the resolved dependency
@@ -101,13 +138,14 @@ lake exe cache get
 lake --wfail build
 ```
 
-The default build covers the aggregate and all ten test modules. For an
+The default build covers the aggregate and all test modules. For an
 individual test, run `lake env lean -DwarningAsError=true CoherentModulesTest/Basic.lean`.
 The 38 `#print axioms` checks in
 [`CoherentModulesTest/Axioms.lean`](CoherentModulesTest/Axioms.lean) are a
-*selected public* list, not a complete transitive axiom audit. Acceptance requires
-an applicable successful build and a complete transitive check including private
-and generated declarations; only `propext`, `Classical.choice` and `Quot.sound`
+*selected public* list, not a complete transitive axiom audit. A successful build
+checks the proofs but does not by itself establish their transitive axiom
+closure. Complete verification also checks private and generated declarations
+and their dependencies; only `propext`, `Classical.choice` and `Quot.sound`
 are allowed. The [guide's measured cost baseline](docs/Guide.md#build-and-audit-resource-baseline)
 is historical and qualified, not a present-day resource guarantee.
 
