@@ -41,6 +41,12 @@ Authors: Formal Frontier Agents
   they are not global instances. [`CoherentModuleCat`](CoherentModules/ModuleCat.lean)
   is a transparent full subcategory with abelian structure obtained through
   generic category constructions.
+- **Faithfully flat tensor products.** Over a `CommRing R`, for additive
+  commutative groups `C` and `D` with `R`-module structures,
+  [`Module.FaithfullyFlat.tensorProduct_iff`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
+  says that `C ⊗[R] D` is faithfully flat over `R` if and only if both `C` and
+  `D` are faithfully flat over `R`. The ring and the two module universes are
+  independent; no finiteness, projectivity or nontriviality assumption is needed.
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
@@ -122,7 +128,11 @@ exercises finite nonfree torsion, zero modules, the semiring base-change formula
 and independently verified invariance and descent premises for predicate transfer.
 For the left Noetherian criterion, import
 `CoherentModules.Algebra.TrivSqZeroExt.Noetherian`; its two equivalences also
-apply to noncommutative coefficient rings and noncentral bimodules.
+apply to noncommutative coefficient rings and noncentral bimodules. For the
+faithful-flatness criterion, import `CoherentModules.RingTheory.Flat.TensorProduct`;
+the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.lean)
+uses nonfinite free abelian groups in independent universes and an empty-index
+boundary.
 
 ### Building and checking
 
