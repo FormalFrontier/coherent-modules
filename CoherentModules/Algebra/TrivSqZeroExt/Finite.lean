@@ -89,7 +89,8 @@ theorem kerIdeal_finite [Module.Finite R M] :
 
 section ProjectionBaseChange
 
-local instance : Algebra (TrivSqZeroExt R M) R := algebraBase R M
+/-- The algebra structure on `R` induced by the first-coordinate projection. -/
+local instance projectionAlgebra : Algebra (TrivSqZeroExt R M) R := algebraBase R M
 
 /-- Projection-base change of the square-zero kernel, as an `R`-linear equivalence. -/
 noncomputable def kerIdealBaseChange :

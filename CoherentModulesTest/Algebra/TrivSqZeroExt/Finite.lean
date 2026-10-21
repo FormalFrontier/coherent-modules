@@ -71,7 +71,9 @@ example : ((TrivSqZeroExt.kerIdealLinearEquiv (R := ℤ) (M := ZMod 2)).symm 1).
     TrivSqZeroExt.inr_injective (by simpa only [TrivSqZeroExt.inr_zero] using heq)
   exact one_ne_zero h
 
-local instance : Algebra (TrivSqZeroExt ℕ ℕ) ℕ := TrivSqZeroExt.algebraBase ℕ ℕ
+/-- The algebra structure on the naturals induced by the first-coordinate projection. -/
+local instance projectionAlgebra : Algebra (TrivSqZeroExt ℕ ℕ) ℕ :=
+  TrivSqZeroExt.algebraBase ℕ ℕ
 
 /-- The projection-base-change equivalence has no finiteness hypothesis, as illustrated
 over the semiring of naturals. The regular module `ℕ` over `ℕ` is finite. -/
@@ -97,50 +99,10 @@ example : Subsingleton (TrivSqZeroExt.kerIdeal (ZMod 1) (ZMod 1)) := by
   exact ((TrivSqZeroExt.kerIdealLinearEquiv (R := ZMod 1) (M := ZMod 1)).toEquiv
     |>.subsingleton_congr).mpr inferInstance
 
-private def isZeroModule (B : Type u) [CommRing B] [Algebra ℤ B]
-    (N : Type u) [AddCommGroup N] [Module B N] : Prop := Subsingleton N
-
-private theorem isZeroModule_iso
-    (B C : Type u) [CommRing B] [CommRing C]
-    [Algebra ℤ B] [Algebra ℤ C]
-    [Algebra.FiniteType ℤ B] [Algebra.FiniteType ℤ C]
-    (e : B ≃ₐ[ℤ] C) (N N' : Type u)
-    [AddCommGroup N] [AddCommGroup N']
-    [Module B N] [Module C N']
-    [Module.Finite B N] [Module.Finite C N']
-    (g : @LinearEquiv B C _ _ e.toRingEquiv.toRingHom
-      e.toRingEquiv.symm.toRingHom
-      (RingHomInvPair.of_ringEquiv e.toRingEquiv)
-      (RingHomInvPair.of_ringEquiv_symm e.toRingEquiv)
-      N N' _ _ _ _) :
-    isZeroModule B N ↔ isZeroModule C N' :=
-  by
-    let : RingHomInvPair e.toRingEquiv.toRingHom
-        e.toRingEquiv.symm.toRingHom := RingHomInvPair.of_ringEquiv e.toRingEquiv
-    let : RingHomInvPair e.toRingEquiv.symm.toRingHom
-        e.toRingEquiv.toRingHom := RingHomInvPair.of_ringEquiv_symm e.toRingEquiv
-    exact g.toEquiv.subsingleton_congr
-
-private theorem isZeroModule_desc
-    (B C : Type u) [CommRing B] [CommRing C]
-    [algebraAB : Algebra ℤ B] [algebraAC : Algebra ℤ C]
-    [Algebra.FiniteType ℤ B] [Algebra.FiniteType ℤ C]
-    [algebraBC : Algebra B C]
-    [@IsScalarTower ℤ B C algebraAB.toSMul algebraBC.toSMul algebraAC.toSMul]
-    (_hf : Function.Surjective (algebraMap B C))
-    (_hsq : (RingHom.ker (algebraMap B C)) ^ 2 = ⊥)
-    (N : Type u) [AddCommGroup N] [Module B N] [Module.Finite B N] :
-    isZeroModule B N → isZeroModule C (C ⊗[B] N) := by
-  intro h
-  have : Subsingleton N := h
-  change Subsingleton (C ⊗[B] N)
-  infer_instance
-
 /-- The property holds for the zero module and fails for a finite nonzero torsion module. -/
-example : isZeroModule ℤ (ZMod 1) ∧ ¬ isZeroModule ℤ (ZMod 2) := by
+example : Subsingleton (ZMod 1) ∧ ¬ Subsingleton (ZMod 2) := by
   constructor
-  · change Subsingleton (ZMod 1)
-    infer_instance
+  · infer_instance
   · intro h
     have : Subsingleton (ZMod 2) := h
     exact one_ne_zero (Subsingleton.elim (1 : ZMod 2) 0)
@@ -148,11 +110,23 @@ example : isZeroModule ℤ (ZMod 1) ∧ ¬ isZeroModule ℤ (ZMod 2) := by
 /-- The transfer implication detects failure of the universal ideal property
 from the finite nonzero torsion module. -/
 example : ¬ (∀ (B : Type) [CommRing B] [Algebra ℤ B]
-    [Algebra.FiniteType ℤ B] (I : Ideal B), I.FG → isZeroModule B I) := by
+    [Algebra.FiniteType ℤ B] (I : Ideal B), I.FG → Subsingleton I) := by
   intro h
-  have hmodules := (Ideal.ideal_property_iff_module_property isZeroModule
-    isZeroModule_iso isZeroModule_desc).mp h
-  have htwo : isZeroModule ℤ (ZMod 2) := hmodules ℤ (ZMod 2)
+  have hmodules := (Ideal.ideal_property_iff_module_property
+    (A := ℤ) (fun _ _ _ N _ _ => Subsingleton N)
+    (by
+      intro B C _ _ _ _ _ _ e N N' _ _ _ _ _ _ g
+      let : RingHomInvPair e.toRingEquiv.toRingHom
+          e.toRingEquiv.symm.toRingHom := RingHomInvPair.of_ringEquiv e.toRingEquiv
+      let : RingHomInvPair e.toRingEquiv.symm.toRingHom
+          e.toRingEquiv.toRingHom := RingHomInvPair.of_ringEquiv_symm e.toRingEquiv
+      exact g.toEquiv.subsingleton_congr)
+    (by
+      intro B C _ _ _ _ _ _ _ _ _hf _hsq N _ _ _ hN
+      have : Subsingleton N := hN
+      change Subsingleton (C ⊗[B] N)
+      infer_instance)).mp h
+  have htwo : Subsingleton (ZMod 2) := hmodules ℤ (ZMod 2)
   have : Subsingleton (ZMod 2) := htwo
   exact one_ne_zero (Subsingleton.elim (1 : ZMod 2) 0)
 

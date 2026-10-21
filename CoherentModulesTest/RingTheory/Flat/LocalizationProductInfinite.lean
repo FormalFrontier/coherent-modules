@@ -61,8 +61,14 @@ abbrev Product := Π i : ℕ, A i
 
 -- Since `R` is itself a function ring, also a different coordinatewise-scalar
 -- Pi instance is available. Select the stock common-`R` structures explicitly.
+/-- The common `R`-scalar action on `Product`, with
+`(r • z) i = algebraMap R (A i) r * z i`. -/
 local instance : SMul R Product := Pi.instSMul
+/-- The product of the canonical `R`-modules `A i`, using the same scalar from `R`
+in every localization factor. -/
 local instance : Module R Product := Pi.module ℕ A R
+/-- The product `R`-algebra structure, with structure map
+`r ↦ fun i ↦ algebraMap R (A i) r`. -/
 local instance : Algebra R Product := Pi.algebra ℕ A
 
 @[simp]

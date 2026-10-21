@@ -45,8 +45,14 @@ open LocalizationProductInfinite
 
 -- The sequence ring also admits coordinatewise-scalar Pi instances. Use the
 -- same stock common-R structures as the localization product model.
+/-- The common `R`-scalar action on `Product`, with
+`(r • z) i = algebraMap R (A i) r * z i`. -/
 local instance : SMul R Product := Pi.instSMul
+/-- The product of the canonical `R`-modules `A i`, using the same scalar from `R`
+in every localization factor. -/
 local instance : Module R Product := Pi.module ℕ A R
+/-- The product `R`-algebra structure, with structure map
+`r ↦ fun i ↦ algebraMap R (A i) r`. -/
 local instance : Algebra R Product := Pi.algebra ℕ A
 
 /-- Every finitely generated proper ideal of `ℕ → ZMod 2` omits a coordinate

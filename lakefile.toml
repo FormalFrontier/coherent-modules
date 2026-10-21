@@ -1,6 +1,7 @@
 name = "coherent-modules"
 version = "0.1.0"
 defaultTargets = ["CoherentModules", "CoherentModulesTest"]
+lintDriver = "batteries/runLinter"
 
 [[require]]
 name = "mathlib"
@@ -18,4 +19,4 @@ name = "CoherentModules"
 
 [[lean_lib]]
 name = "CoherentModulesTest"
-globs = ["CoherentModulesTest.+"]
+globs = ["CoherentModulesTest", "CoherentModulesTest.+"]

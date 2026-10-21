@@ -257,16 +257,20 @@ section RaisedRing
 
 open scoped TrivSqZeroExt
 
-local instance : SMul (ULift.{1} ℤ : Type 1) ℤ :=
+/-- Scalar multiplication by lifted integers on the integers. -/
+local instance liftedIntSMul : SMul (ULift.{1} ℤ : Type 1) ℤ :=
   SMul.comp ℤ (ULift.ringEquiv : ULift.{1} ℤ ≃+* ℤ).toRingHom
 
-local instance : Module (ULift.{1} ℤ : Type 1) ℤ :=
+/-- The integer module over the lifted integer ring. -/
+local instance liftedIntModule : Module (ULift.{1} ℤ : Type 1) ℤ :=
   Module.compHom ℤ (ULift.ringEquiv : ULift.{1} ℤ ≃+* ℤ).toRingHom
 
-local instance : SMul (ULift.{1} ℤ : Type 1)ᵐᵒᵖ ℤ :=
+/-- Scalar multiplication by the opposite lifted integer ring on the integers. -/
+local instance oppositeLiftedIntSMul : SMul (ULift.{1} ℤ : Type 1)ᵐᵒᵖ ℤ :=
   SMul.comp ℤ (RingEquiv.toOpposite (ULift.{1} ℤ)).symm.toRingHom
 
-local instance : Module (ULift.{1} ℤ : Type 1)ᵐᵒᵖ ℤ :=
+/-- The integer module over the opposite lifted integer ring. -/
+local instance oppositeLiftedIntModule : Module (ULift.{1} ℤ : Type 1)ᵐᵒᵖ ℤ :=
   TrivSqZeroExt.canonicalOppositeModule
 
 local instance : IsCentralScalar (ULift.{1} ℤ : Type 1) ℤ :=
