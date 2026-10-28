@@ -7,6 +7,7 @@ module
 
 public import CoherentModules.Basic
 public import Mathlib.LinearAlgebra.TensorProduct.RightExactness
+public import Mathlib.LinearAlgebra.TensorProduct.Pi
 
 /-!
 # Tensor products of coherent modules

@@ -5,6 +5,9 @@ Contributors: The original examples are retained from the reviewed project histo
 -/
 module
 
+import Mathlib.Algebra.EuclideanDomain.Int
+import Mathlib.RingTheory.PrincipalIdealDomain
+
 public import CoherentModules.TensorProduct
 
 /-!

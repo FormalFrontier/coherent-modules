@@ -7,6 +7,9 @@ module
 
 public import CoherentModules.Basic
 public import Mathlib.RingTheory.LocalProperties.FinitePresentation
+public import Mathlib.Algebra.Module.LocalizedModule.Submodule
+public import Mathlib.Algebra.Module.LocalizedModule.Int
+public import Mathlib.RingTheory.Localization.Finiteness
 
 /-!
 # Localization of coherent modules

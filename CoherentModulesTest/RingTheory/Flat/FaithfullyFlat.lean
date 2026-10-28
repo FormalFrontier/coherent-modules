@@ -4,6 +4,8 @@ Authors: Formal Frontier Agents
 -/
 module
 
+import Mathlib.RingTheory.Flat.Localization
+
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModulesTest.RingTheory.Flat.TensorProduct
 public import Mathlib.Data.ZMod.Basic
