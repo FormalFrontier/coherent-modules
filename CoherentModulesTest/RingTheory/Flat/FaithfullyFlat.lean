@@ -11,6 +11,8 @@ public import Mathlib.LinearAlgebra.Basis.Prod
 public import Mathlib.RingTheory.Flat.TorsionFree
 public import Mathlib.RingTheory.Localization.FractionRing
 import Mathlib.Tactic.NormNum
+public import Mathlib.Algebra.Algebra.Prod
+public import Mathlib.LinearAlgebra.Basis.Fin
 
 /-!
 # Surjections and faithful flatness: examples and boundaries
@@ -27,12 +29,21 @@ has no surjection onto the integers; and `(ZMod 4) × ℤ` surjects onto the int
 but is not flat. The empty-index facts are supplied by the public tensor-product
 example, not by accessing its private helpers.
 
+The diagonal algebra `ZMod 4 → ZMod 4 × ZMod 4` supplies a nonsurjective
+rank-two application of the Jacobson-ideal quotient criterion. The ideal `(2)`
+is proper, nonzero and square-zero. Original flatness and faithful flatness of
+the canonical quotient are established independently before applying the criterion.
+The zero-ideal boundary is included as well.
+
 ## References
 
 These examples use Mathlib's Finsupp and product bases, localization flatness,
 the ideal-smul criterion for faithful flatness, and flatness implying torsion
 freeness. The empty-index model uses
 `CoherentModulesTest.Flat.TensorProduct.integerScalarEmptyBoundary`.
+The Jacobson-ideal example uses Mathlib's product basis, faithfully-flat base
+change and quotient-tensor equivalence. For the general criterion and its
+Fujiwara--Kato source relationship, see the imported faithful-flatness module.
 -/
 
 namespace CoherentModulesTest.Flat.FaithfullyFlat
@@ -137,3 +148,92 @@ public theorem integerZModFourProjectionBoundary :
   exact integerZModFourProductNotFlat h.toFlat
 
 end CoherentModulesTest.Flat.FaithfullyFlat
+
+namespace CoherentModulesTest.Flat.FaithfullyFlat.JacobsonQuotient
+
+open scoped _root_.TensorProduct
+
+universe u v
+
+private def doubleIdeal : Ideal (ZMod 4) := Ideal.span {(2 : ZMod 4)}
+
+private theorem doubleIdeal_ne_bot : doubleIdeal ≠ ⊥ := by
+  intro h
+  have h2 : (2 : ZMod 4) = 0 := Ideal.span_singleton_eq_bot.mp h
+  exact (by decide : (2 : ZMod 4) ≠ 0) h2
+
+private theorem doubleIdeal_sq : doubleIdeal ^ 2 = ⊥ := by
+  rw [doubleIdeal, Ideal.span_singleton_pow,
+    show (2 : ZMod 4) ^ 2 = 0 by decide, Ideal.span_singleton_zero]
+
+private theorem doubleIdeal_ne_top : doubleIdeal ≠ ⊤ := by
+  intro h
+  have htb : (⊤ : Ideal (ZMod 4)) = ⊥ := by
+    simpa only [h, Ideal.top_pow] using doubleIdeal_sq
+  have h1 : (1 : ZMod 4) ∈ (⊥ : Ideal (ZMod 4)) :=
+    htb ▸ (show (1 : ZMod 4) ∈ (⊤ : Ideal (ZMod 4)) from trivial)
+  exact (by decide : (1 : ZMod 4) ≠ 0) (Ideal.mem_bot.mp h1)
+
+private theorem doubleIdeal_le_jacobson :
+    doubleIdeal ≤ Ideal.jacobson (⊥ : Ideal (ZMod 4)) := by
+  rw [doubleIdeal, Ideal.span_singleton_le_iff_mem]
+  apply Ideal.radical_le_jacobson
+  exact ⟨2, by change (2 : ZMod 4) ^ 2 = 0; decide⟩
+
+private theorem diagonal_not_surjective :
+    ¬Function.Surjective (algebraMap (ZMod 4) (ZMod 4 × ZMod 4)) := by
+  intro h
+  obtain ⟨x, hx⟩ := h (1, 0)
+  have h₁ : x = 1 := by simpa using congrArg Prod.fst hx
+  have h₀ : x = 0 := by simpa using congrArg Prod.snd hx
+  exact (by decide : (1 : ZMod 4) ≠ 0) (h₁.symm.trans h₀)
+
+private theorem diagonal_faithfullyFlat :
+    Module.FaithfullyFlat (ZMod 4) (ZMod 4 × ZMod 4) := by
+  exact Module.FaithfullyFlat.of_linearEquiv
+    (ZMod 4) (Fin 2 →₀ ZMod 4) (Module.Basis.finTwoProd (ZMod 4)).repr
+
+private theorem diagonal_quotient_faithfullyFlat :
+    Module.FaithfullyFlat ((ZMod 4) ⧸ doubleIdeal)
+      ((ZMod 4 × ZMod 4) ⧸ doubleIdeal.map
+        (algebraMap (ZMod 4) (ZMod 4 × ZMod 4))) := by
+  have : Module.FaithfullyFlat (ZMod 4) (ZMod 4 × ZMod 4) :=
+    diagonal_faithfullyFlat
+  exact Module.FaithfullyFlat.of_linearEquiv
+    ((ZMod 4) ⧸ doubleIdeal)
+    (((ZMod 4) ⧸ doubleIdeal) ⊗[ZMod 4] (ZMod 4 × ZMod 4))
+    (Algebra.TensorProduct.quotIdealMapEquivQuotTensor
+      (ZMod 4 × ZMod 4) doubleIdeal).toLinearEquiv
+
+/-- Reduction by the proper nonzero square-zero ideal `(2)` in `ZMod 4`
+recovers faithful flatness of the nonsurjective rank-two diagonal algebra.
+Original flatness and faithful flatness of the canonical quotient are supplied
+independently, before applying the quotient criterion in the reverse direction. -/
+private theorem zmodFourDiagonalJacobsonQuotient :
+    doubleIdeal ≠ ⊥ ∧ doubleIdeal ≠ ⊤ ∧ doubleIdeal ^ 2 = ⊥ ∧
+      doubleIdeal ≤ Ideal.jacobson (⊥ : Ideal (ZMod 4)) ∧
+      Nonempty (Module.Basis (Fin 2) (ZMod 4) (ZMod 4 × ZMod 4)) ∧
+      ¬Function.Surjective (algebraMap (ZMod 4) (ZMod 4 × ZMod 4)) ∧
+      Module.Flat (ZMod 4) (ZMod 4 × ZMod 4) ∧
+      Module.FaithfullyFlat ((ZMod 4) ⧸ doubleIdeal)
+        ((ZMod 4 × ZMod 4) ⧸ doubleIdeal.map
+          (algebraMap (ZMod 4) (ZMod 4 × ZMod 4))) ∧
+      Module.FaithfullyFlat (ZMod 4) (ZMod 4 × ZMod 4) := by
+  have hflat : Module.Flat (ZMod 4) (ZMod 4 × ZMod 4) :=
+    diagonal_faithfullyFlat.toFlat
+  have hquot := diagonal_quotient_faithfullyFlat
+  have h :=
+    (Module.FaithfullyFlat.iff_flat_and_quotient_of_le_jacobson
+      (S := ZMod 4 × ZMod 4) doubleIdeal doubleIdeal_le_jacobson).mpr ⟨hflat, hquot⟩
+  exact ⟨doubleIdeal_ne_bot, doubleIdeal_ne_top, doubleIdeal_sq,
+    doubleIdeal_le_jacobson, ⟨Module.Basis.finTwoProd (ZMod 4)⟩,
+    diagonal_not_surjective, hflat, hquot, h⟩
+
+-- The criterion also permits the zero ideal, without a nontriviality hypothesis.
+example {R : Type u} {S : Type v} [CommRing R] [CommRing S] [Algebra R S] :
+    Module.FaithfullyFlat R S ↔ Module.Flat R S ∧
+      Module.FaithfullyFlat (R ⧸ (⊥ : Ideal R))
+        (S ⧸ (⊥ : Ideal R).map (algebraMap R S)) :=
+  Module.FaithfullyFlat.iff_flat_and_quotient_of_le_jacobson (⊥ : Ideal R) bot_le
+
+end CoherentModulesTest.Flat.FaithfullyFlat.JacobsonQuotient

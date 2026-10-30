@@ -6,6 +6,9 @@ module
 
 public import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
 public import Mathlib.RingTheory.Finiteness.Ideal
+public import Mathlib.RingTheory.Ideal.Over
+public import Mathlib.RingTheory.Jacobson.Ideal
+public import Mathlib.RingTheory.TensorProduct.Quotient
 
 /-!
 # Criteria for faithful flatness
@@ -15,6 +18,10 @@ For a unital algebra, faithful flatness can be tested using only finitely
 generated proper ideals, together with flatness. The algebra need not be
 commutative. The coefficient ring and module carriers may lie in independent
 universes.
+
+For commutative algebras, faithful flatness can also be tested after quotienting
+by an ideal contained in the Jacobson radical, while retaining flatness over
+the original ring. The quotient algebra has its canonical structure.
 
 ## Proof approach
 
@@ -29,17 +36,34 @@ Right multiplication is linear, so `1 ∈ J • ⊤` implies `a ∈ J • ⊤` f
 every algebra element `a`. This argument uses the identity but not
 commutativity of the algebra.
 
+For the Jacobson-ideal criterion, faithfully-flat base change and the canonical
+quotient-tensor equivalence prove the forward implication. For the converse,
+each maximal ideal contains the given ideal; its proper quotient image detects
+that it cannot act with full image on the original algebra.
+
 ## References
 
 The proofs use Mathlib's ideal-smul criteria for faithful flatness,
 `Submodule.map_smul''`, `Submodule.map_top`, `LinearMap.range_eq_top`,
 `Submodule.mem_ideal_smul_span_iff_exists_sum`, `LinearMap.mulRight` and
 `Submodule.smul_top_le_comap_smul_top`.
+
+The quotient criterion additionally uses Mathlib's faithfully-flat base change,
+`Algebra.TensorProduct.quotIdealMapEquivQuotTensor`, and ideal map/comap operations.
+The faithfully-flat and quotient-tensor developments are due to Mathlib and its
+authors, including Judith Ludwig, Florent Schaffhauser, Yunzhou Xie, Jujian Zhang,
+Christian Merten, Yi Song and Sihan Su.
+
+* Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
+  arXiv:1308.4734v5 (2017-02-28), Lemma 0.7.3.6 and Proposition 0.7.3.2(c).
+  The quotient criterion is an algebraic strengthening, not an adic formulation.
 -/
 
 @[expose] public section
 
 universe u v w
+
+open scoped TensorProduct
 
 namespace Submodule
 
@@ -113,5 +137,69 @@ theorem algebra_iff_flat_and_fg_proper_ideal
     exact Submodule.sum_mem _ fun a ha =>
       Submodule.smul_mem_smul
         (Ideal.subset_span (Finset.mem_image.mpr ⟨a, ha, rfl⟩)) Submodule.mem_top
+
+/-- Faithful flatness can be tested modulo an ideal contained in the Jacobson
+radical, provided flatness over the original ring is retained. Both quotients
+and the algebra structure on the target quotient are the canonical ones.
+
+The forward implication is faithfully-flat base change along `R → R ⧸ I`,
+transported by Mathlib's quotient-tensor equivalence. Conversely, each maximal
+ideal contains `I`; its proper image in `R ⧸ I` detects that it cannot act with
+full image on `S`. No finite generation or topological hypothesis is needed.
+
+This is an algebraic strengthening of Fujiwara--Kato, *Foundations of Rigid
+Geometry I*, arXiv:1308.4734v5, Lemma 0.7.3.6 using Proposition 0.7.3.2(c):
+explicit Jacobson containment replaces the adic and Zariskian hypotheses.
+Original flatness is essential: for `R = ℤ/4`, `I = (2)` and `S = ℤ/2`,
+the quotient algebra is faithfully flat but `S` is not flat over `R`. -/
+theorem iff_flat_and_quotient_of_le_jacobson
+    {R : Type u} {S : Type v} [CommRing R] [CommRing S] [Algebra R S]
+    (I : Ideal R) (hI : I ≤ Ideal.jacobson (⊥ : Ideal R)) :
+    Module.FaithfullyFlat R S ↔
+      Module.Flat R S ∧
+        Module.FaithfullyFlat (R ⧸ I) (S ⧸ I.map (algebraMap R S)) := by
+  constructor
+  · intro h
+    have : Module.FaithfullyFlat R S := h
+    refine ⟨inferInstance, ?_⟩
+    exact Module.FaithfullyFlat.of_linearEquiv
+      (R ⧸ I) ((R ⧸ I) ⊗[R] S)
+      (Algebra.TensorProduct.quotIdealMapEquivQuotTensor S I).toLinearEquiv
+  · rintro ⟨hflat, hquot⟩
+    refine { toFlat := hflat, submodule_ne_top := ?_ }
+    intro m hm htop
+    have hJm : Ideal.jacobson (⊥ : Ideal R) ≤ m := by
+      exact sInf_le ⟨bot_le, hm⟩
+    have hIm : I ≤ m := hI.trans hJm
+    let mbar : Ideal (R ⧸ I) := m.map (Ideal.Quotient.mk I)
+    have hmbar : mbar ≠ ⊤ := by
+      intro heq
+      apply hm.ne_top
+      calc
+        m = Ideal.comap (Ideal.Quotient.mk I) mbar :=
+          (Ideal.comap_map_mk hIm).symm
+        _ = ⊤ := by rw [heq, Ideal.comap_top]
+    have h1 : (1 : S) ∈ m • (⊤ : Submodule R S) :=
+      htop.symm ▸ (show (1 : S) ∈ (⊤ : Submodule R S) from trivial)
+    have hmS : m.map (algebraMap R S) = ⊤ := by
+      apply (Ideal.eq_top_iff_one _).mpr
+      rw [Ideal.smul_top_eq_map] at h1
+      exact h1
+    have hcomm :
+        (algebraMap (R ⧸ I) (S ⧸ I.map (algebraMap R S))).comp
+            (Ideal.Quotient.mk I) =
+          (Ideal.Quotient.mk (I.map (algebraMap R S))).comp
+            (algebraMap R S) := by
+      ext r
+      rfl
+    have hbarS :
+        mbar.map (algebraMap (R ⧸ I) (S ⧸ I.map (algebraMap R S))) = ⊤ := by
+      change (m.map (Ideal.Quotient.mk I)).map _ = _
+      rw [Ideal.map_map, hcomm, ← Ideal.map_map, hmS, Ideal.map_top]
+    have hproper :=
+      ((Module.FaithfullyFlat.iff_flat_and_proper_ideal
+        (R ⧸ I) (S ⧸ I.map (algebraMap R S))).mp hquot).2 mbar hmbar
+    apply hproper
+    simp only [Ideal.smul_top_eq_map, hbarS, Submodule.restrictScalars_top]
 
 end Module.FaithfullyFlat
