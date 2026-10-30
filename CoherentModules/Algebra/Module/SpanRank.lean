@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.Algebra.Module.SpanRank
+public import Mathlib.RingTheory.Ideal.Operations
 
 /-!
 # Generators of semilinear images
@@ -13,11 +14,16 @@ Taking the span over the target semiring allows generator bounds for a semilinea
 without assuming that its scalar homomorphism is surjective. The cardinal bound applies to
 arbitrary submodules. The natural-valued bound assumes finite generation of the source.
 
-Finite generation also ascends along a semilinear map when each element of a target
-submodule can be multiplied into the image by a scalar with a left inverse and the
-comap is finitely generated. This combines target-scalar span transport with the
-scalar-clearing argument of the semilinear Noetherian-ascent family, without requiring
-Noetherianity or surjectivity of the scalar homomorphism.
+For each element of a target submodule, consider the scalars that multiply it into
+the image. If these scalars generate the unit left ideal, the target submodule equals
+the target-scalar span of its comap image. Finite generation therefore ascends from
+the comap under this pointwise unimodular condition. A single clearing scalar with a
+left inverse is sufficient, recovering the existing left-inverse and unit criteria.
+Neither Noetherianity nor surjectivity of the scalar homomorphism is required.
+
+The scalar-span step reuses Mathlib's `Submodule.mem_of_span_top_of_smul_mem` from
+ideal operations, credited to Kenny Lau. The semilinear argument extends this library's
+finite-generation clearing criteria and uses `Submodule.FG.span_image`.
 -/
 
 @[expose] public section
@@ -72,30 +78,50 @@ lemma spanFinrank_span_image_le_of_fg (f : M →ₛₗ[σ] N) {p : Submodule R M
   rw [(hp.span_image f).spanRank_eq_spanFinrank, hp.spanRank_eq_spanFinrank] at h
   simpa using h
 
+/-- A target submodule is the target-scalar span of its comap image if, for each
+of its elements, the scalars clearing that element into the image generate the unit
+left ideal. No finite-generation or scalar-surjectivity hypothesis is required. -/
+theorem span_image_comap_eq_of_one_mem_span_smul_mem_range (f : M →ₛₗ[σ] N)
+    (p : Submodule S N)
+    (hclear : ∀ n ∈ p, (1 : S) ∈ Ideal.span {a : S | ∃ m : M, f m = a • n}) :
+    span S (f '' (p.comap f : Set M)) = p := by
+  apply le_antisymm
+  · refine span_le.mpr ?_
+    rintro _ ⟨m, hm, rfl⟩
+    exact mem_comap.mp hm
+  · intro n hn
+    refine (span S (f '' (p.comap f : Set M))).mem_of_span_top_of_smul_mem
+      {a : S | ∃ m : M, f m = a • n} ((Ideal.eq_top_iff_one _).2 (hclear n hn)) n ?_
+    intro a
+    obtain ⟨m, hm⟩ := a.property
+    apply subset_span
+    refine ⟨m, ?_, hm⟩
+    apply mem_comap.mpr
+    rw [hm]
+    exact p.smul_mem _ hn
+
+/-- Finite generation ascends from a submodule's comap when, pointwise, its
+clearing scalars generate the unit left ideal. The source and target semirings may be
+noncommutative, and the scalar homomorphism need not be surjective. -/
+theorem fg_of_fg_comap_of_one_mem_span_smul_mem_range (f : M →ₛₗ[σ] N)
+    (p : Submodule S N) (hfg : (p.comap f).FG)
+    (hclear : ∀ n ∈ p, (1 : S) ∈ Ideal.span {a : S | ∃ m : M, f m = a • n}) : p.FG := by
+  rw [← span_image_comap_eq_of_one_mem_span_smul_mem_range f p hclear]
+  exact hfg.span_image f
+
 /-- A target submodule is finitely generated if its comap is finitely generated and
 multiplying each of its elements by a scalar with a left inverse puts it in the image.
 No surjectivity of the scalar homomorphism is required. -/
 theorem fg_of_fg_comap_of_left_inv_smul_mem_range (f : M →ₛₗ[σ] N)
     (p : Submodule S N) (hfg : (p.comap f).FG)
     (hclear : ∀ n ∈ p, ∃ m : M, ∃ a b : S, b * a = 1 ∧ f m = a • n) : p.FG := by
-  let H := span S (f '' (p.comap f : Set M))
-  have hHp : H ≤ p := by
-    apply span_le.mpr
-    rintro _ ⟨m, hm, rfl⟩
-    exact hm
-  have hpH : p ≤ H := by
-    intro n hn
-    obtain ⟨m, a, b, hba, hm⟩ := hclear n hn
-    have hmp : m ∈ p.comap f := by
-      rw [mem_comap, hm]
-      exact p.smul_mem a hn
-    have hfm : f m ∈ H := subset_span ⟨m, hmp, rfl⟩
-    have hbn : b • f m = n := by rw [hm, smul_smul, hba, one_smul]
-    rw [← hbn]
-    exact H.smul_mem b hfm
-  have hp : p = H := le_antisymm hpH hHp
-  rw [hp]
-  exact hfg.span_image f
+  apply fg_of_fg_comap_of_one_mem_span_smul_mem_range f p hfg
+  intro n hn
+  obtain ⟨m, a, b, hba, hm⟩ := hclear n hn
+  have ha : a ∈ Ideal.span {a : S | ∃ m : M, f m = a • n} :=
+    Ideal.subset_span ⟨m, hm⟩
+  simpa only [hba] using
+    (Ideal.span {a : S | ∃ m : M, f m = a • n}).mul_mem_left b ha
 
 /-- Unit clearing transfers finite generation from the comap of a target submodule.
 The scalar homomorphism need not be surjective. -/

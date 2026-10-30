@@ -43,9 +43,13 @@ source text or third-party assets.
 
 The finite-generation clearing criteria combine this scalar-clearing family
 with the library's semilinear span transport and Mathlib's finite-generation
-and module-finiteness APIs. They use the target-scalar span of the comap image,
-not a surjectivity assumption on the scalar homomorphism. The proofs and
-sign-clearing example are original Formal Frontier AI-agent contributions.
+and module-finiteness APIs. The pointwise unimodular extension reuses
+`Submodule.mem_of_span_top_of_smul_mem` from Mathlib's ideal operations,
+credited there to Kenny Lau, together with this library's `Submodule.FG.span_image`
+and prior left-inverse and unit-clearing formalizations. They use the target-scalar
+span of the comap image, not a surjectivity assumption on the scalar homomorphism.
+The semilinear interface proofs and sign-clearing example are Formal Frontier
+AI-agent contributions; the general scalar-span engine is reused, not reimplemented.
 
 ## Tooling and background
 

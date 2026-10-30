@@ -3,8 +3,8 @@
 Reusable Lean library for coherent modules and rings, finite presentation,
 localization, closure constructions, finite square-zero extensions, left
 Noetherianity of square-zero extensions, ideal-to-module transfer, and
-finite-generation and Noetherian ascent for semilinear maps under
-left-invertible scalar clearing.
+finite-generation ascent under pointwise unimodular clearing and Noetherian
+ascent under left-invertible scalar clearing for semilinear maps.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -16,15 +16,18 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
-- **Finite generation under semilinear clearing.** For arbitrary semirings `R`, `S`
-  and `f : M →ₛₗ[φ] N` between additive commutative semimodules,
-  [`Submodule.fg_of_fg_comap_of_left_inv_smul_mem_range`](CoherentModules/Algebra/Module/SpanRank.lean)
+- **Finite generation under pointwise unimodular clearing.** For arbitrary,
+  possibly noncommutative semirings `R`, `S` and `f : M →ₛₗ[φ] N` between
+  additive commutative left semimodules,
+  [`Submodule.fg_of_fg_comap_of_one_mem_span_smul_mem_range`](CoherentModules/Algebra/Module/SpanRank.lean)
   proves an `S`-submodule `P` finitely generated if `P.comap f` is finitely
-  generated over `R` and every `n ∈ P` admits `m, a, b` with `b * a = 1`
-  and `f m = a • n`. Taking `P = ⊤` gives
-  `Module.Finite.of_left_inv_smul_mem_range` from `Module.Finite R M`.
-  Both have unit-clearing corollaries. The four universes are independent;
-  neither Noetherianity nor surjectivity of `φ` or `f` is required.
+  generated over `R` and, for every `n ∈ P`, the clearers
+  `{a : S | ∃ m : M, f m = a • n}` generate the unit **left** ideal.
+  The companion `span_image_comap_eq_of_one_mem_span_smul_mem_range` identifies
+  `P` with the target-scalar span of its comap image without any finite-generation
+  premise. The existing single-left-inverse and unit-clearing criteria remain
+  specializations. The four universes are independent; neither Noetherianity
+  nor surjectivity of `φ` or `f` is required.
 - **Semilinear Noetherian ascent.** For arbitrary semirings `R`, `S`, additive
   commutative semimodules `M`, `N` and `f : M →ₛₗ[φ] N`,
   [`isNoetherian_of_left_inv_smul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
