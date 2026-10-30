@@ -7,8 +7,8 @@ project:
     Coherent rings and modules, finite-presentation criteria, exact-sequence
     closure, localization and descent, coherent-module categories, universal
     coherence, Hom and tensor-product closure, finite square-zero kernels and
-    projection base change, finite-type ideal/module transfer, and generator
-    bounds for semilinear images in Lean.
+    projection base change, finite-type ideal/module transfer, left Noetherianity
+    under unit clearing, and generator bounds for semilinear images in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -24,6 +24,13 @@ sources:
       finite presentations, exactness, localization, square-zero extensions,
       tensor products and category theory.
       No mathematical novelty or human-author endorsement is claimed.
+  - title: "Left Noetherianity under unit clearing"
+    type: "folklore"
+    relationship: "independently-proves"
+    note: >-
+      Ideal extension and contraction, finite generation, and left multiplication
+      by arbitrary target units for semiring homomorphisms. Surjectivity is a
+      special case. No commutativity or two-sidedness hypothesis is used.
   - title: "Foundations of Rigid Geometry I"
     authors:
       - "Kazuhiro Fujiwara"
@@ -70,6 +77,8 @@ status:
     of the common algebra/module universe. Semilinear image bounds hold over
     arbitrary semirings without assuming surjectivity of the scalar homomorphism.
     The natural-valued generator bound assumes finite generation of the source.
+    Unit-clearing results use arbitrary source and target semirings with independent
+    universes and transfer left Noetherianity through ideal extension/contraction.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

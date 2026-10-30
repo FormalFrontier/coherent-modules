@@ -2,7 +2,8 @@
 
 Reusable Lean library for coherent modules and rings, finite presentation,
 localization, closure constructions, finite square-zero extensions, left
-Noetherianity of square-zero extensions, and ideal-to-module transfer.
+Noetherianity of square-zero extensions, ideal-to-module transfer, and
+left Noetherianity under unit clearing.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -77,7 +78,14 @@ Authors: Formal Frontier Agents
   `R`-algebras `S`,
   [`Module.FaithfullyFlat.iff_flat_and_quotient_of_le_jacobson`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
   gives the equivalent formulation using the canonical quotient algebra
-  `R ⧸ I → S ⧸ I.map (algebraMap R S)`. The
+  `R ⧸ I → S ⧸ I.map (algebraMap R S)`. Conversely,
+  [`Algebra.map_maximal_ne_top_iff_forall_faithfullyFlat_baseChange`](CoherentModules/RingTheory/Flat/BaseChange.lean)
+  characterizes the maximal-ideal hypothesis itself: it holds **if and only if**
+  scalar extension preserves and reflects faithful flatness for every originally
+  flat `R`-module in `Type (max u w)`, where `R : Type u` and `w` is arbitrary.
+  The universe of `S` remains independent. The converse uses the direct sum of
+  principal localizations indexed by all elements of a maximal ideal, without
+  assuming that ideal is finitely generated. The
   [quotient client](CoherentModulesTest/RingTheory/Flat/FaithfullyFlat.lean)
   applies this corollary to the nonsurjective rank-two diagonal over `ZMod 4`
   with the proper nonzero square-zero ideal `(2)`. Its inputs are obtained
@@ -164,6 +172,22 @@ Zero rings/modules, empty indexing sets and rank-zero finite free
 modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
 or a claim to formalize an entire source.
+
+## Unit clearing and left Noetherianity
+
+For semirings `R` and `S` and a homomorphism `f : R →+* S`, suppose every
+`s : S` admits a unit `u : Sˣ` such that `(u : S) * s` belongs to the image of `f`.
+Then [`Ideal.map_comap_eq_of_unit_mul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
+says that every left ideal of `S` is the extension of its contraction to `R`.
+Consequently [`isNoetherianRing_of_unit_mul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
+transfers left Noetherianity from `R` to `S`, using finite generation of ideals.
+The source and target universes are independent.
+
+The units need not be central or arise from the source. No commutativity,
+injectivity or two-sidedness assumption is needed.
+`RingHom.exists_unit_mul_mem_range_of_surjective` supplies the hypothesis for
+surjective homomorphisms by taking `u = 1`, recovering the usual surjective
+ideal and Noetherian results.
 
 ## Using the library
 
@@ -290,6 +314,16 @@ It uses Mathlib's arbitrary faithfully-flat base change and
 full image on `M`, the corresponding module quotient vanishes; after tensoring,
 the extended ideal acts with full image on `S ⊗[R] M`, contradicting its properness
 and the faithful flatness of that module.
+
+The universal converse in `CoherentModules.RingTheory.Flat.BaseChange` shows that
+this maximal-ideal condition is necessary for reflection on all originally flat
+modules. If a maximal ideal extends to the unit ideal, the direct sum of principal
+localizations at all its elements is flat but not faithfully flat over the source.
+Mathlib's tensor/direct-sum and localization base-change equivalences identify its
+scalar extension with a faithfully flat family of principal localizations over
+the target. `ULift` transports this witness to each test universe `max u w`.
+The [rational base-change boundary](CoherentModulesTest/RingTheory/Flat/BaseChange.lean)
+uses the converse to rule out universal reflection for `ℤ → ℚ`.
 
 Quotienting by an ideal in the Jacobson radical satisfies the maximal-ideal
 hypothesis. The module specialization then yields, for commutative algebras,

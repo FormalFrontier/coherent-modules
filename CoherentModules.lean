@@ -13,11 +13,13 @@ public import CoherentModules.FinitePresentation
 public import CoherentModules.Hom
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
+public import CoherentModules.RingTheory.Flat.BaseChange
 public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.Localization
 public import CoherentModules.RingTheory.Flat.TensorProduct
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
+public import CoherentModules.RingTheory.Noetherian
 public import CoherentModules.TensorProduct
 public import CoherentModules.UniversallyCoherent
 
@@ -26,9 +28,10 @@ public import CoherentModules.UniversallyCoherent
 
 Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
-ideal-to-module transfer, the coherent-module category, universal coherence,
-Hom/tensor closure, generator bounds for semilinear images, and faithful flatness
-of tensor products and direct sums.
+ideal-to-module transfer, left Noetherianity under unit clearing,
+the coherent-module category, universal coherence, Hom/tensor closure,
+generator bounds for semilinear images, and faithful flatness of tensor products
+and direct sums.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal.
 -/
