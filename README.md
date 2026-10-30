@@ -62,16 +62,22 @@ Authors: Formal Frontier Agents
   product of submodules of additive commutative `R`-modules. The index type is
   arbitrary, including empty, and the semiring, index and carrier universes are
   independent.
-- **Faithful flatness modulo a Jacobson ideal.** For commutative rings `R` and `S`
-  with an `R`-algebra structure and `I ≤ Ideal.jacobson (⊥ : Ideal R)`,
+- **Faithful flatness after Jacobson base change.** For a `CommRing R`, an
+  additive commutative group `M` with an `R`-module structure, and
+  `I ≤ Ideal.jacobson (⊥ : Ideal R)`,
+  [`Module.FaithfullyFlat.iff_flat_and_baseChange_of_le_jacobson`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
+  characterizes `Module.FaithfullyFlat R M` by **original** flatness `Module.Flat R M`
+  and faithful flatness over `R ⧸ I` of `(R ⧸ I) ⊗[R] M`, with the canonical
+  left tensor-factor action. The ring and module universes are independent;
+  no algebra structure on `M`, finiteness, Noetherianity, localness, topology or
+  completion is assumed. For commutative `R`-algebras `S`,
   [`Module.FaithfullyFlat.iff_flat_and_quotient_of_le_jacobson`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
-  characterizes `Module.FaithfullyFlat R S` by **original** flatness `Module.Flat R S`
-  and faithful flatness of the canonical quotient algebra
-  `R ⧸ I → S ⧸ I.map (algebraMap R S)`. The ring universes are independent;
-  no finiteness, Noetherianity, localness, topology or completion is assumed.
-  The [quotient client](CoherentModulesTest/RingTheory/Flat/FaithfullyFlat.lean)
-  applies the criterion to the nonsurjective rank-two diagonal over `ZMod 4`
-  with the proper nonzero square-zero ideal `(2)`.
+  gives the equivalent formulation using the canonical quotient algebra
+  `R ⧸ I → S ⧸ I.map (algebraMap R S)`. The
+  [quotient client](CoherentModulesTest/RingTheory/Flat/FaithfullyFlat.lean)
+  applies this corollary to the nonsurjective rank-two diagonal over `ZMod 4`
+  with the proper nonzero square-zero ideal `(2)`. Its inputs are obtained
+  independently from basis-derived faithful flatness.
 - **Faithful flatness of unital algebras.** For a `CommRing R` and a unital
   `R`-algebra `A` whose underlying ring may be noncommutative,
   [`Module.FaithfullyFlat.algebra_iff_flat_and_fg_proper_ideal`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
@@ -272,12 +278,16 @@ from collective author credit.
 
 ## Jacobson-ideal criterion: source and proof approach
 
-The quotient criterion in `CoherentModules.RingTheory.Flat.FaithfullyFlat` is an
+The module base-change criterion in
+`CoherentModules.RingTheory.Flat.FaithfullyFlat` specializes, for commutative
+algebras, to the canonical quotient criterion. This corollary is an
 algebraic strengthening of Fujiwara--Kato, *Foundations of Rigid Geometry I*,
 arXiv:1308.4734v5 (2017-02-28), Lemma 0.7.3.6 using Proposition 0.7.3.2(c):
 explicit Jacobson containment replaces adic topology and Zariskian packaging,
 while original flatness remains a separate necessary hypothesis. It does not
-assert formalization of the surrounding adic theory. Its proof reuses Mathlib's
-faithfully-flat base change, quotient-tensor equivalence and ideal criteria,
+assert formalization of the surrounding adic theory. The module proof reuses
+Mathlib's faithfully-flat base change, quotient-tensor equivalence, cancellation
+of base change and reflection of triviality. The algebra corollary uses the
+canonical quotient-algebra/tensor equivalence. These developments are
 credited to Mathlib and its authors, including Judith Ludwig, Florent Schaffhauser,
-Yunzhou Xie, Jujian Zhang, Christian Merten, Yi Song and Sihan Su.
+Yunzhou Xie, Jujian Zhang, Christian Merten, Yi Song, Sihan Su, Kim Morrison, Johan Commelin and Eric Wieser.
