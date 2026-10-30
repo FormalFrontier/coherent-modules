@@ -10,13 +10,18 @@ import Mathlib.RingTheory.Localization.FractionRing
 import Mathlib.Tactic.NormNum
 
 /-!
-# Rational base change does not reflect faithful flatness
+# Kernels and faithful flatness under scalar extension
 
 The maximal ideal `(2)` of the integers extends to the unit ideal of the rationals.
 The universal characterization therefore rules out reflection of faithful flatness
 on all flat integer modules, in every test universe. This uses the converse through
 the library's public entry point, rather than assuming a scalar-flatness or
 surjectivity criterion.
+
+The kernel formula also proves that flat scalar extension preserves injectivity
+when the tensor map is viewed as an `S`-algebra homomorphism.
+Equality of underlying ring homomorphisms relates that consumer to the `R`-algebra
+tensor map, without `S`-actions on the original algebras.
 -/
 
 @[expose] public section
@@ -42,5 +47,28 @@ theorem integerRationalNotUniversalReflection :
     norm_num
   let : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   exact hmax (Ideal.span ({2} : Set ℤ)) (Int.ideal_span_isMaximal_of_prime 2) hmap
+
+universe uR uS uA uB
+
+/-- An injective algebra homomorphism remains injective after flat scalar extension,
+including when the tensor map is viewed as an `S`-algebra homomorphism. -/
+theorem tensorMap_injective_of_injective
+    {R : Type uR} {S : Type uS} {A : Type uA} {B : Type uB}
+    [CommRing R] [CommRing S] [Ring A] [Ring B]
+    [Algebra R S] [Algebra R A] [Algebra R B] [Module.Flat R S]
+    (f : A →ₐ[R] B) (hf : Function.Injective f) :
+    Function.Injective (Algebra.TensorProduct.map (AlgHom.id S S) f) := by
+  have hmap :
+      (Algebra.TensorProduct.map (AlgHom.id S S) f).toRingHom =
+        (Algebra.TensorProduct.map (AlgHom.id R S) f).toRingHom := by
+    apply Algebra.TensorProduct.ringHom_ext
+    · exact RingHom.ext fun _ => rfl
+    · exact RingHom.ext fun _ => rfl
+  apply (RingHom.injective_iff_ker_eq_bot
+    (Algebra.TensorProduct.map (AlgHom.id S S) f).toRingHom).mpr
+  rw [hmap, AlgHom.toRingHom_eq_coe,
+    ← AlgHom.ker_coe (Algebra.TensorProduct.map (AlgHom.id R S) f)]
+  simpa only [(RingHom.injective_iff_ker_eq_bot f).mp hf, Ideal.map_bot] using
+    (Algebra.TensorProduct.ker_map_id_left (S := S) f)
 
 end CoherentModulesTest.Flat.BaseChange
