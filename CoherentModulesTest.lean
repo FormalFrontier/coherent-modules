@@ -25,6 +25,7 @@ public import CoherentModulesTest.RingTheory.Flat.LocalizationZeroDivisors
 public import CoherentModulesTest.RingTheory.Flat.TensorProduct
 public import CoherentModulesTest.RingTheory.Nakayama
 public import CoherentModulesTest.TensorProduct
+public import CoherentModulesTest.TensorProduct.FiniteSurjectivity
 public import CoherentModulesTest.TrivSqZeroExtNoetherian
 public import CoherentModulesTest.UniversallyCoherent
 
