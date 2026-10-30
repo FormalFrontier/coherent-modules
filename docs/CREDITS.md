@@ -32,6 +32,15 @@ in `ZMod 6` follow the example in
 Mathlib's complement projections and projective splitting rather than
 coalgebra constructions; this example introduces no dependency on that library.
 
+The semilinear Noetherian-ascent results extend this library's ideal
+unit-clearing argument using Mathlib's submodule comap and ascending-chain
+criterion. Formal Frontier Agents developed the semimodule extension and the
+one-sided refinement from units to scalars with left inverses. The
+function-surjective corollary generalizes Mathlib's `isNoetherian_of_surjective`;
+the range specialization documents agreement at its original hypotheses.
+These are mathematical ideas and independently written proofs, not copied
+source text or third-party assets.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from

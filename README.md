@@ -3,7 +3,7 @@
 Reusable Lean library for coherent modules and rings, finite presentation,
 localization, closure constructions, finite square-zero extensions, left
 Noetherianity of square-zero extensions, ideal-to-module transfer, and
-left Noetherianity under unit clearing.
+Noetherian ascent for semilinear maps under left-invertible scalar clearing.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -15,6 +15,15 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Semilinear Noetherian ascent.** For arbitrary semirings `R`, `S`, additive
+  commutative semimodules `M`, `N` and `f : M →ₛₗ[φ] N`,
+  [`isNoetherian_of_left_inv_smul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
+  transfers `IsNoetherian R M` to `IsNoetherian S N` if each `n` admits
+  `m, a, b` with `b * a = 1` and `f m = a • n`. The four universes are
+  independent; neither `φ` nor `f` must be surjective. The
+  `isNoetherian_of_unit_smul_mem_range` corollary retains the familiar
+  unit-clearing hypothesis, while `isNoetherian_of_surjective_semilinear`
+  requires only function-surjectivity of `f`.
 - **Coherent modules and kernels.** [`Module.IsCoherent`](CoherentModules/Basic.lean)
   means finite generation together with finite presentation of every finitely
   generated submodule. [`Module.IsCoherent.iff_finite_and_fg_ker`](CoherentModules/Basic.lean)
@@ -194,14 +203,34 @@ modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
 or a claim to formalize an entire source.
 
-## Unit clearing and left Noetherianity
+## Scalar clearing and Noetherianity
+
+For a semilinear map `f : M →ₛₗ[φ] N` over arbitrary semirings, suppose each
+`n : N` has witnesses `m : M` and `a, b : S` with `b * a = 1` and
+`f m = a • n`. Then
+[`Submodule.comap_le_comap_iff_of_left_inv_smul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
+shows that comap reflects submodule order. Mathlib's ascending-chain criterion
+therefore transfers Noetherianity from `M` over `R` to `N` over `S`.
+Recovery uses `b • f m = (b * a) • n = n`; a right inverse alone would not
+justify this calculation on a left semimodule. No commutativity, additive
+inverses, nontriviality, scalar tower or additional source action on `N` is
+assumed. The witnesses may depend on `n`.
+
+Clearing by a unit `u` specializes this with `a = ↑u`, `b = ↑(u⁻¹)`.
+The function-surjective corollary uses the unit `1`. When `φ` is surjective,
+`LinearMap.range_eq_top_iff_left_inv_smul_mem_range` identifies scalar clearing
+with `LinearMap.range f = ⊤`. The
+[range bridge](CoherentModulesTest/RingTheory/Noetherian.lean) then derives ascent
+from Mathlib's `isNoetherian_of_surjective` under its scalar-surjectivity class.
+That class is not a hypothesis of the new ascent theorems.
 
 For semirings `R` and `S` and a homomorphism `f : R →+* S`, suppose every
 `s : S` admits a unit `u : Sˣ` such that `(u : S) * s` belongs to the image of `f`.
 Then [`Ideal.map_comap_eq_of_unit_mul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
 says that every left ideal of `S` is the extension of its contraction to `R`.
 Consequently [`isNoetherianRing_of_unit_mul_mem_range`](CoherentModules/RingTheory/Noetherian.lean)
-transfers left Noetherianity from `R` to `S`, using finite generation of ideals.
+transfers left Noetherianity from `R` to `S` as the regular-semimodule
+specialization of unit clearing.
 The source and target universes are independent.
 
 The units need not be central or arise from the source. No commutativity,
