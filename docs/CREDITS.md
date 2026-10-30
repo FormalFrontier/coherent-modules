@@ -41,6 +41,12 @@ the range specialization documents agreement at its original hypotheses.
 These are mathematical ideas and independently written proofs, not copied
 source text or third-party assets.
 
+The finite-generation clearing criteria combine this scalar-clearing family
+with the library's semilinear span transport and Mathlib's finite-generation
+and module-finiteness APIs. They use the target-scalar span of the comap image,
+not a surjectivity assumption on the scalar homomorphism. The proofs and
+sign-clearing example are original Formal Frontier AI-agent contributions.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from

@@ -6,6 +6,10 @@ module
 
 import CoherentModules.Algebra.Module.SpanRank
 
+/-!
+# Semilinear span transport and scalar clearing
+-/
+
 universe uR uS uM uN
 
 variable {R : Type uR} {S : Type uS} {M : Type uM} {N : Type uN}
@@ -27,3 +31,16 @@ example (f : M →ₛₗ[σ] N) (hf : Function.Surjective f) {s : Set M}
   intro y _
   obtain ⟨x, rfl⟩ := hf y
   exact Submodule.subset_span ⟨x, by trivial, rfl⟩
+
+-- The inclusion ℕ → ℤ is not surjective, but signs clear every integer into its image.
+-- This uses module-finiteness ascent without surjectivity of the scalar homomorphism.
+example : Module.Finite ℤ ℤ := by
+  let f : ℕ →ₛₗ[Nat.castRingHom ℤ] ℤ :=
+    LinearMap.mk ⟨fun m => (m : ℤ), Nat.cast_add⟩ (by
+      intro r m
+      simp [Nat.castRingHom, smul_eq_mul])
+  apply Module.Finite.of_left_inv_smul_mem_range f inferInstance
+  intro n
+  cases n with
+  | ofNat k => exact ⟨k, 1, 1, by simp, by simp [f]⟩
+  | negSucc k => exact ⟨k + 1, -1, -1, by simp, by simp [f]⟩
