@@ -5,6 +5,7 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
 public import CoherentModules.Basic
@@ -26,7 +27,8 @@ public import CoherentModules.UniversallyCoherent
 Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, the coherent-module category, universal coherence,
-Hom/tensor closure, and faithful flatness of tensor products and direct sums.
+Hom/tensor closure, generator bounds for semilinear images, and faithful flatness
+of tensor products and direct sums.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal.
 -/

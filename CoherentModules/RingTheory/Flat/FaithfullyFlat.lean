@@ -20,10 +20,11 @@ commutative. The coefficient ring and module carriers may lie in independent
 universes.
 
 For arbitrary modules, faithful flatness can also be tested after base change
-by an ideal contained in the Jacobson radical, while retaining flatness over
-the original ring. Scalar extension uses the canonical quotient algebra and
-left tensor-factor action. For commutative algebras, this gives the criterion
-using the canonical quotient algebra as a corollary.
+along a commutative algebra for which every maximal ideal extends to a proper
+ideal, while retaining flatness over the original ring. No flatness of the scalar
+algebra is required. Scalar extension uses the canonical left tensor-factor action.
+Quotienting by an ideal contained in the Jacobson radical gives a module criterion
+and, for commutative algebras, a canonical quotient-algebra criterion.
 
 ## Proof approach
 
@@ -38,12 +39,14 @@ Right multiplication is linear, so `1 ∈ J • ⊤` implies `a ∈ J • ⊤` f
 every algebra element `a`. This argument uses the identity but not
 commutativity of the algebra.
 
-For the Jacobson-ideal criterion, faithfully-flat base change proves the forward
-implication. Conversely, each maximal ideal contains the given ideal. The
-quotient-tensor equivalence and cancellation of base change identify its residue
-fiber with a fiber of the base-changed module. Faithful flatness of that module
-reflects triviality, so the residue fiber cannot vanish. The algebra corollary
-follows by the canonical quotient-algebra/tensor equivalence.
+For the base-change criterion, arbitrary faithfully-flat base change proves the
+forward implication. Conversely, if a maximal ideal acts with full image on the
+original module, its module quotient vanishes. The quotient-tensor equivalence
+then shows that the extended ideal acts with full image on the base-changed
+module, contradicting faithful flatness and properness of that extended ideal.
+For the Jacobson-ideal specialization, every maximal ideal contains the given
+ideal, so its image in the quotient ring is proper. The algebra corollary follows
+by the canonical quotient-algebra/tensor equivalence.
 
 ## References
 
@@ -53,13 +56,14 @@ The proofs use Mathlib's ideal-smul criteria for faithful flatness,
 `Submodule.smul_top_le_comap_smul_top`.
 
 The base-change criterion additionally uses Mathlib's faithfully-flat base change,
-`TensorProduct.quotTensorEquivQuotSMul`,
-`TensorProduct.AlgebraTensorModule.cancelBaseChange` and
-`Module.FaithfullyFlat.rTensor_reflects_triviality`. The algebra corollary uses
+`Submodule.Quotient.subsingleton_iff` and
+`TensorProduct.tensorQuotMapSMulEquivTensorQuot`. The Jacobson-ideal specialization
+uses `Ideal.IsMaximal.map_of_surjective_of_ker_le`, and the algebra corollary uses
 `Algebra.TensorProduct.quotIdealMapEquivQuotTensor`.
 The faithfully-flat and quotient-tensor developments are due to Mathlib and its
 authors, including Judith Ludwig, Florent Schaffhauser, Yunzhou Xie, Jujian Zhang,
-Christian Merten, Yi Song, Sihan Su, Kim Morrison, Johan Commelin and Eric Wieser.
+Antoine Chambert-Loir, Christian Merten, Yi Song, Sihan Su, Kim Morrison,
+Johan Commelin and Eric Wieser.
 
 * Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
   arXiv:1308.4734v5 (2017-02-28), Lemma 0.7.3.6 and Proposition 0.7.3.2(c).
@@ -145,15 +149,45 @@ theorem algebra_iff_flat_and_fg_proper_ideal
       Submodule.smul_mem_smul
         (Ideal.subset_span (Finset.mem_image.mpr ⟨a, ha, rfl⟩)) Submodule.mem_top
 
+/-- If every maximal ideal of `R` extends to a proper ideal of `S`, an `R`-module
+is faithfully flat precisely when it is flat over `R` and its scalar extension is
+faithfully flat over `S`, with the canonical action on the left tensor factor.
+The ideal hypothesis says that every closed point of `Spec R` has a point over it
+in `Spec S`. No flatness of `S` over `R`, surjectivity of the scalar map, algebra
+structure on `M`, or finiteness hypothesis is required. Flatness of the original
+module remains a separate necessary condition. -/
+theorem iff_flat_and_baseChange_of_map_maximal_ne_top
+    {R : Type u} {S : Type v} {M : Type w}
+    [CommRing R] [CommRing S] [Algebra R S]
+    [AddCommGroup M] [Module R M]
+    (hmax : ∀ m : Ideal R, m.IsMaximal →
+      m.map (algebraMap R S) ≠ ⊤) :
+    Module.FaithfullyFlat R M ↔
+      Module.Flat R M ∧ Module.FaithfullyFlat S (S ⊗[R] M) := by
+  constructor
+  · intro h
+    let := h
+    exact ⟨inferInstance, inferInstance⟩
+  · rintro ⟨hflat, hbase⟩
+    refine { toFlat := hflat, submodule_ne_top := ?_ }
+    intro m hm htop
+    let : Subsingleton (M ⧸ (m • (⊤ : Submodule R M))) :=
+      Submodule.Quotient.subsingleton_iff.mpr htop
+    have hquot : Subsingleton
+        ((S ⊗[R] M) ⧸ m.map (algebraMap R S) • (⊤ : Submodule S (S ⊗[R] M))) :=
+      (TensorProduct.tensorQuotMapSMulEquivTensorQuot M S m).injective.subsingleton
+    exact ((iff_flat_and_proper_ideal S (S ⊗[R] M)).mp hbase).2
+      _ (hmax m hm) (Submodule.Quotient.subsingleton_iff.mp hquot)
+
 /-- A module is faithfully flat precisely when it is flat over the original ring
 and its base change modulo an ideal contained in the Jacobson radical is faithfully
 flat. The quotient algebra and the action on the left tensor factor are canonical.
 No algebra structure on the module or finiteness hypothesis is needed.
 
-For the converse, each maximal residue field is an `R ⧸ I`-module. Cancellation
-of base change and reflection of triviality show that its tensor product with `M`
-cannot vanish. Original flatness is essential: for `R = ℤ/4`, `I = (2)` and
-`M = ℤ/2`, the base change is faithfully flat but `M` is not flat over `R`.
+This specializes `iff_flat_and_baseChange_of_map_maximal_ne_top`: each maximal
+ideal contains `I`, so its image in `R ⧸ I` is proper. Original flatness is
+essential: for `R = ℤ/4`, `I = (2)` and `M = ℤ/2`, the base change is faithfully
+flat but `M` is not flat over `R`.
 
 For commutative algebras this gives `iff_flat_and_quotient_of_le_jacobson`, an
 algebraic strengthening of Fujiwara--Kato, *Foundations of Rigid Geometry I*,
@@ -164,29 +198,14 @@ theorem iff_flat_and_baseChange_of_le_jacobson
     Module.FaithfullyFlat R M ↔
       Module.Flat R M ∧
         Module.FaithfullyFlat (R ⧸ I) ((R ⧸ I) ⊗[R] M) := by
-  constructor
-  · intro h
-    have := h
-    exact ⟨inferInstance, inferInstance⟩
-  · rintro ⟨hflat, hquot⟩
-    have := hquot
-    refine { toFlat := hflat, submodule_ne_top := ?_ }
-    intro m hm htop
-    have hIm : I ≤ m := hI.trans (sInf_le ⟨bot_le, hm⟩)
-    -- The quotient factor is compatible with the existing `R`-action on the residue.
-    let : Algebra (R ⧸ I) (R ⧸ m) := (Ideal.Quotient.factor hIm).toAlgebra
-    let : IsScalarTower R (R ⧸ I) (R ⧸ m) :=
-      IsScalarTower.of_algebraMap_eq' (Ideal.Quotient.factor_comp_mk hIm).symm
-    have : Subsingleton (M ⧸ (m • (⊤ : Submodule R M))) :=
-      Submodule.Quotient.subsingleton_iff.mpr htop
-    have : Subsingleton ((R ⧸ m) ⊗[R] M) :=
-      (TensorProduct.quotTensorEquivQuotSMul M m).injective.subsingleton
-    have : Subsingleton ((R ⧸ m) ⊗[R ⧸ I] ((R ⧸ I) ⊗[R] M)) :=
-      (TensorProduct.AlgebraTensorModule.cancelBaseChange
-        R (R ⧸ I) (R ⧸ I) (R ⧸ m) M).injective.subsingleton
-    have : Subsingleton (R ⧸ m) :=
-      rTensor_reflects_triviality (R ⧸ I) ((R ⧸ I) ⊗[R] M) (R ⧸ m)
-    exact hm.ne_top (Ideal.Quotient.subsingleton_iff.mp inferInstance)
+  refine iff_flat_and_baseChange_of_map_maximal_ne_top (S := R ⧸ I) ?_
+  intro m hm
+  let := hm
+  have hIm : I ≤ m := hI.trans (sInf_le ⟨bot_le, hm⟩)
+  have hmmap : (m.map (Ideal.Quotient.mk I)).IsMaximal :=
+    Ideal.IsMaximal.map_of_surjective_of_ker_le
+      Ideal.Quotient.mk_surjective (by simpa only [Ideal.mk_ker] using hIm)
+  simpa only [Ideal.Quotient.algebraMap_eq] using hmmap.ne_top
 
 /-- Faithful flatness can be tested modulo an ideal contained in the Jacobson
 radical, provided flatness over the original ring is retained. Both quotients

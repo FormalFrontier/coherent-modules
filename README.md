@@ -62,15 +62,19 @@ Authors: Formal Frontier Agents
   product of submodules of additive commutative `R`-modules. The index type is
   arbitrary, including empty, and the semiring, index and carrier universes are
   independent.
-- **Faithful flatness after Jacobson base change.** For a `CommRing R`, an
-  additive commutative group `M` with an `R`-module structure, and
-  `I ≤ Ideal.jacobson (⊥ : Ideal R)`,
+- **Faithful flatness after base change covering maximal ideals.** For commutative
+  rings `R` and `S` with an `R`-algebra structure on `S`, suppose every maximal
+  ideal `m` of `R` satisfies `m.map (algebraMap R S) ≠ ⊤`. For any additive
+  commutative group `M` with an `R`-module structure,
+  [`Module.FaithfullyFlat.iff_flat_and_baseChange_of_map_maximal_ne_top`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
+  characterizes faithful flatness over `R` by **original** flatness `Module.Flat R M`
+  and faithful flatness over `S` of `S ⊗[R] M`, with the canonical left tensor-factor
+  action. The three universes are independent. No flatness of `S` over `R`,
+  surjectivity, algebra structure on `M`, finiteness, Noetherianity, localness,
+  topology or completion is assumed. For `I ≤ Ideal.jacobson (⊥ : Ideal R)`,
   [`Module.FaithfullyFlat.iff_flat_and_baseChange_of_le_jacobson`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
-  characterizes `Module.FaithfullyFlat R M` by **original** flatness `Module.Flat R M`
-  and faithful flatness over `R ⧸ I` of `(R ⧸ I) ⊗[R] M`, with the canonical
-  left tensor-factor action. The ring and module universes are independent;
-  no algebra structure on `M`, finiteness, Noetherianity, localness, topology or
-  completion is assumed. For commutative `R`-algebras `S`,
+  specializes this to the canonical quotient `R ⧸ I`. For commutative
+  `R`-algebras `S`,
   [`Module.FaithfullyFlat.iff_flat_and_quotient_of_le_jacobson`](CoherentModules/RingTheory/Flat/FaithfullyFlat.lean)
   gives the equivalent formulation using the canonical quotient algebra
   `R ⧸ I → S ⧸ I.map (algebraMap R S)`. The
@@ -276,18 +280,27 @@ constructions, tests and independent reviews. See [credits](docs/CREDITS.md)
 for mathematical and tooling provenance. No legal copyright owner is inferred
 from collective author credit.
 
-## Jacobson-ideal criterion: source and proof approach
+## Base-change criteria: source and proof approach
 
-The module base-change criterion in
-`CoherentModules.RingTheory.Flat.FaithfullyFlat` specializes, for commutative
-algebras, to the canonical quotient criterion. This corollary is an
-algebraic strengthening of Fujiwara--Kato, *Foundations of Rigid Geometry I*,
+The arbitrary-algebra base-change criterion in
+`CoherentModules.RingTheory.Flat.FaithfullyFlat` applies when every maximal ideal
+extends to a proper ideal, without flatness or surjectivity of the scalar map.
+It uses Mathlib's arbitrary faithfully-flat base change and
+`TensorProduct.tensorQuotMapSMulEquivTensorQuot`: if a maximal ideal acts with
+full image on `M`, the corresponding module quotient vanishes; after tensoring,
+the extended ideal acts with full image on `S ⊗[R] M`, contradicting its properness
+and the faithful flatness of that module.
+
+Quotienting by an ideal in the Jacobson radical satisfies the maximal-ideal
+hypothesis. The module specialization then yields, for commutative algebras,
+the canonical quotient criterion. This corollary is an algebraic strengthening
+of Fujiwara--Kato, *Foundations of Rigid Geometry I*,
 arXiv:1308.4734v5 (2017-02-28), Lemma 0.7.3.6 using Proposition 0.7.3.2(c):
 explicit Jacobson containment replaces adic topology and Zariskian packaging,
 while original flatness remains a separate necessary hypothesis. It does not
-assert formalization of the surrounding adic theory. The module proof reuses
-Mathlib's faithfully-flat base change, quotient-tensor equivalence, cancellation
-of base change and reflection of triviality. The algebra corollary uses the
-canonical quotient-algebra/tensor equivalence. These developments are
+assert formalization of the surrounding adic theory, nor identify the
+arbitrary-algebra criterion with the book's statement. The algebra corollary uses
+the canonical quotient-algebra/tensor equivalence. These developments are
 credited to Mathlib and its authors, including Judith Ludwig, Florent Schaffhauser,
-Yunzhou Xie, Jujian Zhang, Christian Merten, Yi Song, Sihan Su, Kim Morrison, Johan Commelin and Eric Wieser.
+Yunzhou Xie, Jujian Zhang, Antoine Chambert-Loir, Christian Merten, Yi Song, Sihan Su,
+Kim Morrison, Johan Commelin and Eric Wieser.
