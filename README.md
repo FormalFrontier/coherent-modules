@@ -54,6 +54,15 @@ Authors: Formal Frontier Agents
   [clients](CoherentModulesTest/LinearAlgebra/TensorProduct/FiniteDetection.lean)
   recover the finite faithfully-flat and local residue-field criteria and use
   a countable direct sum of residue fields.
+- **Ideal action on finite coefficients.** For an FG submodule `N` of an arbitrary
+  additive commutative module over a `CommRing R`,
+  [`Submodule.FG.ideal_smul_eq_self_iff_sup_annihilator_eq_top`](CoherentModules/RingTheory/Nakayama.lean)
+  says `I • N = N ↔ I ⊔ N.annihilator = ⊤` for every ideal `I`. For finite `P`,
+  [`Module.forall_maximal_smul_top_ne_top_iff_annihilator_le_jacobson`](CoherentModules/RingTheory/Nakayama.lean)
+  characterizes proper image under every maximal ideal by
+  `Module.annihilator R P ≤ Ideal.jacobson ⊥`, with no flatness or faithful-action
+  assumption. The [clients](CoherentModulesTest/RingTheory/Nakayama.lean) recover
+  relative Jacobson properness and supply the finite tensor-detection input.
 - **Faithfully flat tensor products.** Over a `CommRing R`, for additive
   commutative groups `C` and `D` with `R`-module structures,
   [`Module.FaithfullyFlat.tensorProduct_iff`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
