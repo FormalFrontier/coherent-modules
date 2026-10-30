@@ -11,6 +11,7 @@ public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
 public import CoherentModules.Basic
 public import CoherentModules.FinitePresentation
 public import CoherentModules.Hom
+public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
 public import CoherentModules.RingTheory.Flat.BaseChange

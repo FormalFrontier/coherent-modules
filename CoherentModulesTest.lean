@@ -10,6 +10,7 @@ public import CoherentModulesTest.Basic
 public import CoherentModulesTest.FinitePresentation
 public import CoherentModulesTest.FinitePresentationZero
 public import CoherentModulesTest.Hom
+public import CoherentModulesTest.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModulesTest.Localization
 public import CoherentModulesTest.ModuleCat
 public import CoherentModulesTest.RingTheory.Flat.BaseChange

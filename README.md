@@ -42,6 +42,18 @@ Authors: Formal Frontier Agents
   they are not global instances. [`CoherentModuleCat`](CoherentModules/ModuleCat.lean)
   is a transparent full subcategory with abelian structure obtained through
   generic category constructions.
+- **Finite-module tensor zero detection.** For an arbitrary additive commutative
+  `R`-module `P` over a `CommRing R`,
+  [`Module.forall_maximal_smul_top_ne_top_iff_forall_finite_tensorProduct`](CoherentModules/LinearAlgebra/TensorProduct/FiniteDetection.lean)
+  characterizes zero-object detection on all finite modules by
+  `m • (⊤ : Submodule R P) ≠ ⊤` for every maximal ideal `m`.
+  [`Module.subsingleton_tensorProduct_iff_of_finite`](CoherentModules/LinearAlgebra/TensorProduct/FiniteDetection.lean)
+  gives `Subsingleton (P ⊗[R] M) ↔ Subsingleton M` for a single finite module
+  in an independent universe. No flatness, faithfulness or finiteness of `P`
+  is required. This detects zero objects, not zero maps or isomorphisms. The
+  [clients](CoherentModulesTest/LinearAlgebra/TensorProduct/FiniteDetection.lean)
+  recover the finite faithfully-flat and local residue-field criteria and use
+  a countable direct sum of residue fields.
 - **Faithfully flat tensor products.** Over a `CommRing R`, for additive
   commutative groups `C` and `D` with `R`-module structures,
   [`Module.FaithfullyFlat.tensorProduct_iff`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
