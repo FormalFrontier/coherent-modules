@@ -15,6 +15,7 @@ public import CoherentModules.Hom
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteSurjectivity
 public import CoherentModules.LinearAlgebra.TensorProduct.Generation
+public import CoherentModules.LinearAlgebra.TensorProduct.Noetherian
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
 public import CoherentModules.RingTheory.Flat.BaseChange
@@ -36,7 +37,8 @@ Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, left Noetherianity under unit clearing,
 the coherent-module category, universal coherence, Hom/tensor closure,
-generator bounds for semilinear images, and faithful flatness of tensor products
+generator bounds for semilinear images, Noetherian scalar extension along
+essentially finite-type algebras, and faithful flatness of tensor products
 and direct sums. Flatness is invariant under compatible semilinear equivalences
 of modules over equivalent commutative semirings, with mono-flatness understood
 over semirings.

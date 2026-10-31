@@ -4,7 +4,8 @@ Reusable Lean library for coherent modules and rings, finite presentation,
 localization, closure constructions, finite square-zero extensions, left
 Noetherianity of square-zero extensions, ideal-to-module transfer, and
 finite-generation ascent under pointwise unimodular clearing and Noetherian
-ascent under left-invertible scalar clearing for semilinear maps.
+ascent under left-invertible scalar clearing for semilinear maps, and Noetherian
+scalar extension along essentially finite-type algebras.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -51,6 +52,15 @@ Authors: Formal Frontier Agents
   `isNoetherian_of_unit_smul_mem_range` corollary retains the familiar
   unit-clearing hypothesis, while `isNoetherian_of_surjective_semilinear`
   requires only function-surjectivity of `f`.
+- **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
+  an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
+  `R`-module `M`,
+  [`Algebra.EssFiniteType.isNoetherian_tensorProduct`](CoherentModules/LinearAlgebra/TensorProduct/Noetherian.lean)
+  makes `S ⊗[R] M` Noetherian over `S` with its canonical left-factor action.
+  The three universes are independent, and `M` need only be an additive
+  commutative monoid with its given module structure. Neither ambient ring
+  must be Noetherian; no flatness, faithfulness or finite presentation is
+  assumed. This includes finite-type algebras and arbitrary localizations.
 - **Coherent modules and kernels.** [`Module.IsCoherent`](CoherentModules/Basic.lean)
   means finite generation together with finite presentation of every finitely
   generated submodule. [`Module.IsCoherent.iff_finite_and_fg_ker`](CoherentModules/Basic.lean)
