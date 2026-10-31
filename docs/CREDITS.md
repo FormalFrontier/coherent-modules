@@ -51,6 +51,19 @@ span of the comap image, not a surjectivity assumption on the scalar homomorphis
 The semilinear interface proofs and sign-clearing example are Formal Frontier
 AI-agent contributions; the general scalar-span engine is reused, not reimplemented.
 
+The semilinear-flatness invariance results combine Mathlib's fixed-ring
+flatness transport and flatness composition with restriction of scalars and
+additive-equivalence rebundling. Formal Frontier Agents developed this
+composition/restriction argument and its action-preserving packaging. The
+reused flatness formalization is credited to Johan Commelin, Jujian Zhang and
+Yongle Hu, composition to Christian Merten, and restriction and algebra towers
+to Kenny Lau, Yury Kudryashov and Anne Baanen. The equivalence APIs are credited
+to Nathaniel Thomas, Jeremy Avigad, Johannes Hölzl, Mario Carneiro, Anne Baanen,
+Frédéric Dupuis and Heather Macbeth. The projection-module example reuses the
+product APIs credited to Johannes Hölzl, Chris Hughes, Mario Carneiro and Yury
+Kudryashov, and Kim Morrison's lift APIs. Their upstream notices remain with
+Mathlib; no upstream source assets are distributed here.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from

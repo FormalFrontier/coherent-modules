@@ -93,6 +93,17 @@ Authors: Formal Frontier Agents
   `Module.annihilator R P ≤ Ideal.jacobson ⊥`, with no flatness or faithful-action
   assumption. The [clients](CoherentModulesTest/RingTheory/Nakayama.lean) recover
   relative Jacobson properness and supply the finite tensor-detection input.
+- **Semilinear invariance of flatness.** For equivalent commutative semirings
+  `e : R ≃+* S` and a compatible semilinear equivalence from an additive
+  commutative `R`-module `M` to an additive commutative `S`-module `N`,
+  [`Module.Flat.semilinearEquiv_iff`](CoherentModules/RingTheory/Flat/Equiv.lean)
+  gives `Module.Flat R M ↔ Module.Flat S N` for both given scalar actions.
+  `Module.Flat.of_semilinearEquiv e E` takes flatness of `N` to flatness of `M`.
+  The four carrier universes are independent. Over semirings, this is Mathlib's
+  mono-flatness (tensoring preserves injective linear maps); over rings it is
+  usual flatness. No faithful action, finiteness or additive cancellation is
+  required. The identity coefficient equivalence accepts the same ordinary
+  linear equivalence as Mathlib's fixed-ring flatness API.
 - **Faithfully flat tensor products.** Over a `CommRing R`, for additive
   commutative groups `C` and `D` with `R`-module structures,
   [`Module.FaithfullyFlat.tensorProduct_iff`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
@@ -216,9 +227,9 @@ localization, Hom, tensor and universal coherence use `CommRing`. The square-zer
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
 bimodule actions. The predicate transfer uses `CommRing` and `AddCommGroup`.
-The ideal/product identity uses `CommSemiring` and `AddCommMonoid`; the
-faithful-flatness criteria use `CommRing` and require no coherence or projectivity
-assumption. Module carrier universes are independent where stated.
+The ideal/product identity and semilinear mono-flatness invariance use
+`CommSemiring` and `AddCommMonoid`; the faithful-flatness criteria use `CommRing`
+and require no coherence or projectivity assumption. Module carrier universes are independent where stated.
 Zero rings/modules, empty indexing sets and rank-zero finite free
 modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory

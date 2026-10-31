@@ -15,6 +15,7 @@ public import CoherentModulesTest.Localization
 public import CoherentModulesTest.ModuleCat
 public import CoherentModulesTest.RingTheory.Flat.BaseChange
 public import CoherentModulesTest.RingTheory.Flat.DirectSum
+public import CoherentModulesTest.RingTheory.Flat.Equiv
 public import CoherentModulesTest.RingTheory.Flat.FaithfullyFlat
 public import CoherentModulesTest.RingTheory.Flat.Localization
 public import CoherentModulesTest.RingTheory.Flat.LocalizationCriterion
