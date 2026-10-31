@@ -16,6 +16,14 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Coprime scalar rows.** For a commutative semiring `S`, an additive
+  commutative `S`-semimodule `M`, and Bézout-coprime scalars `a`, `b`,
+  [`IsCoprime.existsUnique_smul_eq_pair`](CoherentModules/Algebra/Module/Coprime.lean)
+  gives a unique `k` with `a • k = x` and `b • k = y` whenever
+  `b • x = a • y`. The companion `smul_mem_range_smul_iff` reflects
+  membership in the range of multiplication by `a` after multiplying by `b`.
+  The two universes are independent; no subtraction, additive cancellation,
+  nontriviality or finiteness is assumed.
 - **Finite generation under pointwise unimodular clearing.** For arbitrary,
   possibly noncommutative semirings `R`, `S` and `f : M →ₛₗ[φ] N` between
   additive commutative left semimodules,
@@ -361,9 +369,8 @@ Mathematical background includes Kazuhiro Fujiwara and Fumiharu Kato,
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5).
 No source PDF or substantial excerpt is bundled; this citation does not assert
 complete source correspondence or endorsement. Anchor contributed the original
-foundation, kernel closure and universal-coherence units and coordinated
-integration; other Formal Frontier AI agents contributed the subsequent
-constructions, tests and independent reviews. See [credits](docs/CREDITS.md)
+foundation, kernel closure and universal-coherence formalizations; other Formal
+Frontier AI agents contributed further constructions and tests. See [credits](docs/CREDITS.md)
 for mathematical and tooling provenance. No legal copyright owner is inferred
 from collective author credit.
 

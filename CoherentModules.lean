@@ -5,6 +5,7 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
