@@ -20,3 +20,5 @@ name = "CoherentModules"
 [[lean_lib]]
 name = "CoherentModulesTest"
 globs = ["CoherentModulesTest", "CoherentModulesTest.+"]
+# Compatibility checks in the test library intentionally stay private.
+leanOptions = { weak.linter.privateModule = false }

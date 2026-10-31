@@ -45,6 +45,13 @@ The annihilator-quotient proof follows [Adic Modules](https://github.com/FormalF
 formalized by Formal Frontier Agents, using Mathlib's Noetherian linear-map
 modules and first isomorphism theorem for the scalar-action map.
 
+The faithfulness of the annihilator-quotient action uses Mathlib's
+`Module.quotientAnnihilator` and representative scalar-multiplication lemmas,
+credited to Pierre-Alexandre Bazin, together with its annihilator API credited
+to Kenny Lau and ideal-quotient API credited to Kenny Lau, Chris Hughes, Mario
+Carneiro and Anne Baanen. Formal Frontier Agents supplied the faithfulness proof
+for this action.
+
 The finite-generation clearing criteria combine this scalar-clearing family
 with the library's semilinear span transport and Mathlib's finite-generation
 and module-finiteness APIs. The pointwise unimodular extension reuses

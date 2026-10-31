@@ -24,6 +24,7 @@ public import CoherentModulesTest.RingTheory.Flat.LocalizationProductCriteria
 public import CoherentModulesTest.RingTheory.Flat.LocalizationProductInfinite
 public import CoherentModulesTest.RingTheory.Flat.LocalizationZeroDivisors
 public import CoherentModulesTest.RingTheory.Flat.TensorProduct
+public import CoherentModulesTest.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModulesTest.RingTheory.Nakayama
 public import CoherentModulesTest.TensorProduct
 public import CoherentModulesTest.TensorProduct.FiniteSurjectivity

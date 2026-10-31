@@ -1,5 +1,5 @@
 {
   "version": 1,
   "mode": "required",
-  "test_libraries": []
+  "test_libraries": ["CoherentModulesTest"]
 }
