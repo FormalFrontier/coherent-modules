@@ -9,9 +9,11 @@ public import Mathlib.LinearAlgebra.DirectSum.TensorProduct
 public import Mathlib.LinearAlgebra.TensorProduct.RightExactness
 public import Mathlib.RingTheory.Flat.Equalizer
 public import Mathlib.RingTheory.Localization.BaseChange
+import Mathlib.LinearAlgebra.TensorProduct.Pi
+import Mathlib.RingTheory.Finiteness.Defs
 
 /-!
-# Flat scalar extension and reflection of faithful flatness
+# Flat scalar extension, faithful actions and faithful flatness
 
 Flat scalar extension carries the kernel ideal of an algebra homomorphism to the
 kernel ideal of its tensor product with the identity. The scalar algebra and both
@@ -23,8 +25,14 @@ module. Preservation of faithful flatness holds for arbitrary base change.
 The tensor product has the canonical action on its left factor; the original
 module needs no action of the scalar algebra.
 
-The test modules have carrier universe `max u w`, where `u` is the coefficient
-ring's universe and `w` is arbitrary. The scalar algebra's universe is independent.
+Flat scalar extension also preserves the faithful action of a finite module, without
+requiring that original module to be flat. The coefficient semiring is commutative,
+but the scalar algebra need not be commutative, and the module may be an additive
+commutative monoid. The three universes are independent.
+
+In the maximal-ideal criterion, the test modules have carrier universe `max u w`,
+where `u` is the coefficient ring's universe and `w` is arbitrary. The scalar
+algebra's universe is independent.
 This allows the converse to test the direct sum of principal localizations indexed
 by all elements of a maximal ideal, raised by `ULift` if necessary. No finite
 generation of that ideal or flatness of the scalar algebra is required.
@@ -41,6 +49,10 @@ It combines Mathlib's `TensorProduct.directSumRight`,
 `DirectSum.congrLinearEquiv` and `IsLocalization.Away.tensorEquiv` to identify the
 base change of the direct sum, and uses Mathlib's linear-equivalence and `ULift`
 transport for flatness and faithful flatness.
+
+Faithful-action preservation uses Mathlib's finite generating families,
+`LinearMap.ext_on_range`, `Module.Flat.lTensor_preserves_injective_linearMap`,
+the right tensor unitor and the finite-product comparison `TensorProduct.piRight`.
 -/
 
 @[expose] public section
@@ -125,3 +137,32 @@ theorem ker_map_id_left
 end TensorProduct
 
 end Algebra
+
+/-- A finite faithful module remains faithful after flat scalar extension, with the
+canonical left-factor action on the tensor product. The scalar algebra may be
+noncommutative and the module need not be flat. For semirings, `Module.Flat` has
+Mathlib's mono-flat meaning. -/
+theorem FaithfulSMul.baseChange_of_finite_of_flat
+    (C : Type u) (S : Type v) (N : Type w)
+    [CommSemiring C] [Semiring S] [Algebra C S]
+    [AddCommMonoid N] [Module C N]
+    [Module.Finite C N] [FaithfulSMul C N] [Module.Flat C S] :
+    FaithfulSMul S (S ⊗[C] N) := by
+  obtain ⟨n, v, hv⟩ := Module.Finite.exists_fin (R := C) (M := N)
+  let f : C →ₗ[C] (Fin n → N) :=
+    LinearMap.pi fun i ↦ LinearMap.toSpanSingleton C N (v i)
+  have hf : Function.Injective f := by
+    intro a b hab
+    apply eq_of_smul_eq_smul (α := N)
+    have he : a • (LinearMap.id : N →ₗ[C] N) = b • LinearMap.id :=
+      LinearMap.ext_on_range hv fun i ↦ congrFun hab i
+    exact fun x ↦ congrArg (fun g : N →ₗ[C] N ↦ g x) he
+  have hfS : Function.Injective (f.lTensor S) :=
+    Module.Flat.lTensor_preserves_injective_linearMap f hf
+  refine ⟨?_⟩
+  intro s t h
+  apply (TensorProduct.rid C S).symm.injective
+  apply hfS
+  apply (TensorProduct.piRight C C S (fun _ : Fin n ↦ N)).injective
+  funext i
+  simpa [f, TensorProduct.smul_tmul', smul_eq_mul] using h (1 ⊗ₜ[C] v i)
