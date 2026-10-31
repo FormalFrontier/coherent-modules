@@ -5,28 +5,63 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.Algebra.Module.Basic
+public import Mathlib.LinearAlgebra.Pi
 public import Mathlib.RingTheory.Coprime.Basic
+public import Mathlib.RingTheory.Ideal.Operations
 
 /-!
-# Coprime scalar rows in semimodules
+# Unit-ideal scalar families in semimodules
 
-A Bézout identity for two scalars recovers a unique common parameter from a compatible
-pair in any semimodule. Neither subtraction nor additive cancellation is needed.
-Here `IsCoprime a b` means that `r * a + s * b = 1` for some scalars `r, s`, not merely
-that `a` and `b` have no common nonunit divisor.
+A family of scalars generating the unit ideal recovers a unique common parameter from
+compatible semimodule elements. The index type is arbitrary, and the scalar actions
+need only commute on the semimodule. Neither subtraction nor additive cancellation
+is needed.
 
-The range-membership criterion specializes to Mathlib's coprime divisibility
-criterion on the regular semimodule.
+For two scalars, a Bézout identity gives this gluing principle. Here `IsCoprime a b`
+means that `r * a + s * b = 1` for some scalars `r, s`, not merely that `a` and `b`
+have no common nonunit divisor. The range-membership criterion specializes to
+Mathlib's coprime divisibility criterion on the regular semimodule.
 
 ## References
 
-This uses Mathlib's Bézout definition of `IsCoprime` and its scalar divisibility API
-in `Mathlib.RingTheory.Coprime.Basic`.
+The family theorem applies Kenny Lau's scalar-span membership principle
+`Submodule.mem_of_span_top_of_smul_mem` in `Mathlib.RingTheory.Ideal.Operations`,
+together with Mathlib's linear-map Pi and equality-on-span APIs. The pair results
+use Mathlib's Bézout definition of `IsCoprime` and its scalar divisibility API in
+`Mathlib.RingTheory.Coprime.Basic`.
 -/
 
 @[expose] public section
 
-universe u v
+universe u v w
+
+namespace Ideal
+
+/-- A compatible family has a unique common parameter when its scalars generate the
+unit ideal and their actions commute on the semimodule. The index type need not be
+finite or nonempty, and the semimodule needs no additive inverses or cancellation. -/
+theorem existsUnique_smul_eq_of_span_range_eq_top
+    {S : Type u} [Semiring S]
+    {M : Type v} [AddCommMonoid M] [Module S M] [SMulCommClass S S M]
+    {ι : Type w} (a : ι → S) (hspan : Ideal.span (Set.range a) = ⊤)
+    (x : ι → M) (hcompat : ∀ i j, a j • x i = a i • x j) :
+    ∃! k : M, ∀ i, a i • k = x i := by
+  let D : M →ₗ[S] (ι → M) := LinearMap.pi fun i => DistribSMul.toLinearMap S M (a i)
+  have hx : x ∈ LinearMap.range D := by
+    apply Submodule.mem_of_span_top_of_smul_mem (LinearMap.range D) (Set.range a) hspan x
+    rintro ⟨_, i, rfl⟩
+    refine ⟨x i, ?_⟩
+    funext j
+    exact hcompat i j
+  obtain ⟨k, hk⟩ := hx
+  have hk' : ∀ i, a i • k = x i := fun i => congrFun hk i
+  refine ⟨k, hk', fun y hy => ?_⟩
+  apply LinearMap.toSpanSingleton_injective S M
+  apply LinearMap.ext_on_range hspan
+  intro i
+  exact (hy i).trans (hk' i).symm
+
+end Ideal
 
 namespace IsCoprime
 

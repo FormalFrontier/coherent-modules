@@ -16,6 +16,12 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Unit-ideal scalar families.** For an arbitrary family of scalars generating
+  the unit ideal in a semiring `S`,
+  [`Ideal.existsUnique_smul_eq_of_span_range_eq_top`](CoherentModules/Algebra/Module/Coprime.lean)
+  gives a unique common parameter for compatible elements of an `S`-semimodule
+  whose scalar actions commute. The index type need not be finite or nonempty,
+  and no subtraction or additive cancellation is needed.
 - **Coprime scalar rows.** For a commutative semiring `S`, an additive
   commutative `S`-semimodule `M`, and Bézout-coprime scalars `a`, `b`,
   [`IsCoprime.existsUnique_smul_eq_pair`](CoherentModules/Algebra/Module/Coprime.lean)

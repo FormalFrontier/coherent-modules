@@ -6,13 +6,15 @@ module
 
 import CoherentModules.Algebra.Module.Coprime
 import Mathlib.Algebra.Ring.Prod
+import Mathlib.Data.Fin.VecNotation
 
 /-!
-# Coprime rows over semirings
+# Unit-ideal scalar families over semirings
 
-The product of natural-number semirings gives a nonring example with two nonunit
-scalars carrying different coordinates. The regular-semimodule specialization
-recovers the scalar divisibility criterion.
+Products of natural-number semirings give nonring examples with nonunit scalars
+carrying different coordinates. The regular-semimodule specialization recovers the
+scalar divisibility criterion, and a three-coordinate family exercises gluing beyond
+a selected pair.
 -/
 
 section
@@ -32,3 +34,17 @@ example (h : IsCoprime a b) : a ∣ b * c ↔ a ∣ c := by
     (h.smul_mem_range_smul_iff (M := S) c)
 
 end
+
+/-- Three coordinate idempotents glue compatible data over a semiring without subtraction.
+Each selected pair omits a coordinate, whereas the whole family generates one. -/
+example :
+    let a : Fin 3 → ℕ × ℕ × ℕ := ![(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+    let x : Fin 3 → ℕ × ℕ × ℕ := ![(2, 0, 0), (0, 3, 0), (0, 0, 5)]
+    ∃! k : ℕ × ℕ × ℕ, ∀ i, a i • k = x i := by
+  intro a x
+  apply Ideal.existsUnique_smul_eq_of_span_range_eq_top a
+  · let I := Ideal.span (Set.range a)
+    have hmem (i : Fin 3) : a i ∈ I := Ideal.subset_span ⟨i, rfl⟩
+    rw [Ideal.eq_top_iff_one]
+    exact I.add_mem (I.add_mem (hmem 0) (hmem 1)) (hmem 2)
+  · decide
