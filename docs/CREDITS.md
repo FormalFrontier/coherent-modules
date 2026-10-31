@@ -41,6 +41,10 @@ the range specialization documents agreement at its original hypotheses.
 These are mathematical ideas and independently written proofs, not copied
 source text or third-party assets.
 
+The annihilator-quotient proof follows [Adic Modules](https://github.com/FormalFrontier/adic-modules),
+formalized by Formal Frontier Agents, using Mathlib's Noetherian linear-map
+modules and first isomorphism theorem for the scalar-action map.
+
 The finite-generation clearing criteria combine this scalar-clearing family
 with the library's semilinear span transport and Mathlib's finite-generation
 and module-finiteness APIs. The pointwise unimodular extension reuses

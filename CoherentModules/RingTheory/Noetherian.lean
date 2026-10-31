@@ -5,11 +5,14 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.Algebra.Module.Submodule.Range
+public import Mathlib.LinearAlgebra.Isomorphisms
 public import Mathlib.RingTheory.Finiteness.Ideal
+public import Mathlib.RingTheory.Ideal.Quotient.Basic
+public import Mathlib.RingTheory.Noetherian.Basic
 public import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Noetherian ascent under scalar clearing
+# Noetherianity under scalar clearing and annihilator quotients
 
 For a semilinear map, suppose each target element can be multiplied by a scalar
 with a left inverse into the image. Comap then reflects submodule order, so the
@@ -21,16 +24,25 @@ For regular semiring modules, unit clearing also identifies each left ideal
 with the extension of its contraction. Units need not be central or come from
 the source. Function-surjective maps satisfy unit clearing with the unit `1`.
 
+For a Noetherian module over a commutative ring, the quotient of the scalar ring
+by the module's annihilator is Noetherian. The scalar ring itself need not be
+Noetherian.
+
 ## References
 
 The argument uses Mathlib's submodule comap and ascending-chain criterion, and
 extends the ideal unit-clearing argument in this library to semimodules. The
 left-inverse formulation retains only the scalar recovery needed in that argument.
+The annihilator-quotient proof follows the formalization in Adic Modules by
+Formal Frontier Agents. It uses Mathlib's Noetherianity of linear-map modules and
+first isomorphism theorem for the scalar-action map.
 -/
 
 @[expose] public section
 
 universe uR uS uM uN
+
+section Semiring
 
 variable {R : Type uR} {S : Type uS} [Semiring R] [Semiring S]
 
@@ -153,3 +165,26 @@ theorem isNoetherianRing_of_unit_mul_mem_range (f : R →+* S)
   intro s
   obtain ⟨u, r, hr⟩ := h s
   exact ⟨r, u, hr⟩
+
+end Semiring
+
+section CommRing
+
+/-- The quotient of a commutative ring by the annihilator of a Noetherian module
+is a Noetherian ring. No Noetherianity assumption on the scalar ring is required. -/
+theorem isNoetherianRing_quotient_annihilator
+    {A : Type uR} [CommRing A] (X : Type uM) [AddCommGroup X] [Module A X]
+    [IsNoetherian A X] : IsNoetherianRing (A ⧸ Module.annihilator A X) := by
+  let f := LinearMap.lsmul A X
+  have : IsNoetherian A (Module.End A X) := isNoetherian_linearMap A X X
+  have : IsNoetherian A (LinearMap.range f) :=
+    isNoetherian_of_injective (LinearMap.range f).subtype Subtype.val_injective
+  have hker : LinearMap.ker f = (Module.annihilator A X : Submodule A A) := by
+    ext a
+    exact (Module.mem_annihilator_iff_lsmul_eq_zero).symm
+  have hquot : IsNoetherian A (A ⧸ Module.annihilator A X) := by
+    rw [← hker]
+    exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
+  exact isNoetherian_of_tower A hquot
+
+end CommRing
