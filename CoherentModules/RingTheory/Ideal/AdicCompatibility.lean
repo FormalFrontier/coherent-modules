@@ -5,7 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.RingTheory.Finiteness.Cardinality
-public import Mathlib.RingTheory.Ideal.Operations
+public import Mathlib.RingTheory.Ideal.Maps
 
 /-!
 # Submodule adic cofinality
@@ -18,6 +18,7 @@ condition to finitely generated submodules. These are Fujiwara--Kato's condition
 Neither the ideal nor the relations of the ambient module need be finitely generated.
 
 Full submodule adic cofinality implies finite-submodule adic cofinality.
+Both conditions pass to the extension of an ideal along a module-finite algebra.
 Nilpotent ideals satisfy both conditions without any Noetherian hypothesis. The
 Noetherian-ring providers are in `CoherentModules.RingTheory.Filtration`.
 
@@ -29,6 +30,11 @@ and a shared linear-equivalence transport of the whole inequality.
 The representative is a quotient of a finite free module by its full kernel;
 no finite-presentation assumption is made.
 
+Finite-algebra transport uses the action composed with the algebra map.
+Restriction of scalars preserves intersections and mapped ideal-power actions.
+Finiteness is transitive, and finite generation of a submodule also restricts
+along a module-finite algebra.
+
 ## References
 
 Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
@@ -39,7 +45,7 @@ map, finite-generation and ideal-action APIs.
 
 @[expose] public section
 
-universe uR uM
+universe uR uS uM
 
 namespace Ideal
 
@@ -146,6 +152,50 @@ theorem HasFiniteSubmoduleAdicCofinality.cofinal
   exact cofinal_of_linearEquiv I e N
     ((hasFiniteSubmoduleAdicCofinality_iff I).mp hI
       (Module.Finite.repr R M) (N.map e.symm.toLinearMap) (hN.map e.symm.toLinearMap))
+
+private theorem cofinal_le_of_restrictScalars
+    {S : Type uS} [CommRing S] [Algebra R S]
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module S M]
+    [IsScalarTower R S M] (I : Ideal R) (N : Submodule S M) (m n : ℕ)
+    (h : N.restrictScalars R ⊓ ((I ^ m) • (⊤ : Submodule R M)) ≤
+      (I ^ n) • N.restrictScalars R) :
+    N ⊓ (((I.map (algebraMap R S)) ^ m) • (⊤ : Submodule S M)) ≤
+      ((I.map (algebraMap R S)) ^ n) • N := by
+  apply (Submodule.restrictScalars_le R).mp
+  simpa only [Submodule.restrictScalars_inf, ← Ideal.map_pow,
+    Ideal.smul_restrictScalars, Submodule.restrictScalars_top] using h
+
+/-- Submodule adic cofinality passes to the extension of an ideal along a
+module-finite algebra. This is finite-algebra stability of condition (AP) of
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, §0.7.4. Neither the ideal nor
+the submodules need be finitely generated. -/
+theorem HasSubmoduleAdicCofinality.map
+    {S : Type uS} [CommRing S] [Algebra R S] [Module.Finite R S]
+    {I : Ideal R} (hI : I.HasSubmoduleAdicCofinality) :
+    (I.map (algebraMap R S)).HasSubmoduleAdicCofinality := by
+  refine (hasSubmoduleAdicCofinality_iff _).2 ?_
+  intro X _ _ _ N n
+  let : Module R X := Module.compHom X (algebraMap R S)
+  let : IsScalarTower R S X := IsScalarTower.of_compHom R S X
+  let : Module.Finite R X := Module.Finite.trans (R := R) S X
+  obtain ⟨m, hm⟩ := hI.cofinal (N.restrictScalars R) n
+  exact ⟨m, cofinal_le_of_restrictScalars I N m n hm⟩
+
+/-- Finite-submodule adic cofinality passes to the extension of an ideal along a
+module-finite algebra. This is finite-algebra stability of condition (APf) of
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, §0.7.4. No finite generation
+of the ideal is required. -/
+theorem HasFiniteSubmoduleAdicCofinality.map
+    {S : Type uS} [CommRing S] [Algebra R S] [Module.Finite R S]
+    {I : Ideal R} (hI : I.HasFiniteSubmoduleAdicCofinality) :
+    (I.map (algebraMap R S)).HasFiniteSubmoduleAdicCofinality := by
+  refine (hasFiniteSubmoduleAdicCofinality_iff _).2 ?_
+  intro X _ _ _ N hN n
+  let : Module R X := Module.compHom X (algebraMap R S)
+  let : IsScalarTower R S X := IsScalarTower.of_compHom R S X
+  let : Module.Finite R X := Module.Finite.trans (R := R) S X
+  obtain ⟨m, hm⟩ := hI.cofinal (N.restrictScalars R) (hN.restrictScalars (R := R)) n
+  exact ⟨m, cofinal_le_of_restrictScalars I N m n hm⟩
 
 /-- Nilpotent ideals have submodule adic cofinality: a single vanishing power
 works for every submodule and every index. No Noetherianity or finite generation
