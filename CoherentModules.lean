@@ -33,6 +33,7 @@ public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
+public import CoherentModules.RingTheory.Noetherian.Retraction
 public import CoherentModules.TensorProduct
 public import CoherentModules.UniversallyCoherent
 
@@ -45,7 +46,7 @@ ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary
 commutative rings, finite-submodule adic cofinality with Noetherian-ring and
 nilpotent-ideal providers, its Krull membership characterization and relative
 annihilator separation and submodule intersection theorems,
-left Noetherianity under unit clearing,
+left Noetherianity under unit clearing and additive right retractions,
 the coherent-module category, universal coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
