@@ -28,6 +28,7 @@ public import CoherentModules.RingTheory.Flat.Equiv
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.Localization
 public import CoherentModules.RingTheory.Flat.TensorProduct
+public import CoherentModules.RingTheory.Ideal.AdicBaseChange
 public import CoherentModules.RingTheory.Ideal.AdicCompatibility
 public import CoherentModules.RingTheory.Ideal.AdicKrull
 public import CoherentModules.RingTheory.Ideal.AdicLocality
@@ -48,9 +49,10 @@ public import CoherentModules.UniversallyCoherent
 Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary
-commutative rings, finite-submodule adic cofinality with Noetherian-ring and
-nilpotent-ideal providers, its Krull membership characterization and relative
-annihilator separation and submodule intersection theorems,
+commutative rings, submodule adic cofinality with Noetherian-ring and
+nilpotent-ideal providers and faithfully flat descent, its Krull membership
+characterization and relative annihilator separation and submodule intersection
+theorems,
 left Noetherianity under unit clearing and additive right retractions,
 the coherent-module category, universal coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along

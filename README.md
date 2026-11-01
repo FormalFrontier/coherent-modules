@@ -111,6 +111,14 @@ Authors: Formal Frontier Agents
   Artin–Rees equality. The APf providers follow from (AP), and the
   [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the APf
   API to maps between finite modules in independent universes.
+- **Faithfully flat descent of adic cofinality.** For commutative rings `R`, `A`
+  with a faithfully flat `R`-algebra structure on `A`,
+  [`Ideal.HasSubmoduleAdicCofinality.of_map_of_faithfullyFlat`](CoherentModules/RingTheory/Ideal/AdicBaseChange.lean)
+  descends (AP) from `I.map (algebraMap R A)` to `I`; the corresponding
+  `HasFiniteSubmoduleAdicCofinality` theorem descends (APf). The algebra need
+  not be module-finite, the ideal need not be finitely generated, and no finite
+  presentation or Noetherian hypothesis is required. The ring and algebra
+  universes are independent.
 - **Cofinal ideal powers.** For ideals `I, J` of a commutative ring with
   `I ^ a ≤ J` and `J ^ b ≤ I` for some natural numbers `a, b`,
   [`Ideal.hasSubmoduleAdicCofinality_iff_of_pow_le`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
@@ -525,6 +533,8 @@ The submodule adic cofinality predicates follow the (AP)/(APf) paragraph in
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
 which also provides mathematical background for the library. Their universe
 bridges share Mathlib's finite-module representatives and submodule transport.
+Faithfully flat cofinality descent uses Mathlib's submodule base-change order
+reflection, finite tensor products and finiteness under surjective linear maps.
 Invariance under cofinal ideal powers uses Mathlib's left-ideal power
 monotonicity, submodule actions and lattice APIs.
 The cofinality Krull and relative intersection theorems generalize the
