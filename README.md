@@ -6,8 +6,8 @@ Noetherianity of square-zero extensions, ideal-to-module transfer,
 finite-generation ascent under pointwise unimodular clearing, Noetherian
 ascent under left-invertible scalar clearing for semilinear maps, Noetherian
 scalar extension along essentially finite-type algebras, Artin–Rees for
-Noetherian modules over arbitrary commutative rings, and finite-submodule
-adic cofinality.
+Noetherian modules over arbitrary commutative rings, and submodule adic
+cofinality.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -64,19 +64,21 @@ Authors: Formal Frontier Agents
   Artin–Rees theorem over the quotient by the module's annihilator. The
   [shifted-cofinality client](CoherentModulesTest/RingTheory/Filtration.lean) uses
   the full equality at Mathlib's Noetherian-ring and finite-module hypotheses.
-- **Finite-submodule adic cofinality.** For an arbitrary ideal `I` of a
-  commutative ring `R`,
-  [`Ideal.HasFiniteSubmoduleAdicCofinality`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
-  expresses cofinality of the intrinsic and induced ideal-power filtrations
-  for every finitely generated submodule of every finite original module.
-  The `.cofinal` API allows an independent module universe. Nilpotent ideals
-  satisfy this property without Noetherianity or finite generation of the
-  ideal; every ideal of a Noetherian ring satisfies it by
-  [Artin–Rees](CoherentModules/RingTheory/Filtration.lean). This is
-  Fujiwara--Kato's (APf), not (AP) or the stronger Artin–Rees shifted equality;
-  the ambient module need not be finitely presented. The
-  [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the API
-  to maps between finite modules in independent universes.
+- **Submodule adic cofinality.** For an arbitrary ideal `I` of a commutative
+  ring `R`,
+  [`Ideal.HasSubmoduleAdicCofinality`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
+  expresses `∀ n, ∃ m, N ⊓ (I ^ m • ⊤) ≤ I ^ n • N` for every submodule
+  `N` of every finite `R`-module. This is Fujiwara--Kato's (AP); restricting to
+  finitely generated submodules gives the existing
+  `Ideal.HasFiniteSubmoduleAdicCofinality` condition (APf). Both `.cofinal`
+  eliminators allow an independent module universe. Nilpotent ideals satisfy
+  (AP) without Noetherianity or finite generation of the ideal or submodule;
+  every ideal of a Noetherian ring satisfies it by
+  [Artin–Rees](CoherentModules/RingTheory/Filtration.lean). The ambient module
+  need not be finitely presented. Cofinality is pointwise, not a full shifted
+  Artin–Rees equality. The APf providers follow from (AP), and the
+  [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the APf
+  API to maps between finite modules in independent universes.
 - **Krull intersection from adic cofinality.** For a finite module `M` and an
   ideal `I` satisfying finite-submodule adic cofinality,
   [`Ideal.HasFiniteSubmoduleAdicCofinality.mem_iInf_pow_smul_top_iff`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
@@ -466,11 +468,11 @@ Artin–Rees theorem reuses Andrew Yang's formalization in
 existing quotient action and scalar-restriction submodule APIs. The ideal and
 product criteria reuse mathlib's dependent submodules, ideal multiples,
 quotient-tensor equivalences and `DirectSum.linearEquivFunOnFintype`.
-The finite-submodule adic cofinality predicate follows the (APf) paragraph in
+The submodule adic cofinality predicates follow the (AP)/(APf) paragraph in
 §0.7.4 of Kazuhiro Fujiwara and Fumiharu Kato,
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
-which also provides mathematical background for the library. Its universe
-bridge reuses Mathlib's finite-module representatives and submodule transport.
+which also provides mathematical background for the library. Their universe
+bridges share Mathlib's finite-module representatives and submodule transport.
 The cofinality Krull and relative intersection theorems generalize the
 separation and closedness arguments of Proposition 0.7.4.16. They reuse
 Mathlib's cyclic ideal-action, Jacobson modular-inverse, annihilator and

@@ -18,9 +18,29 @@ statements are authoritative about hypotheses and universes.
 | [`CoherentModules.Algebra.TrivSqZeroExt.Finite`](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean) | Projection-kernel equivalence, whole-extension kernel finiteness and projection base change over a commutative semiring. |
 | [`CoherentModules.Algebra.TrivSqZeroExt.Noetherian`](../CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean) | Left Noetherianity of a square-zero extension iff the base ring is left Noetherian and the coefficient bimodule is finite on the left. |
 | [`CoherentModules.RingTheory.Ideal.FiniteModuleTransfer`](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean) | Transfer of isomorphism-invariant, square-zero-descent-stable properties from finite ideals to finite modules over finite-type algebras. |
-| [`CoherentModules.RingTheory.Ideal.AdicCompatibility`](../CoherentModules/RingTheory/Ideal/AdicCompatibility.lean) | Finite-submodule adic cofinality (APf), its independent-universe eliminator, and the nilpotent-ideal provider; no ideal-FG or ambient finite-presentation assumption. |
+| [`CoherentModules.RingTheory.Ideal.AdicCompatibility`](../CoherentModules/RingTheory/Ideal/AdicCompatibility.lean) | Submodule adic cofinality (AP), its finite-submodule variant (APf), independent-universe eliminators, the implication AP → APf and nilpotent-ideal providers; no ideal-FG or ambient finite-presentation assumption. |
 | [`CoherentModules.RingTheory.Ideal.AdicKrull`](../CoherentModules/RingTheory/Ideal/AdicKrull.lean) | Krull membership and relative-annihilator separation under finite-submodule adic cofinality; submodule intersection statements require only a finite quotient. No topology or completeness is asserted. |
-| [`CoherentModules.RingTheory.Filtration`](../CoherentModules/RingTheory/Filtration.lean) | Full Artin–Rees for Noetherian modules over arbitrary commutative rings, finite-submodule adic cofinality for ideals of Noetherian rings, and compatibility of the cofinality Krull theorem with Mathlib's subtype witness. |
+| [`CoherentModules.RingTheory.Filtration`](../CoherentModules/RingTheory/Filtration.lean) | Full Artin–Rees for Noetherian modules over arbitrary commutative rings, submodule adic cofinality for ideals of Noetherian rings, and compatibility of the cofinality Krull theorem with Mathlib's subtype witness. |
+
+## Adic cofinality
+
+For an ideal `I` of a commutative ring, `Ideal.HasSubmoduleAdicCofinality`
+means that every submodule `N` of every finite module satisfies
+`∀ n, ∃ m, N ⊓ (I ^ m • ⊤) ≤ I ^ n • N`. This is condition (AP) in
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, §0.7.4.
+The constructor `Ideal.hasSubmoduleAdicCofinality_iff` uses modules in the ring
+universe, while `hI.cofinal N` applies in any independent module universe with
+its given scalar action. It requires `Module.Finite R M`, not `N.FG` or finite
+presentation of `M`. The bound may depend on the module, submodule and index;
+it is not a uniform shift or the full Artin–Rees equality.
+
+`hI.hasFiniteSubmoduleAdicCofinality` gives condition (APf), whose existing
+eliminator retains the finite-generation premise on `N`. The providers
+`Ideal.hasSubmoduleAdicCofinality_of_isNilpotent` and
+`Ideal.hasSubmoduleAdicCofinality_of_isNoetherianRing` imply the corresponding
+APf providers. Nilpotence requires no finite generation of the ideal, and
+Noetherianity is a provider hypothesis, not part of either predicate. Zero
+rings and modules, the zero and unit ideals, and index zero are allowed.
 
 ## Foundation and finite presentation
 

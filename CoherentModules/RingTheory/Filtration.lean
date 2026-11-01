@@ -24,9 +24,10 @@ Noetherian ring. The existing quotient action and the scalar-restriction
 submodule order isomorphism preserve the original submodule, ideal powers and
 both scalar products in the equality.
 
-As a consequence, every ideal of a Noetherian ring has finite-submodule adic
-cofinality, the condition (APf) of Fujiwara--Kato. The local Noetherian-module
-Artin–Rees theorem remains available over an arbitrary commutative ring.
+As a consequence, every ideal of a Noetherian ring has submodule adic
+cofinality, the condition (AP) of Fujiwara--Kato, and hence its finite-submodule
+variant (APf). The local Noetherian-module Artin–Rees theorem remains available
+over an arbitrary commutative ring.
 
 ## References
 
@@ -34,8 +35,9 @@ The Artin–Rees lemma and its stable-filtration proof are formalized by Andrew 
 in `Mathlib.RingTheory.Filtration`. We apply that theorem over the annihilator
 quotient, using this library's annihilator-quotient Noetherianity theorem and
 Mathlib's quotient-module and scalar-restriction APIs.
-The Noetherian-ring cofinality consequence is the (APf) part of Fujiwara--Kato,
-*Foundations of Rigid Geometry I*, arXiv:1308.4734v5, Proposition 0.7.4.14.
+The Noetherian-ring cofinality consequences are conditions (AP) and (APf) in
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, arXiv:1308.4734v5,
+Proposition 0.7.4.14.
 The Krull membership specialization below recovers the subtype-witness statement
 of Mathlib's `Ideal.mem_iInf_smul_pow_eq_bot_iff` from the cofinality theorem in
 `CoherentModules.RingTheory.Ideal.AdicKrull`.
@@ -79,18 +81,26 @@ theorem exists_pow_inf_eq_pow_smul_of_isNoetherian
     hsmul, Submodule.restrictScalars_top, hK] using
     congrArg (Submodule.restrictScalars R) (hc n hn)
 
-/-- Every ideal of a Noetherian ring has finite-submodule adic cofinality.
-This follows from Artin–Rees, as in Fujiwara--Kato, *Foundations of Rigid
-Geometry I*, Proposition 0.7.4.14. -/
-theorem hasFiniteSubmoduleAdicCofinality_of_isNoetherianRing
+/-- Every ideal of a Noetherian ring has submodule adic cofinality, for arbitrary
+submodules of finite modules. This follows from Artin–Rees, as in Fujiwara--Kato,
+*Foundations of Rigid Geometry I*, Proposition 0.7.4.14. -/
+theorem hasSubmoduleAdicCofinality_of_isNoetherianRing
     {R : Type uR} [CommRing R] [IsNoetherianRing R] (I : Ideal R) :
-    I.HasFiniteSubmoduleAdicCofinality := by
-  refine (hasFiniteSubmoduleAdicCofinality_iff I).2 ?_
-  intro X _ _ _ K _ n
+    I.HasSubmoduleAdicCofinality := by
+  refine (hasSubmoduleAdicCofinality_iff I).2 ?_
+  intro X _ _ _ K n
   obtain ⟨c, hc⟩ := exists_pow_inf_eq_pow_smul_of_isNoetherian I K
   refine ⟨n + c, ?_⟩
   rw [inf_comm, hc (n + c) (Nat.le_add_left c n), Nat.add_sub_cancel]
   exact smul_mono_right _ inf_le_right
+
+/-- Every ideal of a Noetherian ring has finite-submodule adic cofinality, as a
+consequence of full submodule adic cofinality. This is condition (APf) in
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, Proposition 0.7.4.14. -/
+theorem hasFiniteSubmoduleAdicCofinality_of_isNoetherianRing
+    {R : Type uR} [CommRing R] [IsNoetherianRing R] (I : Ideal R) :
+    I.HasFiniteSubmoduleAdicCofinality :=
+  (hasSubmoduleAdicCofinality_of_isNoetherianRing I).hasFiniteSubmoduleAdicCofinality
 
 /-- The finite-submodule cofinality Krull theorem recovers Mathlib's
 `Ideal.mem_iInf_smul_pow_eq_bot_iff` under its Noetherian-ring hypotheses,
