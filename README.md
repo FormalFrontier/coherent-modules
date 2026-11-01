@@ -153,14 +153,19 @@ Authors: Formal Frontier Agents
   universe. A single common exponent kills the whole submodule; `I` need not
   be finitely generated or nilpotent. The converse uses images in canonical
   module quotients over the original coefficient ring `R`.
-- **Faithfully flat descent of adic cofinality.** For commutative rings `R`, `A`
-  with a faithfully flat `R`-algebra structure on `A`,
+- **Descent of adic cofinality.** For commutative rings `R`, `A`,
   [`Ideal.HasSubmoduleAdicCofinality.of_map_of_faithfullyFlat`](CoherentModules/RingTheory/Ideal/AdicBaseChange.lean)
-  descends (AP) from `I.map (algebraMap R A)` to `I`; the corresponding
-  `HasFiniteSubmoduleAdicCofinality` theorem descends (APf). The algebra need
-  not be module-finite, the ideal need not be finitely generated, and no finite
-  presentation or Noetherian hypothesis is required. The ring and algebra
-  universes are independent.
+  descends (AP) from `I.map (algebraMap R A)` to `I` along a faithfully flat
+  algebra. Alternatively,
+  [`Ideal.HasSubmoduleAdicCofinality.of_map_of_linearRetraction`](CoherentModules/RingTheory/Ideal/AdicBaseChange.lean)
+  uses an `R`-linear map `p : A →ₗ[R] R` with `p 1 = 1`, without a flatness
+  hypothesis; `p` need not preserve multiplication. Both have corresponding
+  `HasFiniteSubmoduleAdicCofinality` methods for (APf). The algebra need not be
+  module-finite, the ideal need not be finitely generated, and no finite
+  presentation or Noetherian hypothesis is required. The pointwise
+  linear-retraction theorem works over commutative semirings and arbitrary
+  semimodules; its tensor membership and inclusion-reflection lemmas even
+  allow noncommutative scalar algebras. All carrier universes are independent.
 - **Adic cofinality on finite products.** For an arbitrary ideal `I` of
   `Π i, R i`, with `[Finite ι]` and commutative rings `R i`,
   [`Ideal.hasSubmoduleAdicCofinality_iff_forall_map_evalRingHom`](CoherentModules/RingTheory/Ideal/AdicProducts.lean)
