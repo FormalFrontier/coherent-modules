@@ -38,6 +38,7 @@ public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
 public import CoherentModules.RingTheory.Noetherian.Retraction
+public import CoherentModules.RingTheory.TwoSidedIdeal.Atoms
 public import CoherentModules.TensorProduct
 public import CoherentModules.UniversallyCoherent
 
@@ -58,5 +59,6 @@ and direct sums. Flatness is invariant under compatible semilinear equivalences
 of modules over equivalent commutative semirings, with mono-flatness understood
 over semirings.
 A direct sum of canonical principal localizations is faithfully flat exactly
-when its generators span the unit ideal.
+when its generators span the unit ideal. The two-sided ideal lattice of any
+unital, possibly nonassociative ring is coatomic.
 -/

@@ -19,6 +19,15 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Coatomicity of two-sided ideals.** For any unital, possibly nonassociative ring `R`,
+  [`TwoSidedIdeal.isCoatomic`](CoherentModules/RingTheory/TwoSidedIdeal/Atoms.lean)
+  proves `IsCoatomic (TwoSidedIdeal R)`: every proper two-sided ideal lies below a
+  maximal proper two-sided ideal. No nontriviality, commutativity or finiteness
+  assumption is needed. Use this theorem as a local instance with Mathlib's
+  coatom consumers. The
+  [simple-quotient example](CoherentModulesTest/RingTheory/TwoSidedIdeal.lean)
+  combines it with the congruence correspondence to obtain a nontrivial simple
+  quotient of an arbitrary nontrivial ring, with its surjective unital quotient map.
 - **Radical colons and pointwise annihilators.** For a radical ideal `I` in a
   commutative semiring `R` and an arbitrary subset `s : Set R`,
   [`Ideal.IsRadical.colon`](CoherentModules/RingTheory/Ideal/Annihilator.lean)
@@ -503,7 +512,9 @@ is historical and qualified, not a present-day resource guarantee.
 ## References and credit
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
-localization, tensor products and categorical infrastructure. The module
+localization, tensor products and categorical infrastructure. Two-sided ideal
+coatomicity uses Mathlib's two-sided ideal API and order-theoretic Zorn theorem;
+its simple-quotient example uses Mathlib's ring congruence correspondence. The module
 Artin–Rees theorem reuses Andrew Yang's formalization in
 `Mathlib.RingTheory.Filtration` over the annihilator quotient, together with the
 existing quotient action and scalar-restriction submodule APIs. The ideal and
