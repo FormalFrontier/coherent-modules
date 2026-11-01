@@ -99,6 +99,13 @@ Authors: Formal Frontier Agents
   No ideal-FG, finite-presentation or Noetherian hypothesis is added, and the
   ring and module universes are independent. These are algebraic intersection
   results, not assertions of topological closedness or completeness.
+- **Finite generation from the first adic quotient.** For an arbitrary submodule
+  `N` of a finite original `R`-module `M`,
+  [`Submodule.fg_iff_finite_quotient_smul`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
+  detects `N.FG` on the intrinsic quotient `N / I N` over `R`, assuming APf and
+  `I ≤ (Module.annihilator R M).jacobson`. This is not the quotient by
+  `N ∩ I M`, and neither ideal-FG nor a Noetherian, finite-presentation,
+  flatness or completeness hypothesis is required.
 - **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
   an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
   `R`-module `M`,
