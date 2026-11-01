@@ -71,7 +71,8 @@ The given target algebra action is unchanged.
 ## References
 
 Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
-arXiv:1308.4734v5, §0.7.4, the (AP)/(APf) paragraph on printed page 167.
+arXiv:1308.4734v5 (2017-02-28), §0.7.4, the (AP)/(APf) paragraph on printed
+page 167, and Exercise 0.7.8 on printed page 173.
 The universe bridges and semilinear transport use Mathlib's finite-module
 representatives and submodule map, order-reflection, finite-generation and
 ideal-action APIs. The filtered-action image identity extends Mathlib's
@@ -205,6 +206,35 @@ theorem adic_cofinality_iff_of_semilinearEquiv
     (Submodule.map_le_map_iff_of_injective (f := e.toLinearMap) e.injective
       (N ⊓ ((I ^ m) • (⊤ : Submodule R M))) ((I ^ n) • N)).symm
 
+/-- Vanishing of an induced-filtration stage on every nilpotent quotient image
+of a submodule implies adic cofinality for that submodule. -/
+private theorem adic_cofinality_of_quotient_image
+    {R : Type uR} [Ring R]
+    {M : Type uM} [AddCommGroup M] [Module R M]
+    (I : Ideal R) (N : Submodule R M)
+    (h : ∀ (Q : Submodule R M),
+      (∃ k : ℕ, (I ^ k) • (N.map Q.mkQ) = ⊥) →
+        ∃ m : ℕ, N.map Q.mkQ ⊓
+          ((I ^ m) • (⊤ : Submodule R (M ⧸ Q))) = ⊥) :
+    ∀ n : ℕ, ∃ m : ℕ,
+      N ⊓ ((I ^ m) • (⊤ : Submodule R M)) ≤ (I ^ n) • N := by
+  intro n
+  let Q : Submodule R M := (I ^ n) • N
+  have hkill : (I ^ n) • N.map Q.mkQ = ⊥ := by
+    rw [← Submodule.map_smul'']
+    exact Q.mkQ_map_self
+  obtain ⟨m, hm⟩ := h Q ⟨n, hkill⟩
+  refine ⟨m, ?_⟩
+  calc
+    N ⊓ ((I ^ m) • (⊤ : Submodule R M))
+        ≤ (N.map Q.mkQ ⊓
+          ((I ^ m) • (⊤ : Submodule R (M ⧸ Q)))).comap Q.mkQ := by
+      rw [Submodule.comap_inf]
+      exact inf_le_inf (Submodule.le_comap_map Q.mkQ N)
+        (Submodule.smul_top_le_comap_smul_top (I ^ m) Q.mkQ)
+    _ = Q := by rw [hm, Submodule.comap_bot, Submodule.ker_mkQ]
+    _ = (I ^ n) • N := rfl
+
 end Submodule
 
 namespace Ideal
@@ -314,6 +344,90 @@ theorem HasFiniteSubmoduleAdicCofinality.cofinal
   exact cofinal_of_linearEquiv I e N
     ((hasFiniteSubmoduleAdicCofinality_iff I).mp hI
       (Module.Finite.repr R M) (N.map e.symm.toLinearMap) (hN.map e.symm.toLinearMap))
+
+/-- In a finite ambient module, condition (AP) gives a zero induced-filtration
+stage on any submodule killed by one common ideal power. Neither the ideal nor
+the submodule need be finitely generated. The module universe is independent of
+the ring universe, and the given scalar action is unchanged.
+
+This is the forward implication of Fujiwara--Kato, *Foundations of Rigid
+Geometry I*, Exercise 0.7.8. -/
+theorem HasSubmoduleAdicCofinality.exists_inf_pow_smul_eq_bot
+    {R : Type uR} [CommRing R] {I : Ideal R}
+    (hI : I.HasSubmoduleAdicCofinality)
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module.Finite R M]
+    (N : Submodule R M) (hkill : ∃ n : ℕ, (I ^ n) • N = ⊥) :
+    ∃ m : ℕ, N ⊓ ((I ^ m) • (⊤ : Submodule R M)) = ⊥ := by
+  obtain ⟨k, hk⟩ := hkill
+  obtain ⟨m, hm⟩ := hI.cofinal N k
+  refine ⟨m, le_antisymm ?_ bot_le⟩
+  simpa only [hk] using hm
+
+/-- In a finite ambient module, condition (APf) gives a zero induced-filtration
+stage on a finitely generated submodule killed by one common ideal power. The
+ideal need not be finitely generated. The module universe is independent of
+the ring universe, and the given scalar action is unchanged.
+
+This is the forward implication of Fujiwara--Kato, *Foundations of Rigid
+Geometry I*, Exercise 0.7.8. -/
+theorem HasFiniteSubmoduleAdicCofinality.exists_inf_pow_smul_eq_bot
+    {R : Type uR} [CommRing R] {I : Ideal R}
+    (hI : I.HasFiniteSubmoduleAdicCofinality)
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module.Finite R M]
+    (N : Submodule R M) (hN : N.FG)
+    (hkill : ∃ n : ℕ, (I ^ n) • N = ⊥) :
+    ∃ m : ℕ, N ⊓ ((I ^ m) • (⊤ : Submodule R M)) = ⊥ := by
+  obtain ⟨k, hk⟩ := hkill
+  obtain ⟨m, hm⟩ := hI.cofinal N hN k
+  refine ⟨m, le_antisymm ?_ bot_le⟩
+  simpa only [hk] using hm
+
+/-- Condition (AP) is equivalent to existence of a zero induced-filtration stage
+for every submodule killed by one common ideal power in a finite ambient module.
+Neither the ideal nor the tested submodule need be finitely generated.
+
+This is Fujiwara--Kato, *Foundations of Rigid Geometry I*, Exercise 0.7.8. -/
+theorem hasSubmoduleAdicCofinality_iff_forall_exists_inf_pow_smul_eq_bot
+    {R : Type uR} [CommRing R] (I : Ideal R) :
+    I.HasSubmoduleAdicCofinality ↔
+      ∀ (X : Type uR) [AddCommGroup X] [Module R X] [Module.Finite R X]
+        (N : Submodule R X),
+        (∃ n : ℕ, (I ^ n) • N = ⊥) →
+          ∃ m : ℕ, N ⊓ ((I ^ m) • (⊤ : Submodule R X)) = ⊥ := by
+  constructor
+  · intro hI X _ _ _ N hkill
+    exact hI.exists_inf_pow_smul_eq_bot N hkill
+  · intro h
+    refine (hasSubmoduleAdicCofinality_iff I).2 ?_
+    intro X _ _ _ N
+    refine Submodule.adic_cofinality_of_quotient_image I N ?_
+    intro Q hkill
+    let : Module.Finite R (X ⧸ Q) := Module.Finite.quotient R Q
+    exact h (X ⧸ Q) (N.map Q.mkQ) hkill
+
+/-- Condition (APf) is equivalent to existence of a zero induced-filtration stage
+for every finitely generated submodule killed by one common ideal power in a
+finite ambient module. The ideal need not be finitely generated, and the ambient
+module need not be finitely presented.
+
+This is Fujiwara--Kato, *Foundations of Rigid Geometry I*, Exercise 0.7.8. -/
+theorem hasFiniteSubmoduleAdicCofinality_iff_forall_exists_inf_pow_smul_eq_bot
+    {R : Type uR} [CommRing R] (I : Ideal R) :
+    I.HasFiniteSubmoduleAdicCofinality ↔
+      ∀ (X : Type uR) [AddCommGroup X] [Module R X] [Module.Finite R X]
+        (N : Submodule R X), N.FG →
+        (∃ n : ℕ, (I ^ n) • N = ⊥) →
+          ∃ m : ℕ, N ⊓ ((I ^ m) • (⊤ : Submodule R X)) = ⊥ := by
+  constructor
+  · intro hI X _ _ _ N hN hkill
+    exact hI.exists_inf_pow_smul_eq_bot N hN hkill
+  · intro h
+    refine (hasFiniteSubmoduleAdicCofinality_iff I).2 ?_
+    intro X _ _ _ N hN
+    refine Submodule.adic_cofinality_of_quotient_image I N ?_
+    intro Q hkill
+    let : Module.Finite R (X ⧸ Q) := Module.Finite.quotient R Q
+    exact h (X ⧸ Q) (N.map Q.mkQ) (hN.map Q.mkQ) hkill
 
 /-- Submodule adic cofinality is invariant under mutual containment of ideal powers. -/
 theorem hasSubmoduleAdicCofinality_iff_of_pow_le

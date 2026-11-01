@@ -111,6 +111,15 @@ Authors: Formal Frontier Agents
   Artin–Rees equality. The APf providers follow from (AP), and the
   [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the APf
   API to maps between finite modules in independent universes.
+- **Power-killed submodule criteria.** For an ideal `I` of a commutative ring `R`,
+  [`Ideal.hasSubmoduleAdicCofinality_iff_forall_exists_inf_pow_smul_eq_bot`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
+  characterizes (AP) by `∃ m, N ⊓ (I ^ m • ⊤) = ⊥` whenever
+  `∃ k, I ^ k • N = ⊥`, for every submodule `N` of every finite `R`-module.
+  The corresponding (APf) criterion tests only finitely generated `N`.
+  Both `.exists_inf_pow_smul_eq_bot` consumers allow an independent module
+  universe. A single common exponent kills the whole submodule; `I` need not
+  be finitely generated or nilpotent. The converse uses images in canonical
+  module quotients over the original coefficient ring `R`.
 - **Faithfully flat descent of adic cofinality.** For commutative rings `R`, `A`
   with a faithfully flat `R`-algebra structure on `A`,
   [`Ideal.HasSubmoduleAdicCofinality.of_map_of_faithfullyFlat`](CoherentModules/RingTheory/Ideal/AdicBaseChange.lean)
