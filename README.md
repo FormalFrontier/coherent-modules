@@ -210,6 +210,16 @@ Authors: Formal Frontier Agents
   `I ≤ (Module.annihilator R M).jacobson`. This is not the quotient by
   `N ∩ I M`, and neither ideal-FG nor a Noetherian, finite-presentation,
   flatness or completeness hypothesis is required.
+- **Finite presentation from cofinal ideal quotients.** For a finite module `M`
+  over a commutative ring `R` and an ideal `I` satisfying full submodule adic
+  cofinality and `I ≤ Ideal.jacobson ⊥`,
+  [`Ideal.finitePresentation_iff_forall_quotient_smul`](CoherentModules/RingTheory/Ideal/AdicFinitePresentation.lean)
+  detects finite presentation over `R` on all reductions `M / J j M` over
+  `R / J j`, for any family `J : ι → Ideal R` with
+  `∀ n : ℕ, ∃ j, J j ≤ I ^ n`. The positive-powers criterion
+  `Ideal.finitePresentation_iff_forall_quotient_pow_smul` is a specialization.
+  The ring, module and index universes are independent; no ideal finite
+  generation or ordering condition on the family is required.
 - **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
   an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
   `R`-module `M`,
