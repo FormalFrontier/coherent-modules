@@ -7,6 +7,7 @@ module
 
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
+public import CoherentModules.Algebra.Category.ModuleCat.Kernels
 public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
@@ -57,7 +58,7 @@ nilpotent-ideal providers and faithfully flat descent, its Krull membership
 characterization and relative annihilator separation and submodule intersection
 theorems,
 left Noetherianity under unit clearing and additive right retractions,
-the coherent-module category, universal coherence, Hom/tensor closure,
+semimodule kernels, the coherent-module category, universal coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
 and direct sums. Flatness is invariant under compatible semilinear equivalences

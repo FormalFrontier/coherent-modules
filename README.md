@@ -19,6 +19,13 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Kernels over semirings.** For an arbitrary `Semiring R`,
+  [`SemimoduleCat.kernelIsLimit`](CoherentModules/Algebra/Category/ModuleCat/Kernels.lean)
+  makes the existing kernel submodule, with its subtype inclusion, a categorical
+  kernel. `SemimoduleCat.hasKernels_semimoduleCat` gives kernels in
+  `SemimoduleCat.{v} R`, with independent coefficient and carrier universes.
+  Over a ring, `ModuleCat.kernelCone_semimodule_hom_apply` shows that the
+  comparison with Mathlib's module kernel preserves underlying elements.
 - **Relative generation by nilpotent ideals.** For a left ideal `I` of a
   possibly noncommutative semiring `R` and submodules `N`, `P` of an additive
   commutative `R`-semimodule,
@@ -453,8 +460,9 @@ Authors: Formal Frontier Agents
   mean module-finite over the base, and arbitrary ideals need not be finitely
   generated.
 
-The foundation, finite-presentation and category results allow arbitrary `Ring`;
-localization, Hom, tensor and universal coherence use `CommRing`. The square-zero
+The foundation, finite-presentation and coherent-module category results allow
+arbitrary `Ring`; localization, Hom, tensor and universal coherence use `CommRing`.
+The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
 bimodule actions. The predicate transfer uses `CommRing` and `AddCommGroup`.
