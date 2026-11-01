@@ -12,7 +12,8 @@ project:
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
     Noetherian modules, finite-submodule adic cofinality, radical colons of
     arbitrary subsets, and localization saturation commuting with colons by
-    finitely generated ideals in Lean.
+    finitely generated ideals, and annihilator localization for finitely
+    generated semimodules in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -112,6 +113,16 @@ status:
     arbitrary; finite generation of J does not mean its underlying set is
     finite. The two universes are independent, and zero semirings, zero in T,
     the zero ideal J and top ideals are allowed.
+    For commutative semirings R and A and a standard localized-module map
+    from M to N, extension of the annihilator of M is the annihilator of N
+    when M is finitely generated over R. The additive commutative monoids
+    carry their given R-module structures and N has its compatible A-action;
+    all four carrier universes are independent. Zero modules, zero semirings
+    and zero in the localizing submonoid are retained, without finite
+    presentation, faithful action or an added flatness hypothesis. Equality
+    after localization for two maps from a finitely generated semimodule is
+    equivalent to equality after multiplying both maps by one element of
+    the localizing submonoid.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

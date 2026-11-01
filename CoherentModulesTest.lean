@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModulesTest.Algebra.Module.LocalizedModule
 public import CoherentModulesTest.Algebra.TrivSqZeroExt.Finite
 public import CoherentModulesTest.Axioms
 public import CoherentModulesTest.Basic

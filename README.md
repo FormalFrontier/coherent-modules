@@ -19,6 +19,23 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Annihilators after localization.** For commutative semirings `R`, `A`,
+  a submonoid `T : Submonoid R`, an `R`-algebra `A` realizing localization at
+  `T`, and a standard localized-module map `f : M →ₗ[R] N`,
+  [`IsLocalizedModule.map_annihilator`](CoherentModules/Algebra/Module/LocalizedModule.lean)
+  gives
+  ```lean
+  Ideal.map (algebraMap R A) (Module.annihilator R M) =
+    Module.annihilator A N
+  ```
+  when `M` is finitely generated over `R`. The semimodules are additive
+  commutative monoids, `N` has its compatible `A`-action, and all four carrier
+  universes are independent. Zero semirings, zero modules and `0 ∈ T` are
+  allowed; no finite presentation, flatness or faithful-action assumption is
+  added. The supporting
+  [`IsLocalizedModule.comp_eq_iff_exists_smul_eq`](CoherentModules/Algebra/Module/LocalizedModule/Finite.lean)
+  characterizes equality after localization for two maps from a finitely
+  generated semimodule by a single submonoid multiplier making them equal.
 - **Coatomicity of two-sided ideals.** For any unital, possibly nonassociative ring `R`,
   [`TwoSidedIdeal.isCoatomic`](CoherentModules/RingTheory/TwoSidedIdeal/Atoms.lean)
   proves `IsCoatomic (TwoSidedIdeal R)`: every proper two-sided ideal lies below a
