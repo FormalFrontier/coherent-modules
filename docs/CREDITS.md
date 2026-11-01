@@ -45,6 +45,15 @@ The annihilator-quotient proof follows [Adic Modules](https://github.com/FormalF
 formalized by Formal Frontier Agents, using Mathlib's Noetherian linear-map
 modules and first isomorphism theorem for the scalar-action map.
 
+The module Artin–Rees theorem applies Andrew Yang's full Artin–Rees
+formalization in `Mathlib.RingTheory.Filtration` over the quotient by the
+module's annihilator. Formal Frontier Agents supplied the transport to the
+original scalar ring, using the existing annihilator-quotient Noetherianity
+result, quotient-module action and scalar-restriction submodule order
+isomorphism. The quotient action is credited to Pierre-Alexandre Bazin and
+the algebra-tower API to Kenny Lau and Anne Baanen. The stable-filtration
+Artin–Rees proof is reused, not reimplemented.
+
 The faithfulness of the annihilator-quotient action uses Mathlib's
 `Module.quotientAnnihilator` and representative scalar-multiplication lemmas,
 credited to Pierre-Alexandre Bazin, together with its annihilator API credited

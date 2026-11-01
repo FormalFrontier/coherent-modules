@@ -19,6 +19,7 @@ public import CoherentModules.LinearAlgebra.TensorProduct.Generation
 public import CoherentModules.LinearAlgebra.TensorProduct.Noetherian
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
+public import CoherentModules.RingTheory.Filtration
 public import CoherentModules.RingTheory.Flat.BaseChange
 public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.Equiv
@@ -38,7 +39,8 @@ public import CoherentModules.UniversallyCoherent
 
 Public entry point for coherent modules, finite presentation, localization,
 finite idealization, left Noetherianity of trivial square-zero extensions,
-ideal-to-module transfer, left Noetherianity under unit clearing,
+ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary
+commutative rings, left Noetherianity under unit clearing,
 the coherent-module category, universal coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products

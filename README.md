@@ -2,10 +2,11 @@
 
 Reusable Lean library for coherent modules and rings, finite presentation,
 localization, closure constructions, finite square-zero extensions, left
-Noetherianity of square-zero extensions, ideal-to-module transfer, and
-finite-generation ascent under pointwise unimodular clearing and Noetherian
-ascent under left-invertible scalar clearing for semilinear maps, and Noetherian
-scalar extension along essentially finite-type algebras.
+Noetherianity of square-zero extensions, ideal-to-module transfer,
+finite-generation ascent under pointwise unimodular clearing, Noetherian
+ascent under left-invertible scalar clearing for semilinear maps, Noetherian
+scalar extension along essentially finite-type algebras, and Artin–Rees for
+Noetherian modules over arbitrary commutative rings.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -52,6 +53,16 @@ Authors: Formal Frontier Agents
   `isNoetherian_of_unit_smul_mem_range` corollary retains the familiar
   unit-clearing hypothesis, while `isNoetherian_of_surjective_semilinear`
   requires only function-surjectivity of `f`.
+- **Artin–Rees for Noetherian modules.** For an arbitrary commutative ring `R`,
+  ideal `I` and submodule `K` of a Noetherian `R`-module `M`,
+  [`Ideal.exists_pow_inf_eq_pow_smul_of_isNoetherian`](CoherentModules/RingTheory/Filtration.lean)
+  gives a constant `c` such that
+  `(I ^ n • ⊤) ⊓ K = I ^ (n - c) • ((I ^ c • ⊤) ⊓ K)` for every `n ≥ c`.
+  Neither Noetherianity of `R` nor finite generation of `I` is assumed.
+  The ring and module universes are independent. The proof uses Mathlib's full
+  Artin–Rees theorem over the quotient by the module's annihilator. The
+  [shifted-cofinality client](CoherentModulesTest/RingTheory/Filtration.lean) uses
+  the full equality at Mathlib's Noetherian-ring and finite-module hypotheses.
 - **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
   an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
   `R`-module `M`,
@@ -402,7 +413,10 @@ is historical and qualified, not a present-day resource guarantee.
 ## References and credit
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
-localization, tensor products and categorical infrastructure. The ideal and
+localization, tensor products and categorical infrastructure. The module
+Artin–Rees theorem reuses Andrew Yang's formalization in
+`Mathlib.RingTheory.Filtration` over the annihilator quotient, together with the
+existing quotient action and scalar-restriction submodule APIs. The ideal and
 product criteria reuse mathlib's dependent submodules, ideal multiples,
 quotient-tensor equivalences and `DirectSum.linearEquivFunOnFintype`.
 Mathematical background includes Kazuhiro Fujiwara and Fumiharu Kato,
