@@ -143,6 +143,20 @@ Authors: Formal Frontier Agents
   ideals of a semiring and arbitrary submodules of an additive commutative
   semimodule, with its given action and independent carrier universes.
   This comparison needs no finiteness or additive-inverse hypothesis.
+- **Semilinear transport of adic cofinality.** For semirings `R`, `S`, a
+  coefficient equivalence `σ : R ≃+* S` and a compatible semilinear
+  equivalence `e : M ≃ₛₗ[(σ : R →+* S)] P` between additive commutative
+  semimodules with their given actions,
+  [`Submodule.adic_cofinality_iff_of_semilinearEquiv`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
+  transports `∀ n, ∃ m, N ⊓ (I ^ m • ⊤) ≤ I ^ n • N` to the condition for
+  `I.map σ.toRingHom` and `N.map e.toLinearMap`. It allows arbitrary left
+  ideals and submodules in four independent universes, without finiteness
+  or additive inverses. For commutative rings, the companion
+  `Ideal.hasSubmoduleAdicCofinality_iff_of_ringEquiv` and
+  `Ideal.hasFiniteSubmoduleAdicCofinality_iff_of_ringEquiv` give (AP)/(APf)
+  invariance under coefficient equivalence. Both predicates quantify over
+  finite ambient modules; only (APf) restricts submodules to be finitely
+  generated.
 - **Krull intersection from adic cofinality.** For a finite module `M` and an
   ideal `I` satisfying finite-submodule adic cofinality,
   [`Ideal.HasFiniteSubmoduleAdicCofinality.mem_iInf_pow_smul_top_iff`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
@@ -549,7 +563,10 @@ bridges share Mathlib's finite-module representatives and submodule transport.
 Faithfully flat cofinality descent uses Mathlib's submodule base-change order
 reflection, finite tensor products and finiteness under surjective linear maps.
 Invariance under cofinal ideal powers uses Mathlib's left-ideal power
-monotonicity, submodule actions and lattice APIs.
+monotonicity, submodule actions and lattice APIs. Semilinear cofinality transport
+uses Mathlib's semilinear submodule maps, ideal actions and lattice APIs; its
+ring-equivalence corollaries reuse finite-algebra stability with Mathlib's
+canonical ring-equivalence finiteness and ideal-map roundtrips.
 The cofinality Krull and relative intersection theorems generalize the
 separation and closedness arguments of Proposition 0.7.4.16. They reuse
 Mathlib's cyclic ideal-action, Jacobson modular-inverse, annihilator and

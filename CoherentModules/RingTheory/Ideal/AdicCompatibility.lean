@@ -20,23 +20,34 @@ condition to finitely generated submodules. These are Fujiwara--Kato's condition
 Neither the ideal nor the relations of the ambient module need be finitely generated.
 
 Full submodule adic cofinality implies finite-submodule adic cofinality.
-Both conditions are invariant under mutually cofinal ideal powers, and hence
-under replacing an ideal by any positive power. They also pass to the extension
-of an ideal along a module-finite algebra or an arbitrary localization algebra.
+Both conditions are invariant under equivalences of coefficient rings and under
+mutually cofinal ideal powers, and hence under replacing an ideal by any positive
+power. They also pass to the extension of an ideal along a module-finite algebra
+or an arbitrary localization algebra.
 Nilpotent ideals satisfy both conditions without any Noetherian hypothesis. The
 Noetherian-ring providers are in `CoherentModules.RingTheory.Filtration`.
 
-The shared pointwise comparison `Submodule.adic_cofinality_iff_of_pow_le` applies
-to arbitrary left ideals of a semiring and arbitrary submodules of a semimodule,
-without any finiteness or additive-inverse assumption.
+The pointwise comparisons `Submodule.adic_cofinality_iff_of_pow_le` and
+`Submodule.adic_cofinality_iff_of_semilinearEquiv` apply to arbitrary left ideals
+of a semiring and arbitrary submodules of a semimodule, without any finiteness or
+additive-inverse assumption. Semilinear transport maps both the ideal and the
+submodule, using the original scalar actions, and preserves each pair of
+filtration indices.
 
 ## Implementation notes
 
 The predicates quantify over modules in the ring's universe. Their `.cofinal`
 eliminators apply in any module universe, using Mathlib's `Module.Finite.reprEquiv`
-and a shared linear-equivalence transport of the whole inequality.
-The representative is a quotient of a finite free module by its full kernel;
-no finite-presentation assumption is made.
+and identity-coefficient specialization of the semilinear transport of the whole
+inequality. The representative is a quotient of a finite free module by its full
+kernel; no finite-presentation assumption is made.
+
+Semilinear transport uses Mathlib's submodule map and order-reflection APIs.
+The ideal-power action commutes with the image of any semilinear map whose
+coefficient homomorphism is surjective; the module map need not be bijective.
+Its identity-coefficient, exponent-one specialization is Mathlib's
+`Submodule.map_smul''`. The power induction uses associativity of the ideal
+action, without a right-unit law for arbitrary left ideals.
 
 Power comparison uses Mathlib's monotonicity of left-ideal powers and ideal
 actions. For arbitrary left ideals, the power-addition formula needs a nonzero
@@ -61,15 +72,63 @@ The given target algebra action is unchanged.
 
 Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
 arXiv:1308.4734v5, §0.7.4, the (AP)/(APf) paragraph on printed page 167.
-The universe bridges use Mathlib's finite-module representatives and submodule
-map, finite-generation and ideal-action APIs.
+The universe bridges and semilinear transport use Mathlib's finite-module
+representatives and submodule map, order-reflection, finite-generation and
+ideal-action APIs. The filtered-action image identity extends Mathlib's
+`Submodule.map_smul''` to semilinear maps with surjective coefficient homomorphisms.
 -/
 
 @[expose] public section
 
-universe uR uS uA uM
+universe uR uS uA uM uP
 
 namespace Submodule
+
+private theorem map_ideal_smul
+    {R : Type uR} {S : Type uS} [Semiring R] [Semiring S]
+    {M : Type uM} {P : Type uP}
+    [AddCommMonoid M] [AddCommMonoid P] [Module R M] [Module S P]
+    {σ : R →+* S} [RingHomSurjective σ]
+    (f : M →ₛₗ[σ] P) (I : Ideal R) (N : Submodule R M) :
+    (I • N).map f = (I.map σ) • N.map f := by
+  refine le_antisymm ?_ ?_
+  · refine Submodule.map_le_iff_le_comap.mpr ?_
+    refine Submodule.smul_le.mpr ?_
+    intro r hr n hn
+    apply Submodule.mem_comap.mpr
+    rw [map_smulₛₗ f]
+    exact Submodule.smul_mem_smul (Ideal.mem_map_of_mem σ hr)
+      (Submodule.mem_map_of_mem hn)
+  · refine Submodule.smul_le.mpr ?_
+    intro s hs p hp
+    obtain ⟨r, hr, rfl⟩ :=
+      (Ideal.mem_map_iff_of_surjective σ σ.surjective).mp hs
+    obtain ⟨n, hn, rfl⟩ := Submodule.mem_map.mp hp
+    rw [← map_smulₛₗ f]
+    exact Submodule.mem_map_of_mem (Submodule.smul_mem_smul hr hn)
+
+private theorem map_ideal_pow_smul
+    {R : Type uR} {S : Type uS} [Semiring R] [Semiring S]
+    {M : Type uM} {P : Type uP}
+    [AddCommMonoid M] [AddCommMonoid P] [Module R M] [Module S P]
+    {σ : R →+* S} [RingHomSurjective σ]
+    (f : M →ₛₗ[σ] P) (I : Ideal R) (N : Submodule R M) (k : ℕ) :
+    ((I ^ k) • N).map f = ((I.map σ) ^ k) • N.map f := by
+  induction k generalizing N with
+  | zero =>
+    simp only [Submodule.pow_zero, Ideal.one_eq_top, Submodule.top_smul]
+  | succ k ih =>
+    rw [Submodule.pow_succ, Submodule.mul_smul, ih, map_ideal_smul,
+      Submodule.pow_succ, Submodule.mul_smul]
+
+private theorem map_ideal_pow_smul_one_id
+    {R : Type uR} [Semiring R]
+    {M : Type uM} {P : Type uP}
+    [AddCommMonoid M] [AddCommMonoid P] [Module R M] [Module R P]
+    (f : M →ₗ[R] P) (I : Ideal R) (N : Submodule R M) :
+    ((I ^ 1) • N).map f =
+      ((I.map (RingHom.id R)) ^ 1) • N.map f := by
+  simpa only [Submodule.pow_one, Ideal.map_id] using (Submodule.map_smul'' I N f)
 
 private theorem ideal_pow_mul {R : Type uR} [Semiring R]
     (I : Ideal R) (a n : ℕ) : I ^ (a * n) = (I ^ a) ^ n := by
@@ -123,6 +182,29 @@ theorem adic_cofinality_iff_of_pow_le
   obtain ⟨b, hb⟩ := hJI
   exact ⟨adic_cofinality_of_pow_le N ha hb, adic_cofinality_of_pow_le N hb ha⟩
 
+attribute [local instance] RingHomInvPair.of_ringEquiv in
+/-- Submodule adic cofinality is invariant under a semilinear equivalence over
+an equivalence of coefficient semirings, for the two given scalar actions. -/
+theorem adic_cofinality_iff_of_semilinearEquiv
+    {R : Type uR} {S : Type uS} [Semiring R] [Semiring S]
+    {M : Type uM} {P : Type uP}
+    [AddCommMonoid M] [AddCommMonoid P] [Module R M] [Module S P]
+    (σ : R ≃+* S) (e : M ≃ₛₗ[(σ : R →+* S)] P)
+    (I : Ideal R) (N : Submodule R M) :
+    (∀ n : ℕ, ∃ m : ℕ,
+      N ⊓ ((I ^ m) • (⊤ : Submodule R M)) ≤ (I ^ n) • N) ↔
+    (∀ n : ℕ, ∃ m : ℕ,
+      N.map e.toLinearMap ⊓
+          (((I.map σ.toRingHom) ^ m) • (⊤ : Submodule S P)) ≤
+        ((I.map σ.toRingHom) ^ n) • N.map e.toLinearMap) := by
+  refine forall_congr' fun n => exists_congr fun m => ?_
+  simpa only [RingEquiv.toRingHom_eq_coe,
+    Submodule.map_inf _ e.injective, map_ideal_pow_smul,
+    Submodule.map_top,
+    LinearMap.range_eq_top_of_surjective e.toLinearMap e.surjective] using
+    (Submodule.map_le_map_iff_of_injective (f := e.toLinearMap) e.injective
+      (N ⊓ ((I ^ m) • (⊤ : Submodule R M))) ((I ^ n) • N)).symm
+
 end Submodule
 
 namespace Ideal
@@ -164,12 +246,14 @@ private theorem cofinal_of_linearEquiv
       N ⊓ ((I ^ m) • (⊤ : Submodule R M)) ≤ (I ^ n) • N := by
   have hmap : (N.map e.symm.toLinearMap).map e.toLinearMap = N :=
     (Submodule.map_symm_eq_iff e).mp rfl
-  intro n
-  obtain ⟨m, hm⟩ := hN n
-  refine ⟨m, ?_⟩
-  have hm' := Submodule.map_mono (f := e.toLinearMap) hm
-  simpa only [Submodule.map_inf _ e.injective, Submodule.map_smul'', hmap,
-    Submodule.map_top, LinearMap.range_eq_top_of_surjective e.toLinearMap e.surjective] using hm'
+  have h := (Submodule.adic_cofinality_iff_of_semilinearEquiv
+    (R := R) (S := R) (M := X) (P := M) (RingEquiv.refl R) e I
+    (N.map e.symm.toLinearMap)).mp hN
+  simp only [RingEquiv.toRingHom_refl, Ideal.map_id] at h
+  change ∀ n : ℕ, ∃ m : ℕ,
+    (N.map e.symm.toLinearMap).map e.toLinearMap ⊓ ((I ^ m) • (⊤ : Submodule R M)) ≤
+      (I ^ n) • (N.map e.symm.toLinearMap).map e.toLinearMap at h
+  simpa only [hmap] using h
 
 /-- Submodule adic cofinality applies to the given module and scalar action in
 any module universe, independently of the ring universe. No finite generation
@@ -336,6 +420,44 @@ theorem HasFiniteSubmoduleAdicCofinality.map
   let : Module.Finite R X := Module.Finite.trans (R := R) S X
   obtain ⟨m, hm⟩ := hI.cofinal (N.restrictScalars R) (hN.restrictScalars (R := R)) n
   exact ⟨m, cofinal_le_of_restrictScalars I N m n hm⟩
+
+/-- Condition (AP) is invariant under an equivalence of coefficient rings. -/
+theorem hasSubmoduleAdicCofinality_iff_of_ringEquiv
+    {R : Type uR} {S : Type uS} [CommRing R] [CommRing S]
+    (σ : R ≃+* S) (I : Ideal R) :
+    I.HasSubmoduleAdicCofinality ↔
+      (I.map σ.toRingHom).HasSubmoduleAdicCofinality := by
+  constructor
+  · intro hI
+    let : Algebra R S := σ.toRingHom.toAlgebra
+    let : Module.Finite R S := σ.finite
+    simpa only [RingHom.algebraMap_toAlgebra] using
+      (hI.map (S := S))
+  · intro hI
+    let : Algebra S R := σ.symm.toRingHom.toAlgebra
+    let : Module.Finite S R := σ.symm.finite
+    simpa only [RingHom.algebraMap_toAlgebra, RingEquiv.toRingHom_eq_coe,
+      Ideal.map_of_equiv] using
+      (hI.map (S := R))
+
+/-- Condition (APf) is invariant under an equivalence of coefficient rings. -/
+theorem hasFiniteSubmoduleAdicCofinality_iff_of_ringEquiv
+    {R : Type uR} {S : Type uS} [CommRing R] [CommRing S]
+    (σ : R ≃+* S) (I : Ideal R) :
+    I.HasFiniteSubmoduleAdicCofinality ↔
+      (I.map σ.toRingHom).HasFiniteSubmoduleAdicCofinality := by
+  constructor
+  · intro hI
+    let : Algebra R S := σ.toRingHom.toAlgebra
+    let : Module.Finite R S := σ.finite
+    simpa only [RingHom.algebraMap_toAlgebra] using
+      (hI.map (S := S))
+  · intro hI
+    let : Algebra S R := σ.symm.toRingHom.toAlgebra
+    let : Module.Finite S R := σ.symm.finite
+    simpa only [RingHom.algebraMap_toAlgebra, RingEquiv.toRingHom_eq_coe,
+      Ideal.map_of_equiv] using
+      (hI.map (S := R))
 
 private theorem exists_fg_localizing_submodule
     {A : Type uA} [CommRing A] [Algebra R A]
