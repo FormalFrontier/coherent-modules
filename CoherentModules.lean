@@ -19,11 +19,13 @@ public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteSurjectivity
 public import CoherentModules.LinearAlgebra.TensorProduct.Generation
+public import CoherentModules.LinearAlgebra.TensorProduct.Kernel
 public import CoherentModules.LinearAlgebra.TensorProduct.Noetherian
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
 public import CoherentModules.RingTheory.Filtration
 public import CoherentModules.RingTheory.Flat.BaseChange
+public import CoherentModules.RingTheory.Flat.CategoryTheory
 public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.Equiv
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
@@ -58,7 +60,9 @@ nilpotent-ideal providers and faithfully flat descent, its Krull membership
 characterization and relative annihilator separation and submodule intersection
 theorems,
 left Noetherianity under unit clearing and additive right retractions,
-semimodule kernels, the coherent-module category, universal coherence, Hom/tensor closure,
+semimodule kernels, annihilator preservation for finite semimodules under
+finite-limit-preserving scalar extension, the coherent-module category, universal
+coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
 and direct sums. Flatness is invariant under compatible semilinear equivalences
