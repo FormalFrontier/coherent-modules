@@ -4,6 +4,8 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.RingTheory.Ideal.AdicCofinalitySup
+
 public import CoherentModules.Algebra.Module.LocalizedModule
 public import Mathlib.RingTheory.Finiteness.Cardinality
 public import Mathlib.RingTheory.Ideal.Maps
@@ -673,3 +675,87 @@ theorem hasFiniteSubmoduleAdicCofinality_of_isNilpotent
   (hasSubmoduleAdicCofinality_of_isNilpotent I hI).hasFiniteSubmoduleAdicCofinality
 
 end Ideal
+
+
+@[expose] public section
+
+/-- Submodule adic cofinality is preserved by a binary ideal supremum.
+Neither ideal nor the test submodule must be finitely generated. -/
+theorem _root_.Ideal.HasSubmoduleAdicCofinality.sup
+    {R : Type*} [CommRing R] {I J : _root_.Ideal R}
+    (hI : I.HasSubmoduleAdicCofinality) (hJ : J.HasSubmoduleAdicCofinality) :
+    (I ⊔ J).HasSubmoduleAdicCofinality := by
+  intro M _ _ _ N n
+  obtain ⟨b, hb⟩ := hJ.cofinal N n
+  obtain ⟨a, ha⟩ := hI.cofinal
+    (N.map (((J ^ b) • (⊤ : Submodule R M)).mkQ)) n
+  refine ⟨a + b,
+    (Submodule.inf_sup_pow_smul_le_sup_of_quotient I J N n a b hb ha).trans ?_⟩
+  have hIle : I ^ n ≤ (I ⊔ J) ^ n := pow_le_pow_left' le_sup_left n
+  have hJle : J ^ n ≤ (I ⊔ J) ^ n := pow_le_pow_left' le_sup_right n
+  refine sup_le ?_ ?_
+  · refine Submodule.smul_le.2 ?_
+    intro r hr z hz
+    exact Submodule.smul_mem_smul (hIle hr) hz
+  · refine Submodule.smul_le.2 ?_
+    intro r hr z hz
+    exact Submodule.smul_mem_smul (hJle hr) hz
+
+/-- Finite-submodule adic cofinality is preserved by a binary ideal supremum.
+Only the test submodule, not either ideal, is required to be finitely generated. -/
+theorem _root_.Ideal.HasFiniteSubmoduleAdicCofinality.sup
+    {R : Type*} [CommRing R] {I J : _root_.Ideal R}
+    (hI : I.HasFiniteSubmoduleAdicCofinality)
+    (hJ : J.HasFiniteSubmoduleAdicCofinality) :
+    (I ⊔ J).HasFiniteSubmoduleAdicCofinality := by
+  intro M _ _ _ N hN n
+  obtain ⟨b, hb⟩ := hJ.cofinal N hN n
+  obtain ⟨a, ha⟩ := hI.cofinal
+    (N.map (((J ^ b) • (⊤ : Submodule R M)).mkQ)) (hN.map _) n
+  refine ⟨a + b,
+    (Submodule.inf_sup_pow_smul_le_sup_of_quotient I J N n a b hb ha).trans ?_⟩
+  have hIle : I ^ n ≤ (I ⊔ J) ^ n := pow_le_pow_left' le_sup_left n
+  have hJle : J ^ n ≤ (I ⊔ J) ^ n := pow_le_pow_left' le_sup_right n
+  refine sup_le ?_ ?_
+  · refine Submodule.smul_le.2 ?_
+    intro r hr z hz
+    exact Submodule.smul_mem_smul (hIle hr) hz
+  · refine Submodule.smul_le.2 ?_
+    intro r hr z hz
+    exact Submodule.smul_mem_smul (hJle hr) hz
+
+/-- A finite supremum of ideals with submodule adic cofinality has submodule
+adic cofinality. The indexing type is arbitrary and the empty supremum is allowed. -/
+theorem _root_.Ideal.HasSubmoduleAdicCofinality.finset_sup
+    {R : Type*} [CommRing R] {ι : Type*} (s : Finset ι) (I : ι → _root_.Ideal R)
+    (hI : ∀ i ∈ s, (I i).HasSubmoduleAdicCofinality) :
+    (s.sup I).HasSubmoduleAdicCofinality := by
+  classical
+  revert hI
+  induction s using Finset.induction_on with
+  | empty =>
+      intro _ M _ _ _ N n
+      exact ⟨1, by simp⟩
+  | @insert i s _ ih =>
+      intro hI
+      simpa only [Finset.sup_insert] using
+        (hI i (Finset.mem_insert_self i s)).sup
+          (ih fun j hj ↦ hI j (Finset.mem_insert_of_mem hj))
+
+/-- A finite supremum of ideals with finite-submodule adic cofinality has
+finite-submodule adic cofinality, including the empty supremum. -/
+theorem _root_.Ideal.HasFiniteSubmoduleAdicCofinality.finset_sup
+    {R : Type*} [CommRing R] {ι : Type*} (s : Finset ι) (I : ι → _root_.Ideal R)
+    (hI : ∀ i ∈ s, (I i).HasFiniteSubmoduleAdicCofinality) :
+    (s.sup I).HasFiniteSubmoduleAdicCofinality := by
+  classical
+  revert hI
+  induction s using Finset.induction_on with
+  | empty =>
+      intro _ M _ _ _ N _ n
+      exact ⟨1, by simp⟩
+  | @insert i s _ ih =>
+      intro hI
+      simpa only [Finset.sup_insert] using
+        (hI i (Finset.mem_insert_self i s)).sup
+          (ih fun j hj ↦ hI j (Finset.mem_insert_of_mem hj))
