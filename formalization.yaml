@@ -10,7 +10,8 @@ project:
     projection base change, finite-type ideal/module transfer, left Noetherianity
     under scalar clearing, pointwise unimodular finite-generation ascent for
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
-    Noetherian modules, and finite-submodule adic cofinality in Lean.
+    Noetherian modules, finite-submodule adic cofinality, and radical colons of
+    arbitrary subsets in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -101,6 +102,9 @@ status:
     allows independent ring and module universes. Nilpotent ideals and ideals
     of Noetherian rings satisfy the property. The full module Artin–Rees theorem
     only assumes Noetherianity of the original module, not of the ring.
+    Colons of radical ideals by arbitrary subsets are radical over commutative
+    semirings. Taking the zero ideal over a reduced commutative semiring gives
+    radical pointwise annihilators, including empty subsets and zero rings.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

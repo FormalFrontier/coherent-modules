@@ -5,11 +5,13 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.RingTheory.Finiteness.Ideal
+public import Mathlib.RingTheory.Ideal.Colon
 public import Mathlib.RingTheory.Ideal.Maps
+public import Mathlib.RingTheory.Ideal.Operations
 public import Mathlib.RingTheory.Ideal.Quotient.Operations
 
 /-!
-# Annihilators and ideal-power bounds on modules
+# Annihilators, radical colons and ideal-power bounds on modules
 
 A surjective semilinear map carries annihilating scalars to annihilating scalars. For an
 injective semilinear map, a scalar whose image annihilates the target annihilates the source.
@@ -23,6 +25,11 @@ Radical containment after adding the annihilator gives a uniform ideal-power bou
 on the original module when the image of the source ideal in the annihilator
 quotient is finitely generated. The quotient is used only for ideal algebra; no
 quotient-ring action on the module is introduced. Exponents may be zero.
+
+The colon of a radical ideal by an arbitrary subset of a commutative semiring is radical.
+Taking the zero ideal in a reduced commutative semiring gives radicality of the pointwise
+annihilator of any subset. The colon and radicality criteria use Mathlib's ideal-operation
+APIs.
 -/
 
 @[expose] public section
@@ -110,3 +117,23 @@ theorem exists_pow_smul_top_le_of_radical_sup_annihilator_le_of_map_fg
 end Ideal
 
 end CommRing
+
+@[expose] public section
+universe uColon
+namespace Ideal
+
+/-- The colon of a radical ideal by an arbitrary subset is radical. -/
+theorem IsRadical.colon {R : Type uColon} [CommSemiring R]
+    {I : Ideal R} (hI : I.IsRadical) (s : Set R) :
+    (I.colon s).IsRadical := by
+  rw [isRadical_iff_pow_one_lt 2 (by decide)] at hI ⊢
+  intro a ha
+  refine Submodule.mem_colon.mpr ?_
+  intro b hb
+  have hab : a ^ 2 * b ∈ I := by
+    simpa only [smul_eq_mul] using (Submodule.mem_colon.mp ha b hb)
+  have habsq : (a * b) ^ 2 ∈ I := by
+    simpa only [mul_pow, pow_two, mul_assoc, mul_left_comm] using (I.mul_mem_left b hab)
+  simpa only [smul_eq_mul] using hI (a * b) habsq
+
+end Ideal
