@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.RingTheory.Noetherian
 public import Mathlib.Algebra.Module.NatInt
 public import Mathlib.Algebra.Module.Torsion.Basic
@@ -35,24 +36,6 @@ finite-type Noetherian ascent and bijective semilinear invariance.
 universe uR uS uM
 
 open scoped TensorProduct
-
-/-- Every scalar annihilating a module annihilates its scalar extension, with
-scalars acting on the left tensor factor. No finiteness or flatness is required. -/
-theorem TensorProduct.annihilator_le_comap_annihilator
-    (R : Type uR) (S : Type uS) (M : Type uM)
-    [CommSemiring R] [Semiring S] [AddCommMonoid M]
-    [Algebra R S] [Module R M] :
-    Module.annihilator R M ≤
-      (Module.annihilator S (S ⊗[R] M)).comap (algebraMap R S) := by
-  intro r hr
-  apply Ideal.mem_comap.mpr
-  apply Module.mem_annihilator.mpr
-  intro x
-  induction x using TensorProduct.inductionOn with
-  | tmul s m =>
-    rw [TensorProduct.smul_tmul', IsScalarTower.algebraMap_smul,
-      TensorProduct.smul_tmul, Module.mem_annihilator.mp hr m, TensorProduct.tmul_zero]
-  | add x y hx hy => rw [smul_add, hx, hy, add_zero]
 
 /-- Extension of scalars along an essentially finite-type algebra of commutative
 rings preserves Noetherian modules. The tensor has its canonical left-factor

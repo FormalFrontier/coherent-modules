@@ -12,6 +12,7 @@ public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
 public import CoherentModules.Basic
 public import CoherentModules.FinitePresentation
 public import CoherentModules.Hom
+public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteSurjectivity
 public import CoherentModules.LinearAlgebra.TensorProduct.Generation

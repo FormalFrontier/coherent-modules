@@ -48,7 +48,7 @@ theorem integerRationalNotUniversalReflection :
   let : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   exact hmax (Ideal.span ({2} : Set ℤ)) (Int.ideal_span_isMaximal_of_prime 2) hmap
 
-universe uR uS uA uB
+universe uR uS uA uB uM
 
 /-- An injective algebra homomorphism remains injective after flat scalar extension,
 including when the tensor map is viewed as an `S`-algebra homomorphism. -/
@@ -70,5 +70,20 @@ theorem tensorMap_injective_of_injective
     ← AlgHom.ker_coe (Algebra.TensorProduct.map (AlgHom.id R S) f)]
   simpa only [(RingHom.injective_iff_ker_eq_bot f).mp hf, Ideal.map_bot] using
     (Algebra.TensorProduct.ker_map_id_left (S := S) f)
+
+/-- The annihilator formula recovers the ring-coefficient specialization of finite
+faithful-action preservation. The existing faithful theorem also handles semiring
+coefficients and is not replaced by this argument. -/
+theorem faithfulSMul_baseChange_of_annihilator
+    (R : Type uR) (S : Type uS) (M : Type uM)
+    [CommRing R] [Semiring S] [Algebra R S]
+    [AddCommMonoid M] [Module R M]
+    [Module.Finite R M] [FaithfulSMul R M] [Module.Flat R S] :
+    FaithfulSMul S (S ⊗[R] M) := by
+  let : Ring S := Algebra.semiringToRing R
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R
+  apply (Module.annihilator_eq_bot (R := S) (M := S ⊗[R] M)).mp
+  rw [Module.annihilator_tensorProduct_eq_map_of_finite_of_flat R S M,
+    (Module.annihilator_eq_bot (R := R) (M := M)).mpr inferInstance, Ideal.map_bot]
 
 end CoherentModulesTest.Flat.BaseChange

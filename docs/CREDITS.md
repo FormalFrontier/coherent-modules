@@ -75,6 +75,17 @@ product APIs credited to Johannes Hölzl, Chris Hughes, Mario Carneiro and Yury
 Kudryashov, and Kim Morrison's lift APIs. Their upstream notices remain with
 Mathlib; no upstream source assets are distributed here.
 
+The finite-module annihilator formula under flat scalar extension shares the
+finite scalar-detection argument of this library's faithful-action preservation
+formalization, both by Formal Frontier Agents. Its kernel/range proof combines
+Mathlib's flat equalizers (Christian Merten), tensor right exactness (Antoine
+Chambert-Loir), finite-product tensor comparison (Judith Ludwig and Christian
+Merten), and tensor unitors (Kim Morrison and Johan Commelin), with the library's existing unconditional
+tensor-annihilator containment. The scalar algebra is not assumed commutative;
+the proof uses centrality only for the image of the coefficient ring. These are
+source-independent auxiliary results, not an identified passage of the background
+reference below.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from
