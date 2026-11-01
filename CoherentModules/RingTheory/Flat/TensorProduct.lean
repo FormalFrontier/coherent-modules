@@ -5,14 +5,16 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
+public import Mathlib.RingTheory.Ideal.Maps
 import Mathlib.LinearAlgebra.TensorProduct.Associator
 
 /-!
-# Faithful flatness of tensor products
+# Faithful flatness and annihilators of tensor products
 
 Faithful flatness of a tensor product of modules over a commutative ring is
-characterized by faithful flatness of both factors. The modules may lie in
-independent universes.
+characterized by faithful flatness of both factors. Tensoring an arbitrary module
+with a faithfully flat module preserves its annihilator over the coefficient ring.
+The modules may lie in independent universes.
 
 ## Proof approach
 
@@ -27,6 +29,8 @@ factor. Conversely, flatness and reflection of nontriviality compose.
 The proof uses Mathlib's tensor-product associator and commutor, its flatness
 and faithful-flatness criteria, and `LinearMap.ker_eq_bot_of_cancel` to express
 reflection of injectivity without restricting the module universes.
+Annihilator preservation uses Mathlib's faithfully flat zero detection on scalar
+endomorphisms and compatibility of tensoring with scalar multiplication.
 -/
 
 @[expose] public section
@@ -36,6 +40,22 @@ open scoped TensorProduct
 universe u v w
 
 namespace Module.FaithfullyFlat
+
+/-- Tensoring with a faithfully flat module preserves the annihilator over the
+coefficient ring. The other module need not be finite, flat or faithful, and needs
+only an additive commutative monoid structure. -/
+theorem annihilator_tensorProduct_eq
+    (R : Type u) (P : Type v) (M : Type w)
+    [CommRing R] [AddCommGroup P] [AddCommMonoid M]
+    [Module R P] [Module R M] [Module.FaithfullyFlat R P] :
+    Module.annihilator R (P ⊗[R] M) = Module.annihilator R M := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R
+  ext r
+  rw [Module.mem_annihilator_iff_lsmul_eq_zero,
+    Module.mem_annihilator_iff_lsmul_eq_zero]
+  simpa only [LinearMap.lsmul_eq_distribSMultoLinearMap,
+    LinearMap.lTensor_smul_action] using
+    (Module.FaithfullyFlat.zero_iff_lTensor_zero R P (LinearMap.lsmul R M r)).symm
 
 /-- Zero detection for the inner tensor operation follows from zero detection
 for the composite. -/

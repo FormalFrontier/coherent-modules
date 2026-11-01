@@ -105,6 +105,16 @@ linear images, without commuting arbitrary scalars or extending ideal map across
 an infinite intersection. Its nonfinite free-module client uses Mathlib's
 Finsupp and base-changed bases.
 
+The arbitrary-module annihilator preservation and faithfully flat algebra
+contraction formulas are Formal Frontier AI-agent contributions. They reuse
+Mathlib's zero detection for tensor maps, credited to Judith Ludwig, Florent
+Schaffhauser, Yunzhou Xie and Jujian Zhang, the tensor-map API credited to Kenny
+Lau and Mario Carneiro, and Kenny Lau's annihilator restriction-scalars identity.
+The generic argument applies zero detection to scalar endomorphisms; the algebra
+formula then restricts the canonical tensor action along the algebra map.
+These are source-independent auxiliary results, with no identified passage of
+the background reference below.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from

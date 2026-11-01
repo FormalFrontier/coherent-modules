@@ -6,6 +6,7 @@ module
 
 public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.RingTheory.Flat.Localization
+public import CoherentModules.RingTheory.Flat.TensorProduct
 public import Mathlib.LinearAlgebra.DirectSum.TensorProduct
 public import Mathlib.LinearAlgebra.TensorProduct.RightExactness
 public import Mathlib.RingTheory.Flat.Equalizer
@@ -33,6 +34,10 @@ may be noncommutative. For an arbitrary original module, its scalar-extended
 annihilator is the intersection of the mapped annihilators of all its finitely
 generated submodules. This does not assert that ideal extension commutes with
 arbitrary intersections.
+
+For a faithfully flat algebra, contraction of the tensor annihilator is the
+original annihilator without a finiteness assumption. This follows from generic
+module-level annihilator preservation and Mathlib's restriction-scalars identity.
 
 Flat scalar extension also preserves the faithful action of a finite module, without
 requiring that original module to be flat. The coefficient semiring is commutative,
@@ -289,3 +294,15 @@ theorem Module.annihilator_tensorProduct_eq_iInf_map_of_flat
     exact (Ideal.map_le_iff_le_comap.mpr
       (TensorProduct.annihilator_le_comap_annihilator R S N.1)).trans
       ((N.1.toBaseChange S).annihilator_le_of_surjective (N.1.toBaseChange_surjective S))
+
+/-- For faithfully flat scalar extension, contraction of the tensor annihilator is
+its original annihilator. The scalar algebra may be noncommutative, and the original
+module need not be finite, flat or faithful. The tensor has the canonical left-factor
+action, with no action of the scalar algebra on the original module. -/
+theorem Module.comap_annihilator_tensorProduct_of_faithfullyFlat
+    (R : Type uR) (S : Type uS) (M : Type uM)
+    [CommRing R] [Ring S] [Algebra R S]
+    [AddCommMonoid M] [Module R M] [Module.FaithfullyFlat R S] :
+    Ideal.comap (algebraMap R S) (Module.annihilator S (S ⊗[R] M)) =
+      Module.annihilator R M := by
+  rw [Module.comap_annihilator, Module.FaithfullyFlat.annihilator_tensorProduct_eq R S M]

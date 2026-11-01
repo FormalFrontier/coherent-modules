@@ -20,7 +20,9 @@ flat factor is insufficient.
 The models use Mathlib's Finsupp bases, tensor-product bases, ideal criterion
 for faithful flatness and transport along linear equivalences, independently
 of the tensor-product criterion. Further examples apply both directions of
-the criterion to these models.
+the criterion to these models. A module-level client uses annihilator preservation
+to show that tensoring with a faithfully flat module preserves and reflects faithful
+action of the coefficient ring, without finiteness of the other module.
 -/
 
 open scoped TensorProduct
@@ -102,5 +104,19 @@ public theorem integerScalarEmptyTensorNotFaithfullyFlat :
   intro h
   exact integerEmptyFinsuppNotFaithfullyFlat
     ((Module.FaithfullyFlat.tensorProduct_iff ℤ ℤ (Fin 0 →₀ ℤ)).mp h).2
+
+universe uR uP uM
+
+/-- Faithful action of the coefficient ring is preserved and reflected by tensoring
+with a faithfully flat module, without finiteness or flatness of the other module.
+This concerns the coefficient-ring action, not an action of a larger scalar algebra. -/
+public theorem faithfulSMul_tensorProduct_iff
+    (R : Type uR) (P : Type uP) (M : Type uM)
+    [CommRing R] [AddCommGroup P] [AddCommMonoid M]
+    [Module R P] [Module R M] [Module.FaithfullyFlat R P] :
+    FaithfulSMul R (P ⊗[R] M) ↔ FaithfulSMul R M := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R
+  rw [← Module.annihilator_eq_bot, ← Module.annihilator_eq_bot,
+    Module.FaithfullyFlat.annihilator_tensorProduct_eq R P M]
 
 end CoherentModulesTest.Flat.TensorProduct

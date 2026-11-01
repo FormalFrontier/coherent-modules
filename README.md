@@ -150,6 +150,20 @@ Authors: Formal Frontier Agents
   preservation over ring coefficients. The existing
   `FaithfulSMul.baseChange_of_finite_of_flat` additionally allows commutative
   semiring coefficients.
+- **Annihilator contraction under faithfully flat extension.** Over a `CommRing R`,
+  [`Module.FaithfullyFlat.annihilator_tensorProduct_eq`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
+  says tensoring an arbitrary `R`-module `M` with a faithfully flat module `P`
+  preserves its annihilator over `R`. Here `P` is only a module group, while `M`
+  needs only an additive commutative monoid structure. For a faithfully flat,
+  possibly noncommutative ring algebra `S`,
+  [`Module.comap_annihilator_tensorProduct_of_faithfullyFlat`](CoherentModules/RingTheory/Flat/BaseChange.lean)
+  identifies contraction of the annihilator of `S ⊗[R] M` with the original
+  annihilator. The tensor has its canonical left-factor action and `M` needs no
+  `S`-action. All three carrier universes are independent, with no finiteness,
+  flatness or faithfulness assumption on `M`. The
+  [module client](CoherentModulesTest/RingTheory/Flat/TensorProduct.lean) derives
+  preservation and reflection of faithful action over the coefficient ring;
+  this does not assert faithful action over a larger scalar algebra.
 - **Faithfully flat tensor products.** Over a `CommRing R`, for additive
   commutative groups `C` and `D` with `R`-module structures,
   [`Module.FaithfullyFlat.tensorProduct_iff`](CoherentModules/RingTheory/Flat/TensorProduct.lean)
