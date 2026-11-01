@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.RingTheory.Ideal.AdicCofinalityMul
 public import CoherentModules.RingTheory.Ideal.AdicCofinalitySup
 
 public import CoherentModules.Algebra.Module.LocalizedModule
@@ -677,6 +678,106 @@ theorem hasFiniteSubmoduleAdicCofinality_of_isNilpotent
 end Ideal
 
 
+/-! ## Products and intersections of ideals with submodule-adic cofinality -/
+
+@[expose] public section
+
+/-- The product of two ideals with submodule-adic cofinality has
+submodule-adic cofinality. -/
+theorem _root_.Ideal.HasSubmoduleAdicCofinality.mul {R : Type*} [CommRing R] {I J : Ideal R}
+    (hI : I.HasSubmoduleAdicCofinality)
+    (hJ : J.HasSubmoduleAdicCofinality) :
+    (I * J).HasSubmoduleAdicCofinality := by
+  intro M _ _ _ N n
+  obtain ⟨b, hb⟩ :
+      ∃ b : ℕ, N ⊓ (J ^ b) • (⊤ : Submodule R M) ≤ (J ^ n) • N := by
+    apply hJ
+  obtain ⟨a, ha⟩ :
+      ∃ a : ℕ,
+        ((J ^ n) • N) ⊓ (I ^ a) • (⊤ : Submodule R M) ≤
+          (I ^ n) • ((J ^ n) • N) := by
+    apply hI
+  refine ⟨max a b, ?_⟩
+  simpa only [mul_pow] using
+    Submodule.inf_mul_pow_smul_le_of_inf_smul_le I J N a b n n hb ha
+
+/-- Finite-submodule cofinality for the right ideal and arbitrary-submodule
+cofinality for the left ideal imply finite-submodule cofinality for their
+product. No finite-generation hypothesis is needed for the intermediate
+submodule. -/
+theorem _root_.Ideal.HasFiniteSubmoduleAdicCofinality.mul_of_left
+    {R : Type*} [CommRing R] {I J : Ideal R}
+    (hJ : J.HasFiniteSubmoduleAdicCofinality)
+    (hI : I.HasSubmoduleAdicCofinality) :
+    (I * J).HasFiniteSubmoduleAdicCofinality := by
+  intro M _ _ _ N hN n
+  obtain ⟨b, hb⟩ :
+      ∃ b : ℕ, N ⊓ (J ^ b) • (⊤ : Submodule R M) ≤ (J ^ n) • N := by
+    apply hJ
+    exact hN
+  obtain ⟨a, ha⟩ :
+      ∃ a : ℕ,
+        ((J ^ n) • N) ⊓ (I ^ a) • (⊤ : Submodule R M) ≤
+          (I ^ n) • ((J ^ n) • N) := by
+    apply hI
+  refine ⟨max a b, ?_⟩
+  simpa only [mul_pow] using
+    Submodule.inf_mul_pow_smul_le_of_inf_smul_le I J N a b n n hb ha
+
+/-- The intersection of two ideals with submodule-adic cofinality has
+submodule-adic cofinality. -/
+theorem _root_.Ideal.HasSubmoduleAdicCofinality.inf {R : Type*} [CommRing R] {I J : Ideal R}
+    (hI : I.HasSubmoduleAdicCofinality)
+    (hJ : J.HasSubmoduleAdicCofinality) :
+    (I ⊓ J).HasSubmoduleAdicCofinality := by
+  have hprod : (I * J).HasSubmoduleAdicCofinality := hI.mul hJ
+  intro M _ _ _ N
+  refine
+    (Submodule.forall_exists_inf_pow_smul_le_iff_of_pow_cofinal
+      (I * J) (I ⊓ J) N ?_ ?_).mp ?_
+  · intro n
+    refine ⟨n, ?_⟩
+    exact pow_le_pow_left' (le_inf Ideal.mul_le_left Ideal.mul_le_right) n
+  · intro n
+    refine ⟨2 * n, ?_⟩
+    calc
+      (I ⊓ J) ^ (2 * n) = (I ⊓ J) ^ n * (I ⊓ J) ^ n := by
+        rw [two_mul, pow_add]
+      _ ≤ I ^ n * J ^ n :=
+        mul_le_mul' (pow_le_pow_left' inf_le_left n)
+          (pow_le_pow_left' inf_le_right n)
+      _ = (I * J) ^ n := (mul_pow I J n).symm
+  · intro n
+    apply hprod
+
+/-- Finite-submodule cofinality for the right ideal and arbitrary-submodule
+cofinality for the left ideal imply finite-submodule cofinality for their
+intersection. The cofinality comparison is made at the original submodule. -/
+theorem _root_.Ideal.HasFiniteSubmoduleAdicCofinality.inf_of_left
+    {R : Type*} [CommRing R] {I J : Ideal R}
+    (hJ : J.HasFiniteSubmoduleAdicCofinality)
+    (hI : I.HasSubmoduleAdicCofinality) :
+    (I ⊓ J).HasFiniteSubmoduleAdicCofinality := by
+  have hprod : (I * J).HasFiniteSubmoduleAdicCofinality := hJ.mul_of_left hI
+  intro M _ _ _ N hN
+  refine
+    (Submodule.forall_exists_inf_pow_smul_le_iff_of_pow_cofinal
+      (I * J) (I ⊓ J) N ?_ ?_).mp ?_
+  · intro n
+    refine ⟨n, ?_⟩
+    exact pow_le_pow_left' (le_inf Ideal.mul_le_left Ideal.mul_le_right) n
+  · intro n
+    refine ⟨2 * n, ?_⟩
+    calc
+      (I ⊓ J) ^ (2 * n) = (I ⊓ J) ^ n * (I ⊓ J) ^ n := by
+        rw [two_mul, pow_add]
+      _ ≤ I ^ n * J ^ n :=
+        mul_le_mul' (pow_le_pow_left' inf_le_left n)
+          (pow_le_pow_left' inf_le_right n)
+      _ = (I * J) ^ n := (mul_pow I J n).symm
+  · intro n
+    apply hprod
+    exact hN
 @[expose] public section
 
 /-- Submodule adic cofinality is preserved by a binary ideal supremum.
