@@ -5,6 +5,8 @@ Authors: Formal Frontier Agents
 module
 
 public import CoherentModules
+import Mathlib.LinearAlgebra.TensorProduct.Basis
+import Mathlib.RingTheory.Finiteness.Cardinality
 import Mathlib.RingTheory.Ideal.Int
 import Mathlib.RingTheory.Localization.FractionRing
 import Mathlib.Tactic.NormNum
@@ -22,6 +24,11 @@ The kernel formula also proves that flat scalar extension preserves injectivity
 when the tensor map is viewed as an `S`-algebra homomorphism.
 Equality of underlying ring homomorphisms relates that consumer to the `R`-algebra
 tensor map, without `S`-actions on the original algebras.
+
+For the countably generated free abelian group, the arbitrary-module annihilator
+formula evaluates an intersection of rationally extended ideals. An infinite
+basis verifies that the original module is not finite, and the base-changed
+basis computes its rational tensor annihilator independently.
 -/
 
 @[expose] public section
@@ -85,5 +92,19 @@ theorem faithfulSMul_baseChange_of_annihilator
   apply (Module.annihilator_eq_bot (R := S) (M := S ⊗[R] M)).mp
   rw [Module.annihilator_tensorProduct_eq_map_of_finite_of_flat R S M,
     (Module.annihilator_eq_bot (R := R) (M := M)).mpr inferInstance, Ideal.map_bot]
+
+/-- The intersection formula applies to a nonfinite free abelian group. Rational
+scalar extension gives a faithful module, so the intersection of the extended
+annihilators of its finitely generated subgroups is zero. -/
+theorem rationalInfiniteFreeAnnihilator :
+    ¬ Module.Finite ℤ (ℕ →₀ ℤ) ∧
+      (⨅ N : {N : Submodule ℤ (ℕ →₀ ℤ) // N.FG},
+        Ideal.map (algebraMap ℤ ℚ) (Module.annihilator ℤ N.1)) = ⊥ := by
+  let : Module.Flat ℤ ℚ := IsLocalization.flat ℚ (nonZeroDivisors ℤ)
+  let b : Module.Basis ℕ ℤ (ℕ →₀ ℤ) := Finsupp.basisSingleOne
+  refine ⟨Module.not_finite_of_infinite_basis b, ?_⟩
+  rw [← Module.annihilator_tensorProduct_eq_iInf_map_of_flat ℤ ℚ (ℕ →₀ ℤ),
+    (b.baseChange ℚ).repr.annihilator_eq, Module.annihilator_finsupp]
+  exact (Module.annihilator_eq_bot (R := ℚ) (M := ℚ)).mpr inferInstance
 
 end CoherentModulesTest.Flat.BaseChange

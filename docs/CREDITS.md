@@ -95,6 +95,16 @@ the proof uses centrality only for the image of the coefficient ring. These are
 source-independent auxiliary results, not an identified passage of the background
 reference below.
 
+The arbitrary-module annihilator formula reuses that finite formula on every
+finitely generated original submodule. Formal Frontier Agents supplied the
+intersection argument using Mathlib's flat preservation of injectivity,
+extension-of-scalars maps and submodules (Kim Morrison, Johan Commelin and
+Eric Wieser), and annihilator comparisons and suprema (Kenny Lau).
+It transports annihilation through
+linear images, without commuting arbitrary scalars or extending ideal map across
+an infinite intersection. Its nonfinite free-module client uses Mathlib's
+Finsupp and base-changed bases.
+
 ## Tooling and background
 
 Anchor adapted this project's [API adapter](../scripts/generate_api.py) from
