@@ -54,6 +54,15 @@ isomorphism. The quotient action is credited to Pierre-Alexandre Bazin and
 the algebra-tower API to Kenny Lau and Anne Baanen. The stable-filtration
 Artin–Rees proof is reused, not reimplemented.
 
+The finite-submodule adic cofinality predicate expresses condition (APf) in
+Fujiwara--Kato, *Foundations of Rigid Geometry I*, arXiv:1308.4734v5,
+§0.7.4, printed page 167. Formal Frontier Agents supplied the predicate API,
+the nilpotent-ideal argument and the Noetherian-ring consequence of the existing
+module Artin–Rees theorem. The independent-universe eliminator uses Mathlib's
+finite-module quotient representatives, credited to Johan Commelin, and its
+submodule map, finite-generation and ideal-action APIs, including the work of
+Kenny Lau. No finite-presentation condition on the ambient module is imposed.
+
 The faithfulness of the annihilator-quotient action uses Mathlib's
 `Module.quotientAnnihilator` and representative scalar-multiplication lemmas,
 credited to Pierre-Alexandre Bazin, together with its annihilator API credited

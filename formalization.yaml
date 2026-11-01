@@ -9,7 +9,8 @@ project:
     coherence, Hom and tensor-product closure, finite square-zero kernels and
     projection base change, finite-type ideal/module transfer, left Noetherianity
     under scalar clearing, pointwise unimodular finite-generation ascent for
-    semilinear maps, and generator bounds for semilinear images in Lean.
+    semilinear maps, generator bounds for semilinear images, Artin–Rees for
+    Noetherian modules, and finite-submodule adic cofinality in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -43,8 +44,9 @@ sources:
     type: "book"
     relationship: "background"
     note: >-
-      Motivating coherent-ring/module mathematics. Exact passage correspondence,
-      additional source hypotheses and remaining gaps are recorded separately;
+      Motivating coherent-ring/module mathematics and the condition (APf) of
+      section 0.7.4, expressed by finite-submodule adic cofinality. Exact passage
+      correspondence, additional source hypotheses and remaining gaps are recorded separately;
       this metadata makes no source-coverage or whole-source completion claim.
 
 related_formalizations:
@@ -93,6 +95,12 @@ status:
     b * a = 1 and f m = a • n for each target element n. Comap reflects submodule
     order. Unit clearing and function-surjectivity specialize this result; regular
     semimodules recover ring Noetherianity, alongside ideal extension/contraction.
+    Finite-submodule adic cofinality concerns finitely generated submodules of
+    finite original modules over a commutative ring, without finite presentation
+    of the ambient module or finite generation of the ideal. Its eliminator
+    allows independent ring and module universes. Nilpotent ideals and ideals
+    of Noetherian rings satisfy the property. The full module Artin–Rees theorem
+    only assumes Noetherianity of the original module, not of the ring.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

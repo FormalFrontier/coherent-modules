@@ -18,6 +18,8 @@ statements are authoritative about hypotheses and universes.
 | [`CoherentModules.Algebra.TrivSqZeroExt.Finite`](../CoherentModules/Algebra/TrivSqZeroExt/Finite.lean) | Projection-kernel equivalence, whole-extension kernel finiteness and projection base change over a commutative semiring. |
 | [`CoherentModules.Algebra.TrivSqZeroExt.Noetherian`](../CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean) | Left Noetherianity of a square-zero extension iff the base ring is left Noetherian and the coefficient bimodule is finite on the left. |
 | [`CoherentModules.RingTheory.Ideal.FiniteModuleTransfer`](../CoherentModules/RingTheory/Ideal/FiniteModuleTransfer.lean) | Transfer of isomorphism-invariant, square-zero-descent-stable properties from finite ideals to finite modules over finite-type algebras. |
+| [`CoherentModules.RingTheory.Ideal.AdicCompatibility`](../CoherentModules/RingTheory/Ideal/AdicCompatibility.lean) | Finite-submodule adic cofinality (APf), its independent-universe eliminator, and the nilpotent-ideal provider; no ideal-FG or ambient finite-presentation assumption. |
+| [`CoherentModules.RingTheory.Filtration`](../CoherentModules/RingTheory/Filtration.lean) | Full Artin–Rees for Noetherian modules over arbitrary commutative rings, and finite-submodule adic cofinality for ideals of Noetherian rings. |
 
 ## Foundation and finite presentation
 

@@ -5,8 +5,9 @@ localization, closure constructions, finite square-zero extensions, left
 Noetherianity of square-zero extensions, ideal-to-module transfer,
 finite-generation ascent under pointwise unimodular clearing, Noetherian
 ascent under left-invertible scalar clearing for semilinear maps, Noetherian
-scalar extension along essentially finite-type algebras, and Artin–Rees for
-Noetherian modules over arbitrary commutative rings.
+scalar extension along essentially finite-type algebras, Artin–Rees for
+Noetherian modules over arbitrary commutative rings, and finite-submodule
+adic cofinality.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -63,6 +64,19 @@ Authors: Formal Frontier Agents
   Artin–Rees theorem over the quotient by the module's annihilator. The
   [shifted-cofinality client](CoherentModulesTest/RingTheory/Filtration.lean) uses
   the full equality at Mathlib's Noetherian-ring and finite-module hypotheses.
+- **Finite-submodule adic cofinality.** For an arbitrary ideal `I` of a
+  commutative ring `R`,
+  [`Ideal.HasFiniteSubmoduleAdicCofinality`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
+  expresses cofinality of the intrinsic and induced ideal-power filtrations
+  for every finitely generated submodule of every finite original module.
+  The `.cofinal` API allows an independent module universe. Nilpotent ideals
+  satisfy this property without Noetherianity or finite generation of the
+  ideal; every ideal of a Noetherian ring satisfies it by
+  [Artin–Rees](CoherentModules/RingTheory/Filtration.lean). This is
+  Fujiwara--Kato's (APf), not (AP) or the stronger Artin–Rees shifted equality;
+  the ambient module need not be finitely presented. The
+  [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the API
+  to maps between finite modules in independent universes.
 - **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
   an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
   `R`-module `M`,
@@ -439,8 +453,11 @@ Artin–Rees theorem reuses Andrew Yang's formalization in
 existing quotient action and scalar-restriction submodule APIs. The ideal and
 product criteria reuse mathlib's dependent submodules, ideal multiples,
 quotient-tensor equivalences and `DirectSum.linearEquivFunOnFintype`.
-Mathematical background includes Kazuhiro Fujiwara and Fumiharu Kato,
-[*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5).
+The finite-submodule adic cofinality predicate follows the (APf) paragraph in
+§0.7.4 of Kazuhiro Fujiwara and Fumiharu Kato,
+[*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
+which also provides mathematical background for the library. Its universe
+bridge reuses Mathlib's finite-module representatives and submodule transport.
 No source PDF or substantial excerpt is bundled; this citation does not assert
 complete source correspondence or endorsement. Anchor contributed the original
 foundation, kernel closure and universal-coherence formalizations; other Formal
