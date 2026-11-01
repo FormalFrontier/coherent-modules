@@ -28,6 +28,7 @@ public import CoherentModules.RingTheory.Flat.Localization
 public import CoherentModules.RingTheory.Flat.TensorProduct
 public import CoherentModules.RingTheory.Ideal.AdicCompatibility
 public import CoherentModules.RingTheory.Ideal.AdicKrull
+public import CoherentModules.RingTheory.Ideal.AdicLocality
 public import CoherentModules.RingTheory.Ideal.Annihilator
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.RingTheory.Ideal.Localization
