@@ -119,6 +119,19 @@ Authors: Formal Frontier Agents
   not be module-finite, the ideal need not be finitely generated, and no finite
   presentation or Noetherian hypothesis is required. The ring and algebra
   universes are independent.
+- **Adic cofinality on finite products.** For an arbitrary ideal `I` of
+  `Π i, R i`, with `[Finite ι]` and commutative rings `R i`,
+  [`Ideal.hasSubmoduleAdicCofinality_iff_forall_map_evalRingHom`](CoherentModules/RingTheory/Ideal/AdicProducts.lean)
+  gives (AP) for `I` iff each projection image `I.map (Pi.evalRingHom R i)`
+  has (AP). The companion
+  `hasFiniteSubmoduleAdicCofinality_iff_forall_map_evalRingHom` does the same
+  for (APf). The [characteristic criteria](CoherentModules/RingTheory/Ideal/AdicProducts.lean)
+  also cover unary `Ideal.pi` and binary `Ideal.prod`, with independent binary
+  ring universes. Empty products and zero factors are allowed. Full (AP)
+  covers every submodule of every finite module; (APf) requires only the
+  submodule to be finitely generated. No ideal-FG, Noetherian or ambient
+  finite-presentation hypothesis is added. Infinite products are not covered
+  by these equivalences.
 - **Cofinal ideal powers.** For ideals `I, J` of a commutative ring with
   `I ^ a ≤ J` and `J ^ b ≤ I` for some natural numbers `a, b`,
   [`Ideal.hasSubmoduleAdicCofinality_iff_of_pow_le`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
