@@ -4,7 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
-public import CoherentModules.RingTheory.Ideal.AdicCompatibility
+public import CoherentModules.RingTheory.Ideal.AdicKrull
 public import CoherentModules.RingTheory.Noetherian
 public import Mathlib.RingTheory.Filtration
 
@@ -36,6 +36,9 @@ quotient, using this library's annihilator-quotient Noetherianity theorem and
 Mathlib's quotient-module and scalar-restriction APIs.
 The Noetherian-ring cofinality consequence is the (APf) part of Fujiwara--Kato,
 *Foundations of Rigid Geometry I*, arXiv:1308.4734v5, Proposition 0.7.4.14.
+The Krull membership specialization below recovers the subtype-witness statement
+of Mathlib's `Ideal.mem_iInf_smul_pow_eq_bot_iff` from the cofinality theorem in
+`CoherentModules.RingTheory.Ideal.AdicKrull`.
 -/
 
 @[expose] public section
@@ -88,5 +91,20 @@ theorem hasFiniteSubmoduleAdicCofinality_of_isNoetherianRing
   refine ⟨n + c, ?_⟩
   rw [inf_comm, hc (n + c) (Nat.le_add_left c n), Nat.add_sub_cancel]
   exact smul_mono_right _ inf_le_right
+
+/-- The finite-submodule cofinality Krull theorem recovers Mathlib's
+`Ideal.mem_iInf_smul_pow_eq_bot_iff` under its Noetherian-ring hypotheses,
+including its subtype-valued fixing scalar. The proof specializes the cofinality
+API and converts the membership-conjunction witness to an element of the ideal. -/
+theorem mem_iInf_pow_smul_top_iff_of_isNoetherianRing
+    {R : Type uR} [CommRing R] [IsNoetherianRing R] (I : Ideal R)
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module.Finite R M]
+    (x : M) :
+    (x ∈ ⨅ n : ℕ, (I ^ n) • (⊤ : Submodule R M)) ↔
+      ∃ a : I, (a : R) • x = x := by
+  have hAPf := hasFiniteSubmoduleAdicCofinality_of_isNoetherianRing I
+  exact (hAPf.mem_iInf_pow_smul_top_iff x).trans
+    ⟨fun ⟨a, ha, hax⟩ => ⟨⟨a, ha⟩, hax⟩,
+      fun ⟨a, hax⟩ => ⟨a, a.property, hax⟩⟩
 
 end Ideal

@@ -77,6 +77,19 @@ Authors: Formal Frontier Agents
   the ambient module need not be finitely presented. The
   [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the API
   to maps between finite modules in independent universes.
+- **Krull intersection from adic cofinality.** For a finite module `M` and an
+  ideal `I` satisfying finite-submodule adic cofinality,
+  [`Ideal.HasFiniteSubmoduleAdicCofinality.mem_iInf_pow_smul_top_iff`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
+  characterizes membership in `⨅ n, I ^ n • ⊤` by a scalar `a ∈ I` fixing
+  the element. The relative bound `I ≤ (Module.annihilator R M).jacobson`
+  makes this intersection zero. For any submodule `N` with finite quotient,
+  membership in `⨅ n, N ⊔ I ^ n • ⊤` is equivalent to
+  `(1 - a) • x ∈ N` for some `a ∈ I`; a Jacobson bound relative to the
+  quotient annihilator makes the intersection equal to `N`.
+  The ambient module and `N` need not be finite in the quotient statements.
+  No ideal-FG, finite-presentation or Noetherian hypothesis is added, and the
+  ring and module universes are independent. These are algebraic intersection
+  results, not assertions of topological closedness or completeness.
 - **Essentially finite-type scalar extension.** For commutative rings `R`, `S`,
   an essentially finite-type `R`-algebra structure on `S`, and a Noetherian
   `R`-module `M`,
@@ -458,6 +471,11 @@ The finite-submodule adic cofinality predicate follows the (APf) paragraph in
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
 which also provides mathematical background for the library. Its universe
 bridge reuses Mathlib's finite-module representatives and submodule transport.
+The cofinality Krull and relative intersection theorems generalize the
+separation and closedness arguments of Proposition 0.7.4.16. They reuse
+Mathlib's cyclic ideal-action, Jacobson modular-inverse, annihilator and
+quotient APIs, and generalize Andrew Yang's Noetherian Krull membership
+formalization. The Noetherian specialization preserves its subtype witness.
 No source PDF or substantial excerpt is bundled; this citation does not assert
 complete source correspondence or endorsement. Anchor contributed the original
 foundation, kernel closure and universal-coherence formalizations; other Formal

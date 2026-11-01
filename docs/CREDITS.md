@@ -63,6 +63,16 @@ finite-module quotient representatives, credited to Johan Commelin, and its
 submodule map, finite-generation and ideal-action APIs, including the work of
 Kenny Lau. No finite-presentation condition on the ambient module is imposed.
 
+The cofinality Krull theorem and relative-annihilator separation and intersection
+theorems generalize the separation and closedness arguments of Fujiwara--Kato,
+Proposition 0.7.4.16. They extend Andrew Yang's Noetherian Krull membership
+formalization, with its subtype-witness specialization retained. The proofs use
+Mathlib's singleton-span ideal-action API, Jacobson modular-inverse theorem,
+annihilators and quotient map/comap laws, including work by Kenny Lau, Devon
+Tuma, Wojciech Nawrocki, Johannes Hölzl, Mario Carneiro, Kevin Buzzard and
+Yury Kudryashov. The scalar action is unchanged, and quotient intersections use
+preimages rather than images of arbitrary infima.
+
 The faithfulness of the annihilator-quotient action uses Mathlib's
 `Module.quotientAnnihilator` and representative scalar-multiplication lemmas,
 credited to Pierre-Alexandre Bazin, together with its annihilator API credited
