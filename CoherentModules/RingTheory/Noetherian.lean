@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.RingTheory.Ideal.Annihilator
 public import Mathlib.Algebra.Module.Submodule.Range
 public import Mathlib.LinearAlgebra.Isomorphisms
 public import Mathlib.RingTheory.Finiteness.Ideal
@@ -36,6 +37,10 @@ left-inverse formulation retains only the scalar recovery needed in that argumen
 The annihilator-quotient proof follows the formalization in Adic Modules by
 Formal Frontier Agents. It uses Mathlib's Noetherianity of linear-map modules and
 first isomorphism theorem for the scalar-action map.
+
+For a Noetherian module, containment of ideal radicals after adding its annihilator
+gives a uniform ideal-power bound on the original module. No Noetherianity of the
+scalar ring or finite generation of the original ideals is required.
 -/
 
 @[expose] public section
@@ -186,5 +191,23 @@ theorem isNoetherianRing_quotient_annihilator
     rw [← hker]
     exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
   exact isNoetherian_of_tower A hquot
+
+namespace Ideal
+
+/-- On a Noetherian module, containment of radicals after adding the annihilator
+gives a uniform ideal-power bound. No Noetherianity assumption on the scalar ring,
+or finite generation assumption on either original ideal, is required. -/
+theorem exists_pow_smul_top_le_of_radical_sup_annihilator_le
+    {R : Type uR} [CommRing R]
+    {M : Type uM} [AddCommGroup M] [Module R M] {I J : Ideal R}
+    [IsNoetherian R M]
+    (h : (I ⊔ Module.annihilator R M).radical ≤
+      (J ⊔ Module.annihilator R M).radical) :
+    ∃ n : ℕ, (I ^ n) • (⊤ : Submodule R M) ≤ J • ⊤ := by
+  let := isNoetherianRing_quotient_annihilator (A := R) M
+  exact exists_pow_smul_top_le_of_radical_sup_annihilator_le_of_map_fg
+    (IsNoetherian.noetherian _) h
+
+end Ideal
 
 end CommRing
