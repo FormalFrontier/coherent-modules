@@ -102,6 +102,17 @@ Authors: Formal Frontier Agents
   Artin–Rees equality. The APf providers follow from (AP), and the
   [range client](CoherentModulesTest/RingTheory/Filtration.lean) applies the APf
   API to maps between finite modules in independent universes.
+- **Cofinal ideal powers.** For ideals `I, J` of a commutative ring with
+  `I ^ a ≤ J` and `J ^ b ≤ I` for some natural numbers `a, b`,
+  [`Ideal.hasSubmoduleAdicCofinality_iff_of_pow_le`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean)
+  makes (AP) equivalent for `I` and `J`; the companion
+  `hasFiniteSubmoduleAdicCofinality_iff_of_pow_le` does the same for (APf).
+  The witnesses may be zero. In particular, replacing an ideal by any positive
+  power preserves both conditions. The shared pointwise theorem
+  `Submodule.adic_cofinality_iff_of_pow_le` already applies to arbitrary left
+  ideals of a semiring and arbitrary submodules of an additive commutative
+  semimodule, with its given action and independent carrier universes.
+  This comparison needs no finiteness or additive-inverse hypothesis.
 - **Krull intersection from adic cofinality.** For a finite module `M` and an
   ideal `I` satisfying finite-submodule adic cofinality,
   [`Ideal.HasFiniteSubmoduleAdicCofinality.mem_iInf_pow_smul_top_iff`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
@@ -503,6 +514,8 @@ The submodule adic cofinality predicates follow the (AP)/(APf) paragraph in
 [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
 which also provides mathematical background for the library. Their universe
 bridges share Mathlib's finite-module representatives and submodule transport.
+Invariance under cofinal ideal powers uses Mathlib's left-ideal power
+monotonicity, submodule actions and lattice APIs.
 The cofinality Krull and relative intersection theorems generalize the
 separation and closedness arguments of Proposition 0.7.4.16. They reuse
 Mathlib's cyclic ideal-action, Jacobson modular-inverse, annihilator and
