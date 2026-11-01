@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import CoherentModules.RingTheory.Ideal.AdicCompatibility
+public import CoherentModules.RingTheory.Ideal.Operations
 public import Mathlib.RingTheory.Jacobson.Ideal
 
 /-!
@@ -222,23 +223,9 @@ theorem fg_of_finite_quotient_smul
     (hQ : Module.Finite R (N ⧸ (I • (⊤ : Submodule R N)))) :
     N.FG := by
   obtain ⟨L, hLfg, hLN, hstep⟩ := exists_fg_le_and_le_sup_smul (I := I) N hQ
-  have hpow : ∀ n : ℕ, N ≤ L ⊔ (I ^ n) • (⊤ : Submodule R M) := by
-    intro n
-    induction n with
-    | zero => simp
-    | succ n ih =>
-      calc
-        N ≤ L ⊔ I • N := hstep
-        _ ≤ L ⊔ I • (L ⊔ (I ^ n) • (⊤ : Submodule R M)) :=
-          sup_le_sup le_rfl (Submodule.smul_mono le_rfl ih)
-        _ = L ⊔ (I • L ⊔ I • ((I ^ n) • (⊤ : Submodule R M))) := by
-          rw [Submodule.smul_sup]
-        _ = (L ⊔ I • L) ⊔ I • ((I ^ n) • (⊤ : Submodule R M)) :=
-          (sup_assoc _ _ _).symm
-        _ ≤ L ⊔ I • ((I ^ n) • (⊤ : Submodule R M)) :=
-          sup_le_sup (sup_le le_rfl Submodule.smul_le_right) le_rfl
-        _ = L ⊔ (I ^ (n + 1)) • (⊤ : Submodule R M) := by
-          rw [← Submodule.mul_smul, ← pow_succ']
+  have hpow : ∀ n : ℕ, N ≤ L ⊔ (I ^ n) • (⊤ : Submodule R M) := fun n =>
+    (le_sup_pow_smul_of_le_sup_smul hstep n).trans
+      (sup_le_sup le_rfl (Submodule.smul_mono le_rfl le_top))
   have hNL : N ≤ L := by
     rw [← iInf_sup_pow_smul_top_eq_self_of_le_jacobson_annihilator (I := I) L hAPf hJ]
     exact le_iInf hpow

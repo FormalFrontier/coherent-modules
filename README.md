@@ -19,6 +19,15 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Relative generation by nilpotent ideals.** For a left ideal `I` of a
+  possibly noncommutative semiring `R` and submodules `N`, `P` of an additive
+  commutative `R`-semimodule,
+  [`Submodule.le_sup_pow_smul_of_le_sup_smul`](CoherentModules/RingTheory/Ideal/Operations.lean)
+  propagates `P ≤ N ⊔ I • P` to `P ≤ N ⊔ (I ^ n) • P` for every natural `n`.
+  Under global nilpotence `IsNilpotent I`, the companion
+  `Submodule.le_of_le_sup_smul_of_isNilpotent` gives `P ≤ N`.
+  The carrier universes are independent, and no finite generation, additive
+  inverses, cancellation or nontriviality is required.
 - **Extension of products and powers of left ideals.** For any unital homomorphism
   `f : A →+* B` between semirings in independent universes,
   [`Ideal.map_mul_of_isTwoSided`](CoherentModules/RingTheory/Ideal/Maps.lean)

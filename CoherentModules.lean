@@ -37,6 +37,7 @@ public import CoherentModules.RingTheory.Ideal.Annihilator
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.RingTheory.Ideal.Localization
 public import CoherentModules.RingTheory.Ideal.Maps
+public import CoherentModules.RingTheory.Ideal.Operations
 public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
@@ -65,6 +66,8 @@ over semirings.
 Extension of left ideals along a unital semiring homomorphism preserves products
 when the extension of the first factor is two-sided, and preserves all powers
 when the extended ideal is two-sided.
+Relative generation bounds persist along every power of a left ideal over a
+semiring; a globally nilpotent ideal cannot enlarge relative generation.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal. The two-sided ideal lattice of any
 unital, possibly nonassociative ring is coatomic.

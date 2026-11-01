@@ -12,8 +12,8 @@ project:
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
     Noetherian modules, finite-submodule adic cofinality, radical colons of
     arbitrary subsets, and localization saturation commuting with colons by
-    finitely generated ideals, and annihilator localization for finitely
-    generated semimodules in Lean.
+    finitely generated ideals, annihilator localization for finitely generated
+    semimodules, and relative generation by nilpotent ideals in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -76,6 +76,11 @@ status:
     Reusable coherence and finite-presentation results with each declaration's
     actual algebraic hypotheses and independent module universes.
     Universal coherence explicitly records its target-algebra universe.
+    For left ideals I over a possibly noncommutative semiring and arbitrary
+    submodules N and P of an additive commutative semimodule, the relative bound
+    P ≤ N ⊔ I • P persists along every ideal power. Global nilpotence of I then
+    gives P ≤ N, without finite generation, additive inverses, cancellation or
+    nontriviality; the scalar and module universes are independent.
     Hom/tensor closure remains theorem-based, with a finitely presented first
     argument and coherent second argument. Square-zero kernel and projection
     base-change results hold over commutative semirings and additive commutative
