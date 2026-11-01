@@ -26,6 +26,22 @@ Authors: Formal Frontier Agents
   Taking `I = ⊥` in a reduced commutative semiring shows that the ideal of
   scalars `a` with `a * b = 0` for every `b ∈ s` is radical. No finiteness,
   nonemptiness or nontriviality assumption is needed.
+- **Finitely generated ideal colons and localization.** For commutative
+  semirings `R`, `S`, a submonoid `T : Submonoid R` and an `R`-algebra `S`
+  satisfying `[IsLocalization T S]`,
+  [`IsLocalization.comap_map_colon`](CoherentModules/RingTheory/Ideal/Localization.lean)
+  gives
+  ```lean
+  Ideal.comap (algebraMap R S)
+      ((I.colon (J : Set R)).map (algebraMap R S)) =
+    (Ideal.comap (algebraMap R S) (I.map (algebraMap R S))).colon (J : Set R)
+  ```
+  for any ideal `I` and finitely generated ideal `J`, with
+  `Submodule.FG (J : Submodule R R)`. Thus multiplicative saturation, expressed
+  by extension followed by contraction, commutes with colon by `J`.
+  Finite generation concerns the ideal, not its underlying set. The two
+  universes are independent; zero semirings, `0 ∈ T`, `J = ⊥` and top ideals
+  are allowed. No finiteness or radicality of `I` is required.
 - **Unit-ideal scalar families.** For an arbitrary family of scalars generating
   the unit ideal in a semiring `S`,
   [`Ideal.existsUnique_smul_eq_of_span_range_eq_top`](CoherentModules/Algebra/Module/Coprime.lean)

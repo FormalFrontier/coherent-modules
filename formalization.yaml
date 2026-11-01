@@ -10,8 +10,9 @@ project:
     projection base change, finite-type ideal/module transfer, left Noetherianity
     under scalar clearing, pointwise unimodular finite-generation ascent for
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
-    Noetherian modules, finite-submodule adic cofinality, and radical colons of
-    arbitrary subsets in Lean.
+    Noetherian modules, finite-submodule adic cofinality, radical colons of
+    arbitrary subsets, and localization saturation commuting with colons by
+    finitely generated ideals in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -105,6 +106,12 @@ status:
     Colons of radical ideals by arbitrary subsets are radical over commutative
     semirings. Taking the zero ideal over a reduced commutative semiring gives
     radical pointwise annihilators, including empty subsets and zero rings.
+    For commutative semirings R and S, a submonoid T of R and an R-algebra S
+    realizing localization at T, extension followed by contraction commutes
+    with colon by a finitely generated ideal J. The numerator ideal I is
+    arbitrary; finite generation of J does not mean its underlying set is
+    finite. The two universes are independent, and zero semirings, zero in T,
+    the zero ideal J and top ideals are allowed.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

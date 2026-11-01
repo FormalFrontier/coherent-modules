@@ -30,6 +30,7 @@ public import CoherentModules.RingTheory.Ideal.AdicCompatibility
 public import CoherentModules.RingTheory.Ideal.AdicKrull
 public import CoherentModules.RingTheory.Ideal.Annihilator
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
+public import CoherentModules.RingTheory.Ideal.Localization
 public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
