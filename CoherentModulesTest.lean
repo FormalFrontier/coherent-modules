@@ -29,6 +29,7 @@ public import CoherentModulesTest.RingTheory.Flat.TensorProduct
 public import CoherentModulesTest.RingTheory.Ideal.AdicCompatibility
 public import CoherentModulesTest.RingTheory.Ideal.AdicLocality
 public import CoherentModulesTest.RingTheory.Ideal.AdicProducts
+public import CoherentModulesTest.RingTheory.Ideal.Maps
 public import CoherentModulesTest.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModulesTest.RingTheory.Nakayama
 public import CoherentModulesTest.RingTheory.TwoSidedIdeal

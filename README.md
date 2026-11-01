@@ -19,6 +19,13 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Extension of products and powers of left ideals.** For any unital homomorphism
+  `f : A →+* B` between semirings in independent universes,
+  [`Ideal.map_mul_of_isTwoSided`](CoherentModules/RingTheory/Ideal/Maps.lean)
+  gives `(I * J).map f = I.map f * J.map f` whenever `I.map f` is two-sided.
+  The companion `Ideal.map_pow_of_isTwoSided` gives
+  `(I ^ n).map f = (I.map f) ^ n` for every natural exponent, including zero.
+  Neither semiring must be commutative, and `f` need not be surjective.
 - **Annihilators after localization.** For commutative semirings `R`, `A`,
   a submonoid `T : Submonoid R`, an `R`-algebra `A` realizing localization at
   `T`, and a standard localized-module map `f : M →ₗ[R] N`,
