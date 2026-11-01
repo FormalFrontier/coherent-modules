@@ -4,8 +4,10 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.Algebra.Module.LocalizedModule
 public import Mathlib.RingTheory.Finiteness.Cardinality
 public import Mathlib.RingTheory.Ideal.Maps
+public import Mathlib.RingTheory.LocalProperties.Basic
 
 /-!
 # Submodule adic cofinality
@@ -18,9 +20,10 @@ condition to finitely generated submodules. These are Fujiwara--Kato's condition
 Neither the ideal nor the relations of the ambient module need be finitely generated.
 
 Full submodule adic cofinality implies finite-submodule adic cofinality.
-Both conditions pass to the extension of an ideal along a module-finite algebra.
-Nilpotent ideals satisfy both conditions without any Noetherian hypothesis. The
-Noetherian-ring providers are in `CoherentModules.RingTheory.Filtration`.
+Both conditions pass to the extension of an ideal along a module-finite algebra
+or an arbitrary localization algebra. Nilpotent ideals satisfy both conditions
+without any Noetherian hypothesis. The Noetherian-ring providers are in
+`CoherentModules.RingTheory.Filtration`.
 
 ## Implementation notes
 
@@ -35,6 +38,15 @@ Restriction of scalars preserves intersections and mapped ideal-power actions.
 Finiteness is transitive, and finite generation of a submodule also restricts
 along a module-finite algebra.
 
+For localization transport, a finite target module is the localization of a
+finitely generated submodule over the original ring; it need not itself be
+finite over that ring. Full cofinality uses the whole preimage of the target
+submodule. Finite-submodule cofinality instead uses a finitely generated
+representative supplied by `Submodule.FG.exists_localized'_eq`; the whole
+preimage need not be finitely generated. Both proofs localize the same kind of
+stage inclusion using the localized-submodule intersection and ideal-action APIs.
+The given target algebra action is unchanged.
+
 ## References
 
 Kazuhiro Fujiwara and Fumiharu Kato, *Foundations of Rigid Geometry I*,
@@ -45,7 +57,7 @@ map, finite-generation and ideal-action APIs.
 
 @[expose] public section
 
-universe uR uS uM
+universe uR uS uA uM
 
 namespace Ideal
 
@@ -196,6 +208,85 @@ theorem HasFiniteSubmoduleAdicCofinality.map
   let : Module.Finite R X := Module.Finite.trans (R := R) S X
   obtain ⟨m, hm⟩ := hI.cofinal (N.restrictScalars R) (hN.restrictScalars (R := R)) n
   exact ⟨m, cofinal_le_of_restrictScalars I N m n hm⟩
+
+private theorem exists_fg_localizing_submodule
+    {A : Type uA} [CommRing A] [Algebra R A]
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module A M]
+    [IsScalarTower R A M] [Module.Finite A M]
+    (S : Submonoid R) [IsLocalization S A] :
+    ∃ P : Submodule R M, P.FG ∧ IsLocalizedModule S P.subtype := by
+  let : IsLocalizedModule S (LinearMap.id : M →ₗ[R] M) := isLocalizedModule_id S M A
+  obtain ⟨P, hP, hPloc⟩ := Submodule.FG.exists_localized'_eq S
+    (LinearMap.id : M →ₗ[R] M) (Module.Finite.fg_top (R := A) (M := M))
+  let e : P.localized' A S (LinearMap.id : M →ₗ[R] M) ≃ₗ[R] M :=
+    ((LinearEquiv.ofEq _ _ hPloc).trans Submodule.topEquiv).restrictScalars R
+  have he : e.toLinearMap ∘ₗ P.toLocalized' A S (LinearMap.id : M →ₗ[R] M) =
+      P.subtype := by
+    ext x
+    rfl
+  refine ⟨P, hP, ?_⟩
+  rw [← he]
+  exact IsLocalizedModule.of_linearEquiv S
+    (P.toLocalized' A S (LinearMap.id : M →ₗ[R] M)) e
+
+private theorem cofinal_le_of_isLocalizedModule
+    {A : Type uA} [CommRing A] [Algebra R A]
+    {X : Type*} [AddCommGroup X] [Module R X]
+    {M : Type uM} [AddCommGroup M] [Module R M] [Module A M]
+    [IsScalarTower R A M] (S : Submonoid R) [IsLocalization S A]
+    (f : X →ₗ[R] M) [IsLocalizedModule S f]
+    (I : Ideal R) (Q : Submodule R X) (N : Submodule A M)
+    (hQ : Q.localized' A S f = N) (m n : ℕ)
+    (h : Q ⊓ ((I ^ m) • (⊤ : Submodule R X)) ≤ (I ^ n) • Q) :
+    N ⊓ (((I.map (algebraMap R A)) ^ m) • (⊤ : Submodule A M)) ≤
+      ((I.map (algebraMap R A)) ^ n) • N := by
+  have hloc := (Submodule.localized'gi A S f).gc.monotone_l h
+  simpa only [Submodule.localized'_inf, Submodule.localized'_smul,
+    Submodule.localized'_top, Ideal.localized'_eq_map, Ideal.map_pow, hQ] using hloc
+
+/-- Submodule adic cofinality passes to the extension of an ideal along an
+arbitrary localization algebra. This is localization stability of condition (AP)
+of Fujiwara--Kato, *Foundations of Rigid Geometry I*, §0.7.4. Neither the ideal nor
+the submodules need be finitely generated; no finiteness of the localization
+algebra over the original ring is required. -/
+theorem HasSubmoduleAdicCofinality.map_of_isLocalization
+    {A : Type uA} [CommRing A] [Algebra R A]
+    {I : Ideal R} (hI : I.HasSubmoduleAdicCofinality)
+    (S : Submonoid R) [IsLocalization S A] :
+    (I.map (algebraMap R A)).HasSubmoduleAdicCofinality := by
+  refine (hasSubmoduleAdicCofinality_iff _).2 ?_
+  intro M _ _ _ N n
+  let : Module R M := Module.compHom M (algebraMap R A)
+  let : IsScalarTower R A M := IsScalarTower.of_compHom R A M
+  obtain ⟨P, hP, hPloc⟩ := exists_fg_localizing_submodule (A := A) (M := M) S
+  let : Module.Finite R P := Module.Finite.of_fg hP
+  let : IsLocalizedModule S P.subtype := hPloc
+  let Q := (N.restrictScalars R).comap P.subtype
+  have hQ : Q.localized' A S P.subtype = N :=
+    (Submodule.localized'gi A S P.subtype).l_u_eq N
+  obtain ⟨m, hm⟩ := hI.cofinal Q n
+  exact ⟨m, cofinal_le_of_isLocalizedModule S P.subtype I Q N hQ m n hm⟩
+
+/-- Finite-submodule adic cofinality passes to the extension of an ideal along an
+arbitrary localization algebra. This is localization stability of condition (APf)
+of Fujiwara--Kato, *Foundations of Rigid Geometry I*, §0.7.4. No finite generation
+of the ideal or finiteness of the localization algebra over the original ring
+is required. -/
+theorem HasFiniteSubmoduleAdicCofinality.map_of_isLocalization
+    {A : Type uA} [CommRing A] [Algebra R A]
+    {I : Ideal R} (hI : I.HasFiniteSubmoduleAdicCofinality)
+    (S : Submonoid R) [IsLocalization S A] :
+    (I.map (algebraMap R A)).HasFiniteSubmoduleAdicCofinality := by
+  refine (hasFiniteSubmoduleAdicCofinality_iff _).2 ?_
+  intro M _ _ _ N hN n
+  let : Module R M := Module.compHom M (algebraMap R A)
+  let : IsScalarTower R A M := IsScalarTower.of_compHom R A M
+  obtain ⟨P, hP, hPloc⟩ := exists_fg_localizing_submodule (A := A) (M := M) S
+  let : Module.Finite R P := Module.Finite.of_fg hP
+  let : IsLocalizedModule S P.subtype := hPloc
+  obtain ⟨Q, hQfg, hQ⟩ := Submodule.FG.exists_localized'_eq S P.subtype hN
+  obtain ⟨m, hm⟩ := hI.cofinal Q hQfg n
+  exact ⟨m, cofinal_le_of_isLocalizedModule S P.subtype I Q N hQ m n hm⟩
 
 /-- Nilpotent ideals have submodule adic cofinality: a single vanishing power
 works for every submodule and every index. No Noetherianity or finite generation

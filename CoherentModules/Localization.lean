@@ -5,6 +5,7 @@ Contributors: Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.Algebra.Module.LocalizedModule
 public import CoherentModules.Basic
 public import Mathlib.RingTheory.LocalProperties.FinitePresentation
 
@@ -52,31 +53,11 @@ theorem of_isLocalizedModule
     Module.IsCoherent Rₚ Mₚ where
   finite := Module.Finite.of_isLocalizedModule S f
   finitePresentation_submodule P hP := by
-    classical
-    obtain ⟨t, htfinite, htspan⟩ := Submodule.fg_def.mp hP
-    let s : Finset Mₚ := htfinite.toFinset
-    let T : Finset M := IsLocalizedModule.finsetIntegerMultiple S f s
-    let N : Submodule R M := Submodule.span R (T : Set M)
-    have hNfg : N.FG := Submodule.fg_span T.finite_toSet
+    obtain ⟨N, hNfg, hlocalized⟩ := Submodule.FG.exists_localized'_eq S f hP
     let _ : Module.IsCoherent R N := Module.IsCoherent.submodule N hNfg
     have hNfp : Module.FinitePresentation Rₚ (N.localized' Rₚ S f) :=
       FinitePresentation.of_isBaseChange (N.toLocalized' Rₚ S f)
         ((isLocalizedModule_iff_isBaseChange S Rₚ _).mp inferInstance)
-    have hlocalized : N.localized' Rₚ S f = P := by
-      change (Submodule.span R (T : Set M)).localized' Rₚ S f = P
-      rw [Submodule.localized'_span]
-      rw [IsLocalizedModule.finsetIntegerMultiple_image]
-      rw [show (s : Set Mₚ) = t from htfinite.coe_toFinset]
-      let y := IsLocalizedModule.commonDenomOfFinset S f s
-      have hfun : (fun z : Mₚ ↦ y • z) =
-          (fun z : Mₚ ↦ algebraMap R Rₚ (y : R) • z) := by
-        funext z
-        rw [Submonoid.smul_def, algebraMap_smul]
-      have hsmul : y • t = algebraMap R Rₚ (y : R) • t := by
-        simpa only [← Set.image_smul] using congrArg (fun g : Mₚ → Mₚ ↦ g '' t) hfun
-      rw [hsmul, Submodule.span_smul_eq_of_isUnit]
-      · exact htspan
-      · exact IsLocalization.map_units Rₚ y
     let e : N.localized' Rₚ S f ≃ₗ[Rₚ] P := LinearEquiv.ofEq _ _ hlocalized
     exact Module.FinitePresentation.of_equiv e
 
