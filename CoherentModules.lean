@@ -24,6 +24,7 @@ public import CoherentModules.RingTheory.Flat.Equiv
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.Localization
 public import CoherentModules.RingTheory.Flat.TensorProduct
+public import CoherentModules.RingTheory.Ideal.Annihilator
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Nakayama
