@@ -38,6 +38,18 @@ Authors: Formal Frontier Agents
   `SemimoduleCat.{v} R`, with independent coefficient and carrier universes.
   Over a ring, `ModuleCat.kernelCone_semimodule_hom_apply` shows that the
   comparison with Mathlib's module kernel preserves underlying elements.
+- **Sums of nilpotent left ideals.** For arbitrary left ideals `I`, `J` of a
+  possibly noncommutative `Semiring R`,
+  [`Ideal.sup_pow_add_sub_one_le`](CoherentModules/RingTheory/Ideal/Operations.lean)
+  gives `(I ⊔ J) ^ (m + n - 1) ≤ I ^ m * ⊤ ⊔ J ^ n * ⊤` for all natural
+  `m`, `n`. Global witnesses `I ^ m = 0` and `J ^ n = 0` therefore give
+  `(I ⊔ J) ^ (m + n - 1) = 0`; `Ideal.isNilpotent_sup` makes the sum of two
+  globally nilpotent left ideals nilpotent. No commutativity, two-sidedness or
+  positivity of the exponents is required. The
+  [relative-generation client](CoherentModulesTest/RingTheory/Ideal/Operations.lean)
+  combines this with nilpotent-ideal elimination to deduce `P ≤ N` from
+  `P ≤ N ⊔ (I ⊔ J) • P` in any additive commutative `R`-semimodule, with an
+  independent carrier universe.
 - **Relative generation by nilpotent ideals.** For a left ideal `I` of a
   possibly noncommutative semiring `R` and submodules `N`, `P` of an additive
   commutative `R`-semimodule,
