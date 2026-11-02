@@ -402,6 +402,16 @@ Authors: Formal Frontier Agents
   usual flatness. No faithful action, finiteness or additive cancellation is
   required. The identity coefficient equivalence accepts the same ordinary
   linear equivalence as Mathlib's fixed-ring flatness API.
+- **Flatness under pure scalar extension.** For commutative rings `R`, `S`, an
+  `R`-algebra `S` and an additive commutative monoid `M` with an `R`-module
+  structure, suppose every canonical map `N → S ⊗[R] N`, `n ↦ 1 ⊗ n`, is
+  injective for test modules `N : Type (max uR uM)`. Then
+  [`Module.Flat.iff_flat_tensorProduct_of_injective`](CoherentModules/RingTheory/Flat/Pure.lean)
+  gives `Module.Flat S (S ⊗[R] M) ↔ Module.Flat R M`.
+  The tensor has its canonical left-factor `S`-action, and `M` needs no
+  `S`-action. The coefficient ring, scalar algebra and module have independent
+  universes. No flatness of `S` over `R` or finite generation of `M` is assumed;
+  the additive group structure of `M` over a ring is derived internally.
 - **Annihilators under finite-limit-preserving scalar extension.** For a
   `CommSemiring R`, a possibly noncommutative `Semiring S` with `Algebra R S`,
   and a finitely generated semimodule `M`,

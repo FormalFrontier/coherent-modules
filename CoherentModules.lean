@@ -40,6 +40,7 @@ public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.Equiv
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
 public import CoherentModules.RingTheory.Flat.Localization
+public import CoherentModules.RingTheory.Flat.Pure
 public import CoherentModules.RingTheory.Flat.TensorProduct
 public import CoherentModules.RingTheory.Ideal.AdicBaseChange
 public import CoherentModules.RingTheory.Ideal.AdicCompatibility

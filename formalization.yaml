@@ -13,7 +13,8 @@ project:
     Noetherian modules, finite-submodule adic cofinality, radical colons of
     arbitrary subsets, and localization saturation commuting with colons by
     finitely generated ideals, annihilator localization for finitely generated
-    semimodules, and relative generation by nilpotent ideals in Lean.
+    semimodules, relative generation by nilpotent ideals, and flatness descent
+    along pure scalar extension in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -31,6 +32,19 @@ highlights:
     declarations:
       - declaration: "Module.IsCoherent.iff_finite_and_fg_ker"
         file: "CoherentModules/Basic.lean"
+  - title: "Flatness descends along pure scalar extension"
+    statement: >-
+      For commutative rings R and S, an R-algebra S and an R-module M,
+      assume the canonical unit N → S ⊗[R] N is injective for every R-module N
+      in Type (max uR uM). Then S ⊗[R] M is flat over S if and only if M is flat
+      over R. The ring, algebra and module universes are independent; S need
+      not be flat over R, and M need not be finitely generated or supplied
+      with an additive group structure.
+    declarations:
+      - declaration: "Module.Flat.of_flat_tensorProduct_of_injective"
+        file: "CoherentModules/RingTheory/Flat/Pure.lean"
+      - declaration: "Module.Flat.iff_flat_tensorProduct_of_injective"
+        file: "CoherentModules/RingTheory/Flat/Pure.lean"
 
 sources:
   - title: "Coherent rings, coherent modules and finite presentation"
@@ -148,6 +162,12 @@ status:
     after localization for two maps from a finitely generated semimodule is
     equivalent to equality after multiplying both maps by one element of
     the localizing submonoid.
+    Over commutative rings, injectivity of the tensor units on test modules
+    in the universe max uR uM reflects flatness along scalar extension.
+    The scalar algebra has an independent universe and is not assumed flat
+    over the coefficient ring. The module carries only its given additive
+    commutative monoid and scalar action; its group structure is derived
+    internally, and no finite generation or additional scalar action is needed.
     No coherence, projectivity, nontriviality or nonzero-module assumption or
     complete source coverage is asserted.
 

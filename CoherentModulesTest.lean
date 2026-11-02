@@ -34,6 +34,7 @@ public import CoherentModulesTest.RingTheory.Flat.LocalizationProduct
 public import CoherentModulesTest.RingTheory.Flat.LocalizationProductCriteria
 public import CoherentModulesTest.RingTheory.Flat.LocalizationProductInfinite
 public import CoherentModulesTest.RingTheory.Flat.LocalizationZeroDivisors
+public import CoherentModulesTest.RingTheory.Flat.Pure
 public import CoherentModulesTest.RingTheory.Flat.TensorProduct
 public import CoherentModulesTest.RingTheory.Ideal.AdicCompatibility
 public import CoherentModulesTest.RingTheory.Ideal.AdicLocality
