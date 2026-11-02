@@ -20,6 +20,18 @@ project:
     - "Formal Frontier source-maintainer team"
   license: "Apache-2.0"
 
+highlights:
+  - title: "Coherence via kernels of maps from finite free modules"
+    statement: >-
+      For any unital, possibly noncommutative ring R and any left R-module M,
+      M is coherent (finitely generated with every finitely generated submodule
+      finitely presented) if and only if M is finitely generated and the kernel
+      of every R-linear map Rⁿ → M is finitely generated for every natural
+      number n, including zero.
+    declarations:
+      - declaration: "Module.IsCoherent.iff_finite_and_fg_ker"
+        file: "CoherentModules/Basic.lean"
+
 sources:
   - title: "Coherent rings, coherent modules and finite presentation"
     type: "folklore"
