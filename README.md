@@ -22,6 +22,18 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Hom and End of matrix columns.** Over an arbitrary possibly noncommutative
+  semiring `R`, finite-sum matrix actions retain the given coefficient-module
+  structures. For a finite nonempty index `I`,
+  [`LinearMap.matrixModuleHomAddEquiv`](CoherentModules/LinearAlgebra/Matrix/ColumnHom.lean)
+  identifies coefficient-linear maps additively with matrix-linear maps of columns;
+  its inverse is characterized at every coordinate.
+  `Module.matrixModuleEndRingEquiv` preserves the usual order of composition.
+  For the regular coefficient module this gives `Rᵐᵒᵖ`, not the full matrix semiring.
+  With empty `I`, coordinate extension is still surjective, but need not be
+  injective. Zero semirings are allowed, and no scalar-module structure on a
+  general Hom is used.
+
 - **Projective matrix-column semimodules.** For a semiring `R`, an additive
   commutative monoid `M` with its given `R`-module structure, and a finite type `I`
   with decidable equality,

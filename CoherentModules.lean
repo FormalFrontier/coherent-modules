@@ -5,6 +5,7 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Module
 public import CoherentModules.LinearAlgebra.Matrix.Projective
 public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
@@ -81,6 +82,9 @@ when the extension of the first factor is two-sided, and preserves all powers
 when the extended ideal is two-sided.
 Relative generation bounds persist along every power of a left ideal over a
 semiring; a globally nilpotent ideal cannot enlarge relative generation.
+For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
+and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
+for empty indices it remains surjective.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal. The two-sided ideal lattice of any
 unital, possibly nonassociative ring is coatomic.

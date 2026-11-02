@@ -76,6 +76,14 @@ status:
     Reusable coherence and finite-presentation results with each declaration's
     actual algebraic hypotheses and independent module universes.
     Universal coherence explicitly records its target-algebra universe.
+    Coordinatewise extension identifies coefficient-linear maps additively with
+    matrix-linear maps of columns for finite nonempty indices over arbitrary
+    possibly noncommutative semirings, retaining the given coefficient actions.
+    The induced endomorphism semiring equivalence preserves composition;
+    on the regular coefficient module its source identifies with the opposite
+    coefficient semiring, not the full matrix semiring. For empty indices only
+    surjectivity is asserted. Zero semirings are allowed, and no coefficient-module
+    structure on a general Hom is used.
     For left ideals I over a possibly noncommutative semiring and arbitrary
     submodules N and P of an additive commutative semimodule, the relative bound
     P ≤ N ⊔ I • P persists along every ideal power. Global nilpotence of I then
