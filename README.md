@@ -283,6 +283,27 @@ Authors: Formal Frontier Agents
   invariance under coefficient equivalence. Both predicates quantify over
   finite ambient modules; only (APf) restricts submodules to be finitely
   generated.
+- **Stability of adic cofinality under scalar extension.** Over commutative
+  rings, both (AP) and (APf) pass from an ideal `I` to its extension
+  `I.map (algebraMap R A)` along a **module-finite** `R`-algebra `A`, or
+  along an arbitrary localization algebra. The localization algebra need not
+  be finite over `R`. The respective `.map` and `.map_of_isLocalization`
+  interfaces are in
+  [`AdicCompatibility`](CoherentModules/RingTheory/Ideal/AdicCompatibility.lean).
+  Neither ideal finite generation nor finite presentation or Noetherianity
+  is required; the original target action and independent carrier universes
+  are retained.
+- **Adic cofinality near a closed locus.** For an ideal `I` of a commutative
+  ring `R` and any set `s : Set R` with `I ⊔ Ideal.span s = ⊤`, (AP) holds
+  for `I` if and only if it holds for every extension to `Localization.Away f`,
+  `f ∈ s`; the same equivalence holds for (APf). The
+  [`hasSubmoduleAdicCofinality_iff_forall_map_away` and finite-submodule counterpart](CoherentModules/RingTheory/Ideal/AdicLocality.lean)
+  need only a distinguished-open cover of `V(I)`, not of the whole spectrum.
+  The set need not be finite. The ambient modules remain finite, with arbitrary
+  submodules for (AP) and finitely generated submodules for (APf); no ideal-FG,
+  ambient finite-presentation or Noetherian hypothesis is added. Cutoffs are
+  pointwise, not a uniform shift or denominator bound, and this is not a
+  stalkwise criterion.
 - **Krull intersection from adic cofinality.** For a finite module `M` and an
   ideal `I` satisfying finite-submodule adic cofinality,
   [`Ideal.HasFiniteSubmoduleAdicCofinality.mem_iInf_pow_smul_top_iff`](CoherentModules/RingTheory/Ideal/AdicKrull.lean)
@@ -550,7 +571,8 @@ Authors: Formal Frontier Agents
   generated.
 
 The foundation, finite-presentation and coherent-module category results allow
-arbitrary `Ring`; localization, Hom, tensor and universal coherence use `CommRing`.
+arbitrary `Ring`. Localization of coherent modules, coherent Hom/tensor closure,
+and universal coherence use `CommRing`.
 The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
@@ -721,17 +743,21 @@ monotonicity, submodule actions and lattice APIs. Semilinear cofinality transpor
 uses Mathlib's semilinear submodule maps, ideal actions and lattice APIs; its
 ring-equivalence corollaries reuse finite-algebra stability with Mathlib's
 canonical ring-equivalence finiteness and ideal-map roundtrips.
+Localization stability and
+the distinguished-open locality criteria reuse Mathlib's finite-generation,
+localized-submodule, ideal-action and submodule-inclusion-reflection APIs;
+the locality criteria for the cofinality predicates are proved here.
 The cofinality Krull and relative intersection theorems generalize the
 separation and closedness arguments of Proposition 0.7.4.16. They reuse
 Mathlib's cyclic ideal-action, Jacobson modular-inverse, annihilator and
 quotient APIs, and generalize Andrew Yang's Noetherian Krull membership
 formalization. The Noetherian specialization preserves its subtype witness.
 No source PDF or substantial excerpt is bundled; this citation does not assert
-complete source correspondence or endorsement. Anchor contributed the original
-foundation, kernel closure and universal-coherence formalizations; other Formal
-Frontier AI agents contributed further constructions and tests. See [credits](docs/CREDITS.md)
-for mathematical and tooling provenance. No legal copyright owner is inferred
-from collective author credit.
+complete source correspondence or endorsement. The original foundation, kernel
+closure and universal-coherence formalizations are distinct contributions from
+later constructions and tests. Formal Frontier Agents developed this library
+with AI assistance. See [credits](docs/CREDITS.md) for mathematical and tooling
+provenance. No legal copyright owner is inferred from collective author credit.
 
 ## Base-change criteria: source and proof approach
 
