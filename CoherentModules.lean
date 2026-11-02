@@ -6,6 +6,7 @@ Contributors: Anchor and other Formal Frontier AI agents
 module
 
 public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
+public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
 public import CoherentModules.Algebra.Category.ModuleCat.Kernels
