@@ -1,6 +1,6 @@
 name = "coherent-modules"
 version = "0.1.0"
-defaultTargets = ["CoherentModules", "CoherentModulesTest"]
+defaultTargets = ["CoherentModules", "CoherentModulesTest", "CoherentModulesExamples.DirectSum"]
 lintDriver = "batteries/runLinter"
 
 [[require]]
@@ -22,3 +22,7 @@ name = "CoherentModulesTest"
 globs = ["CoherentModulesTest", "CoherentModulesTest.+"]
 # Compatibility checks in the test library intentionally stay private.
 leanOptions = { weak.linter.privateModule = false }
+
+[[lean_lib]]
+name = "CoherentModulesExamples.DirectSum"
+globs = ["CoherentModulesExamples.+"]
