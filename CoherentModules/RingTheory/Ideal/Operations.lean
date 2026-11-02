@@ -5,9 +5,14 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.RingTheory.Ideal.Operations
+public import Mathlib.Algebra.Group.Pointwise.Set.ListOfFn
 
 /-!
-# Nilpotent ideal sums and relative generation
+# Left ideal powers, nilpotent sums and relative generation
+
+Powers of a left ideal are generated additively by ordered mixed products of its
+elements in every positive degree. In degree zero the power is the top ideal;
+left-ideal closure extends the ordered-product universal property to that degree.
 
 The join of two globally nilpotent left ideals is globally nilpotent, with a
 vanishing-power bound given by the sum of the two exponents minus one. More
@@ -174,5 +179,44 @@ private theorem sup_pow_add_le_pow_sup_pow_from_top_bound
       simpa only [mul_top] using sup_pow_add_sub_one_le I J n m
 
 end CommSemiring
+
+end Ideal
+
+universe u
+
+namespace Ideal
+
+variable {A : Type u} [Semiring A] {I J : Ideal A}
+
+/-- An ordered product of elements of a left ideal belongs to the power whose
+degree is the length of the list, including the empty product in degree zero. -/
+theorem list_prod_mem_pow (l : List A) (hl : ∀ x ∈ l, x ∈ I) :
+    l.prod ∈ I ^ l.length := by
+  apply Submodule.pow_subset_pow I
+  apply Set.mem_pow.mpr
+  refine ⟨fun i => ⟨l.get i, hl _ (List.get_mem _ _)⟩, ?_⟩
+  simp only [List.ofFn_get]
+
+/-- A left ideal contains a power exactly when it contains every ordered mixed
+product of that length. This also holds in degree zero, where containing the
+empty product forces the target ideal to be top. -/
+theorem pow_le_iff_forall_list_prod_mem (n : ℕ) :
+    I ^ n ≤ J ↔ ∀ l : List A, l.length = n → (∀ x ∈ l, x ∈ I) → l.prod ∈ J := by
+  constructor
+  · intro h l hn hl
+    exact h (hn ▸ list_prod_mem_pow l hl)
+  · intro h
+    obtain rfl | hn := eq_or_ne n 0
+    · have h1 : (1 : A) ∈ J := h [] rfl (by simp)
+      intro x _
+      simpa only [mul_one] using J.mul_mem_left x h1
+    · change (I ^ n).toAddSubmonoid ≤ J.toAddSubmonoid
+      rw [Submodule.pow_toAddSubmonoid I hn, AddSubmonoid.pow_eq_closure_pow_set,
+        Submodule.coe_toAddSubmonoid, AddSubmonoid.closure_le]
+      intro a ha
+      obtain ⟨f, rfl⟩ := Set.mem_pow.mp ha
+      apply h _ List.length_ofFn
+      rw [List.forall_mem_ofFn_iff]
+      exact fun i => SetLike.mem_coe.mp (f i).property
 
 end Ideal
