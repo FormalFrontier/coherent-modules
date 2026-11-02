@@ -24,6 +24,7 @@ public import CoherentModules.LinearAlgebra.TensorProduct.Kernel
 public import CoherentModules.LinearAlgebra.TensorProduct.Noetherian
 public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
+public import CoherentModules.RingTheory.Artinian.Regular
 public import CoherentModules.RingTheory.Filtration
 public import CoherentModules.RingTheory.Flat.BaseChange
 public import CoherentModules.RingTheory.Flat.CategoryTheory
@@ -61,8 +62,9 @@ nilpotent-ideal providers and faithfully flat descent, its Krull membership
 characterization and relative annihilator separation and submodule intersection
 theorems,
 left Noetherianity under unit clearing and additive right retractions,
-semimodule kernels, annihilator preservation for finite semimodules under
-finite-limit-preserving scalar extension, the coherent-module category, universal
+units from left-regular elements in left Artinian rings, semimodule kernels,
+annihilator preservation for finite semimodules under finite-limit-preserving
+scalar extension, the coherent-module category, universal
 coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products

@@ -19,6 +19,13 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Left-regular elements in left Artinian rings.** For an arbitrary unital
+  `Ring A` with `[IsArtinianRing A]`,
+  [`IsLeftRegular.isUnit_of_isArtinianRing`](CoherentModules/RingTheory/Artinian/Regular.lean)
+  makes every left-regular element a unit. Artinianity concerns the original
+  left regular module; no opposite-Artinian, commutativity or nontriviality
+  hypothesis is required, and the carrier universe is arbitrary. The reverse
+  implication is already available through Mathlib's `IsUnit.isRegular`.
 - **Closed semimodule categories.** For a `CommSemiring R`,
   [`SemimoduleCat.tensorLeftHomAdjunction`](CoherentModules/Algebra/Category/ModuleCat/Monoidal/Closed.lean)
   makes tensoring with `M` left adjoint to its wrapped-morphism Hom functor.
