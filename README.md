@@ -7,7 +7,10 @@ finite-generation ascent under pointwise unimodular clearing, Noetherian
 ascent under left-invertible scalar clearing for semilinear maps, Noetherian
 scalar extension along essentially finite-type algebras, Artin–Rees for
 Noetherian modules over arbitrary commutative rings, and submodule adic
-cofinality.
+cofinality. Left ideals of a finite square matrix semiring are order-isomorphic
+to submodules of its row module, including empty index types. This gives
+Artinian and Noetherian equivalences with the row module over arbitrary
+semirings, not unrestricted ascent from the coefficient semiring.
 Import `CoherentModules` for the mathematical library; test modules are separate.
 See the [mathematical guide](docs/Guide.md),
 the [historical API reference](docs/API.md) and its [provenance](docs/README.md),
@@ -18,6 +21,14 @@ under [Apache-2.0](LICENSE).
 Authors: Formal Frontier Agents
 
 ## Headline results
+
+- **Left ideals of finite matrix semirings.** For `[Semiring R]`, `[Fintype I]`
+  and `[DecidableEq I]`, including empty `I`,
+  [`Submodule.matrixRowsOrderIso`](CoherentModules/LinearAlgebra/Matrix/RowIdeal.lean)
+  identifies left ideals of `Matrix I I R` with `R`-submodules of the row module
+  `I → R`. Left Artinianity and left Noetherianity of the matrix semiring are
+  equivalent to the corresponding conditions on this row module, not to
+  unrestricted conditions on the coefficient semiring.
 
 - **Left-regular elements in left Artinian rings.** For an arbitrary unital
   `Ring A` with `[IsArtinianRing A]`,

@@ -8,6 +8,7 @@ public import CoherentModulesTest.Algebra.Category.ModuleCat.Monoidal.Closed
 public import CoherentModulesTest.Algebra.Module.LocalizedModule
 public import CoherentModulesTest.Algebra.TrivSqZeroExt.Finite
 public import CoherentModulesTest.Axioms
+public import CoherentModulesTest.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModulesTest.Basic
 public import CoherentModulesTest.FinitePresentation
 public import CoherentModulesTest.FinitePresentationZero
