@@ -9,6 +9,7 @@ public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Module
 public import CoherentModules.LinearAlgebra.Matrix.Projective
 public import CoherentModules.LinearAlgebra.Matrix.Reconstruction
+public import CoherentModules.LinearAlgebra.Matrix.ReconstructionCoherence
 public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModules.LinearAlgebra.Matrix.Submodule
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
