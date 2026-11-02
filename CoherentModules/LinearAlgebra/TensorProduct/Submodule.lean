@@ -4,8 +4,12 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import Mathlib.Algebra.Module.NatInt
+public import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+public import Mathlib.LinearAlgebra.TensorProduct.RightExactness
 public import Mathlib.LinearAlgebra.TensorProduct.Tower
 public import Mathlib.RingTheory.Ideal.Maps
+public import Mathlib.RingTheory.TensorProduct.Finite
 
 /-!
 # Scalar extension of submodules
@@ -22,10 +26,16 @@ An `R`-linear map from the scalar algebra to `R` taking `1` to `1` contracts
 extended submodules along `m ↦ 1 ⊗ m`, and hence reflects submodule inclusions.
 The map need not preserve multiplication.
 
+Over a commutative coefficient ring, injectivity of tensor units on modules in
+the maximum of the coefficient and module universes also contracts extended
+submodules. Consequently scalar extension reflects submodule inclusions and
+finite generation of submodules, without requiring a flat scalar algebra.
+
 ## References
 
 The formalization uses Mathlib's submodule base change, ideal map, ideal action,
-span induction and tensor balancing APIs.
+span induction, tensor balancing, quotient isomorphism, tensor right-exactness
+and finite span APIs.
 -/
 
 @[expose] public section
@@ -128,5 +138,99 @@ theorem baseChange_smul
       simpa only [add_smul] using ((I • N).baseChange A).add_mem hb hc
     · intro b c _ hc
       simpa only [smul_eq_mul, mul_smul] using ((I • N).baseChange A).smul_mem b hc
+
+/-- Injectivity of the tensor unit reflects membership in extended submodules.
+The scalar algebra need not be commutative or flat. -/
+theorem one_tmul_mem_baseChange_iff_of_injective
+    {R : Type uR} {S : Type uS} [CommRing R] [Semiring S]
+    [Algebra R S] {M : Type uM} [AddCommMonoid M] [Module R M]
+    (hunit : ∀ (N : Type (max uR uM)) [AddCommMonoid N] [Module R N],
+      Function.Injective (TensorProduct.mk R S N 1))
+    (N : Submodule R M) (m : M) :
+    (1 : S) ⊗ₜ[R] m ∈ N.baseChange S ↔ m ∈ N := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R
+  let : AddCommGroup S := Module.addCommMonoidToAddCommGroup R
+  -- The free cover puts the quotient in the universe tested by `hunit`.
+  let F := M →₀ R
+  let p : F →ₗ[R] M := Finsupp.linearCombination R id
+  have hp : Function.Surjective p := Finsupp.linearCombination_id_surjective R M
+  let P₀ : Submodule R F := N.comap p
+  let C := F ⧸ P₀
+  have hker : P₀ = LinearMap.ker (N.mkQ.comp p) := by
+    rw [LinearMap.ker_comp, ker_mkQ]
+  let e : C ≃ₗ[R] M ⧸ N :=
+    (quotEquivOfEq P₀ _ hker).trans
+      ((N.mkQ.comp p).quotKerEquivOfSurjective (N.mkQ_surjective.comp hp))
+  have hquot : Function.Injective (TensorProduct.mk R S (M ⧸ N) 1) := by
+    intro x y hxy
+    apply e.symm.injective
+    apply hunit C
+    have hnatural := LinearMap.lTensor_comp_mk (M := S) e.symm.toLinearMap (1 : S)
+    calc
+      TensorProduct.mk R S C 1 (e.symm x) =
+          e.symm.toLinearMap.lTensor S (TensorProduct.mk R S (M ⧸ N) 1 x) :=
+        (LinearMap.congr_fun hnatural x).symm
+      _ = e.symm.toLinearMap.lTensor S (TensorProduct.mk R S (M ⧸ N) 1 y) :=
+        congrArg _ hxy
+      _ = TensorProduct.mk R S C 1 (e.symm y) := LinearMap.congr_fun hnatural y
+  constructor
+  · intro hm
+    have hm' : (1 : S) ⊗ₜ[R] m ∈ LinearMap.ker (N.mkQ.lTensor S) := by
+      rw [_root_.lTensor_mkQ S N]
+      change (1 : S) ⊗ₜ[R] m ∈ LinearMap.range (N.subtype.baseChange S) at hm
+      obtain ⟨x, hx⟩ := hm
+      exact ⟨x, by simpa only [LinearMap.baseChange_eq_ltensor] using hx⟩
+    have hzero : TensorProduct.mk R S (M ⧸ N) 1 (N.mkQ m) = 0 := by
+      simpa only [LinearMap.mem_ker, LinearMap.lTensor_tmul, TensorProduct.mk_apply] using hm'
+    have hq : N.mkQ m = 0 := hquot (by simpa only [map_zero] using hzero)
+    exact (Submodule.Quotient.mk_eq_zero (p := N)).mp hq
+  · exact tmul_mem_baseChange_of_mem (A := S) 1
+
+/-- Injectivity of the tensor unit makes scalar extension reflect submodule
+inclusions. The scalar algebra need not be commutative or flat. -/
+theorem baseChange_le_iff_of_injective
+    {R : Type uR} {S : Type uS} [CommRing R] [Semiring S]
+    [Algebra R S] {M : Type uM} [AddCommMonoid M] [Module R M]
+    (hunit : ∀ (N : Type (max uR uM)) [AddCommMonoid N] [Module R N],
+      Function.Injective (TensorProduct.mk R S N 1))
+    (N K : Submodule R M) :
+    N.baseChange S ≤ K.baseChange S ↔ N ≤ K := by
+  constructor
+  · intro h m hm
+    exact (one_tmul_mem_baseChange_iff_of_injective hunit K m).mp
+      (h (tmul_mem_baseChange_of_mem (A := S) 1 hm))
+  · exact baseChange_mono S
+
+/-- Injectivity of the tensor unit makes finite generation invariant under
+scalar extension of a submodule. No flatness is assumed. -/
+theorem fg_baseChange_iff_of_injective
+    {R : Type uR} {S : Type uS} [CommRing R] [Semiring S]
+    [Algebra R S] {M : Type uM} [AddCommMonoid M] [Module R M]
+    (hunit : ∀ (N : Type (max uR uM)) [AddCommMonoid N] [Module R N],
+      Function.Injective (TensorProduct.mk R S N 1))
+    (N : Submodule R M) : (N.baseChange S).FG ↔ N.FG := by
+  constructor
+  · intro hN
+    rw [baseChange_eq_span, map_coe] at hN
+    obtain ⟨s, hs, hspan⟩ := (fg_span_iff_fg_span_finset_subset _).mp hN
+    obtain ⟨t, htN, ht, hspan'⟩ :=
+      (Set.exists_subset_image_finite_and
+        (f := TensorProduct.mk R S M 1) (s := (N : Set M))
+        (p := fun t => span S (TensorProduct.mk R S M 1 '' (N : Set M)) =
+          span S t)).mp ⟨(s : Set (S ⊗[R] M)), hs, s.finite_toSet, hspan⟩
+    let N₀ : Submodule R M := span R t
+    have hbase : N₀.baseChange S = N.baseChange S := by
+      dsimp only [N₀]
+      rw [baseChange_span, baseChange_eq_span, map_coe]
+      exact hspan'.symm
+    have hN₀ : N₀ = N :=
+      le_antisymm (span_le.mpr htN)
+        ((baseChange_le_iff_of_injective hunit N N₀).mp hbase.ge)
+    rw [← hN₀]
+    exact fg_span ht
+  · intro hN
+    let : Module.Finite R N := Module.Finite.of_fg hN
+    exact Module.Finite.iff_fg.mp
+      (Module.Finite.of_surjective (N.toBaseChange S) (N.toBaseChange_surjective S))
 
 end Submodule

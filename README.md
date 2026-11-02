@@ -1,7 +1,8 @@
 # coherent-modules
 
 Reusable Lean library for coherent modules and rings, finite presentation,
-localization, closure constructions, finite square-zero extensions, left
+finiteness descent under injective tensor units, localization, closure
+constructions, finite square-zero extensions, left
 Noetherianity of square-zero extensions, ideal-to-module transfer,
 finite-generation ascent under pointwise unimodular clearing, Noetherian
 ascent under left-invertible scalar clearing for semilinear maps, Noetherian
@@ -402,16 +403,29 @@ Authors: Formal Frontier Agents
   usual flatness. No faithful action, finiteness or additive cancellation is
   required. The identity coefficient equivalence accepts the same ordinary
   linear equivalence as Mathlib's fixed-ring flatness API.
-- **Flatness under pure scalar extension.** For commutative rings `R`, `S`, an
-  `R`-algebra `S` and an additive commutative monoid `M` with an `R`-module
-  structure, suppose every canonical map `N → S ⊗[R] N`, `n ↦ 1 ⊗ n`, is
-  injective for test modules `N : Type (max uR uM)`. Then
+- **Finiteness and flatness under pure scalar extension.** Let `R : Type uR`
+  be a commutative ring, `S` an `R`-algebra and `M : Type uM` an additive
+  commutative monoid with its given `R`-module structure. Suppose the canonical
+  map `N → S ⊗[R] N`, `n ↦ 1 ⊗ n`, is injective for every additive commutative
+  `R`-semimodule `N : Type (max uR uM)`. Then
+  [`Module.Finite.iff_finite_tensorProduct_of_injective`](CoherentModules/RingTheory/Finiteness/Pure.lean)
+  gives `Module.Finite S (S ⊗[R] M) ↔ Module.Finite R M` for any `Semiring S`,
+  and
+  [`Module.FinitePresentation.iff_finitePresentation_tensorProduct_of_injective`](CoherentModules/RingTheory/Finiteness/Pure.lean)
+  gives the corresponding finite-presentation equivalence for any `Ring S`.
+  These scalar algebras need not be commutative. The
+  [submodule comparisons](CoherentModules/LinearAlgebra/TensorProduct/Submodule.lean)
+  reflect membership and inclusions and characterize finite generation of
+  scalar-extension images, without assuming tensoring preserves submodule
+  injections. If `S` is commutative,
   [`Module.Flat.iff_flat_tensorProduct_of_injective`](CoherentModules/RingTheory/Flat/Pure.lean)
-  gives `Module.Flat S (S ⊗[R] M) ↔ Module.Flat R M`.
-  The tensor has its canonical left-factor `S`-action, and `M` needs no
-  `S`-action. The coefficient ring, scalar algebra and module have independent
-  universes. No flatness of `S` over `R` or finite generation of `M` is assumed;
-  the additive group structure of `M` over a ring is derived internally.
+  also gives `Module.Flat S (S ⊗[R] M) ↔ Module.Flat R M`.
+  The tensor has its canonical left-factor `S`-action; `M` needs no `S`-action
+  or supplied additive group structure. All three carrier universes are
+  independent. No flatness of `S` over `R` is assumed. The
+  [finite-projectivity client](CoherentModulesTest/RingTheory/Finiteness/Pure.lean)
+  combines these results with Mathlib's finite-projective and finitely presented
+  flat criteria to descend finite projectivity when `S` is commutative.
 - **Annihilators under finite-limit-preserving scalar extension.** For a
   `CommSemiring R`, a possibly noncommutative `Semiring S` with `Algebra R S`,
   and a finitely generated semimodule `M`,
@@ -705,6 +719,16 @@ action alone on the target does not suffice. The
 include a projection onto a nonfinite free abelian group, linear-equivalence
 transport, and the rational, empty-index and integer-torsion boundaries.
 
+For finiteness descent, import `CoherentModules.RingTheory.Finiteness.Pure`.
+Apply `Module.Finite.of_finite_tensorProduct_of_injective R M S hunit` to a
+finite extended module, or
+`Module.FinitePresentation.of_finitePresentation_tensorProduct_of_injective R M S hunit`
+to a finitely presented extended module. Both use the tensor-unit injectivity
+hypothesis stated above, on the original module and canonical scalar actions.
+The [clients](CoherentModulesTest/RingTheory/Finiteness/Pure.lean) also compare
+faithfully flat descent and split-retraction membership and order reflection
+on the same modules and maps.
+
 ### Building and checking
 
 The exact `lean-toolchain` is `leanprover/lean4:v4.34.0-rc2`; mathlib is pinned
@@ -733,7 +757,10 @@ is historical and qualified, not a present-day resource guarantee.
 ## References and credit
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
-localization, tensor products and categorical infrastructure. Two-sided ideal
+localization, tensor products and categorical infrastructure. Finiteness descent
+under injective tensor units generalizes Mathlib's faithfully flat
+finite-generation argument and uses its finite-presentation, submodule
+scalar-extension and tensor right-exactness APIs. Two-sided ideal
 coatomicity uses Mathlib's two-sided ideal API and order-theoretic Zorn theorem;
 its simple-quotient example uses Mathlib's ring congruence correspondence. The module
 Artin–Rees theorem reuses Andrew Yang's formalization in

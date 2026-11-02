@@ -34,6 +34,7 @@ public import CoherentModules.Localization
 public import CoherentModules.ModuleCat
 public import CoherentModules.RingTheory.Artinian.Regular
 public import CoherentModules.RingTheory.Filtration
+public import CoherentModules.RingTheory.Finiteness.Pure
 public import CoherentModules.RingTheory.Flat.BaseChange
 public import CoherentModules.RingTheory.Flat.CategoryTheory
 public import CoherentModules.RingTheory.Flat.DirectSum
