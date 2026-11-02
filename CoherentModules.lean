@@ -8,6 +8,7 @@ module
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
 public import CoherentModules.Algebra.Category.ModuleCat.Kernels
+public import CoherentModules.Algebra.Category.ModuleCat.Monoidal.Closed
 public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite

@@ -19,6 +19,18 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Closed semimodule categories.** For a `CommSemiring R`,
+  [`SemimoduleCat.tensorLeftHomAdjunction`](CoherentModules/Algebra/Category/ModuleCat/Monoidal/Closed.lean)
+  makes tensoring with `M` left adjoint to its wrapped-morphism Hom functor.
+  The Hom functor allows an independent carrier universe; the monoidal closed
+  structure uses the common scalar and carrier universe of the tensor category.
+  Currying, uncurrying, evaluation and coevaluation have pure-tensor formulas.
+  Over a commutative ring, `ModuleCat.ihomSemimoduleIso` compares the chosen
+  internal Homs and their unit, counit and precomposition maps.
+  The [finite-basis client](CoherentModulesTest/Algebra/Category/ModuleCat/Monoidal/Closed.lean)
+  uses a specified basis with finite index type to show that tensoring preserves
+  existing limits at two independent diagram sizes; the index universe is
+  independent as well.
 - **Kernels over semirings.** For an arbitrary `Semiring R`,
   [`SemimoduleCat.kernelIsLimit`](CoherentModules/Algebra/Category/ModuleCat/Kernels.lean)
   makes the existing kernel submodule, with its subtype inclusion, a categorical
