@@ -42,6 +42,7 @@ public import CoherentModulesTest.RingTheory.Ideal.AdicProducts
 public import CoherentModulesTest.RingTheory.Ideal.Maps
 public import CoherentModulesTest.RingTheory.Ideal.Operations
 public import CoherentModulesTest.RingTheory.Ideal.Quotient.Annihilator
+public import CoherentModulesTest.RingTheory.Morita.Matrix
 public import CoherentModulesTest.RingTheory.Nakayama
 public import CoherentModulesTest.RingTheory.TwoSidedIdeal
 public import CoherentModulesTest.TensorProduct
