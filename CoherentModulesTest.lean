@@ -11,6 +11,7 @@ public import CoherentModulesTest.Axioms
 public import CoherentModulesTest.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModulesTest.LinearAlgebra.Matrix.Module
 public import CoherentModulesTest.LinearAlgebra.Matrix.Projective
+public import CoherentModulesTest.LinearAlgebra.Matrix.Reconstruction
 public import CoherentModulesTest.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModulesTest.LinearAlgebra.Matrix.Submodule
 public import CoherentModulesTest.Basic
