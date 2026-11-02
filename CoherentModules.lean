@@ -40,6 +40,7 @@ public import CoherentModules.RingTheory.Ideal.AdicKrull
 public import CoherentModules.RingTheory.Ideal.AdicLocality
 public import CoherentModules.RingTheory.Ideal.AdicProducts
 public import CoherentModules.RingTheory.Ideal.Annihilator
+public import CoherentModules.RingTheory.Ideal.Comap
 public import CoherentModules.RingTheory.Ideal.FiniteModuleTransfer
 public import CoherentModules.RingTheory.Ideal.Localization
 public import CoherentModules.RingTheory.Ideal.Maps

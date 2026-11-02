@@ -68,6 +68,15 @@ Authors: Formal Frontier Agents
   combines this with nilpotent-ideal elimination to deduce `P ≤ N` from
   `P ≤ N ⊔ (I ⊔ J) • P` in any additive commutative `R`-semimodule, with an
   independent carrier universe.
+- **Inverse images with nilpotent kernel.** For a unital semiring homomorphism `f`
+  and a target left ideal `J`,
+  [`Ideal.pow_comap_eq_zero_of_ker_pow_eq_zero`](CoherentModules/RingTheory/Ideal/Comap.lean)
+  gives `J.comap f ^ (m * n) = 0` from the global witnesses `J ^ m = 0` and
+  `(RingHom.ker f) ^ n = 0`. The companion `Ideal.isNilpotent_comap` gives global
+  nilpotence of the inverse image. Both semirings may be noncommutative, all natural
+  exponents including zero are allowed, and the source, target and generic
+  `RingHomClass` homomorphism family have independent universes. The same module
+  gives product and power inclusions for inverse images without nilpotence hypotheses.
 - **Relative generation by nilpotent ideals.** For a left ideal `I` of a
   possibly noncommutative semiring `R` and submodules `N`, `P` of an additive
   commutative `R`-semimodule,
