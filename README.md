@@ -22,6 +22,15 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Projective matrix-column semimodules.** For a semiring `R`, an additive
+  commutative monoid `M` with its given `R`-module structure, and a finite type `I`
+  with decidable equality,
+  [`Matrix.Module.projective_iff`](CoherentModules/LinearAlgebra/Matrix/Projective.lean)
+  characterizes projectivity of the canonical `Matrix I I R`-module on `I → M` by
+  `IsEmpty I ∨ Module.Projective R M`. In particular, for inhabited `I`, projectivity
+  is equivalent to that of `M` over `R`. No coefficient commutativity or additive
+  inverses are required, and the carrier universes are independent.
+
 - **Left ideals of finite matrix semirings.** For `[Semiring R]`, `[Fintype I]`
   and `[DecidableEq I]`, including empty `I`,
   [`Submodule.matrixRowsOrderIso`](CoherentModules/LinearAlgebra/Matrix/RowIdeal.lean)
