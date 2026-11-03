@@ -32,6 +32,12 @@ Unit factors give zero kernels; zero factors are allowed under coprimality.
 The Bézout witnesses are encapsulated: use the coordinate and reconstruction
 formulas rather than unfolding the constructions.
 
+An additive map intertwining just the labelled annihilating operators also
+intertwines the canonical kernel projectors and preserves the underlying values of
+the kernel-equivalence coordinates. The coefficient and scalar semirings on the
+two sides may differ; no scalar-linearity or compatibility with other represented
+elements is assumed.
+
 For example, multiplication on `ℕ × ℕ` with factors `(1, 0)` and `(0, 1)` has
 labelled kernel projectors `(x, y) ↦ (0, y)` and `(x, y) ↦ (x, 0)`, respectively.
 No additive inverses are present in this example.
@@ -46,12 +52,14 @@ The construction uses Mathlib's complete complementary-product Bézout identity
 `exists_sum_eq_one_iff_pairwise_coprime'`, its `CompleteOrthogonalIdempotents`,
 linear-map kernels and product equivalences. The scalar comparison follows
 Mathlib's `Submodule.torsionBy_isInternal`; the semiring kernel result generalizes
-that theorem beyond its commutative-ring and additive-group hypotheses.
+that theorem beyond its commutative-ring and additive-group hypotheses. Additive
+intertwining uses `OrthogonalIdempotents.semiconj_iff_mapsTo_range` and the canonical
+`Module.toAddMonoidEnd` action on the kernel projectors.
 -/
 
 public section
 
-universe uR uM uA uI
+universe uR uT uM uN uA uB uI
 
 namespace RingHom
 
@@ -359,6 +367,54 @@ theorem isInternal_ker [DecidableEq ι]
       (DirectSum.linearEquivFunOnFintype R ι (fun i ↦ LinearMap.ker (τ (a i)))).bijective
   rw [τ.linearEquivPiKer_symm_comp_coeFnLinearMap a hcop hAnn] at hbij
   exact hbij
+
+section Naturality
+
+variable {T : Type uT} [Semiring T]
+variable {N : Type uN} [AddCommMonoid N] [Module T N]
+variable {B : Type uB} [CommSemiring B]
+
+/-- An additive map intertwining the labelled annihilating operators intertwines the
+canonical kernel projectors. The coefficient and scalar semirings on the two sides
+are independent; compatibility with other represented elements is not required. -/
+theorem semiconj_kerProjector
+    (υ : B →+* Module.End T N) (b : ι → B)
+    (hcop' : Pairwise fun i j ↦ IsCoprime (b i) (b j))
+    (hAnn' : υ (∏ i, b i) = 0)
+    (h : M →+ N) (hh : ∀ i, Function.Semiconj h (τ (a i)) (υ (b i))) :
+    ∀ i, Function.Semiconj h
+      (τ.kerProjector a hcop hAnn i) (υ.kerProjector b hcop' hAnn' i) := by
+  let F : Module.End R M →+* AddMonoid.End M :=
+    Module.toAddMonoidEnd (Module.End R M) M
+  let G : Module.End T N →+* AddMonoid.End N :=
+    Module.toAddMonoidEnd (Module.End T N) N
+  have hP := (τ.kerProjector_completeOrthogonalIdempotents a hcop hAnn).map F
+  have hQ := (υ.kerProjector_completeOrthogonalIdempotents b hcop' hAnn').map G
+  apply (hQ.toOrthogonalIdempotents.semiconj_iff_mapsTo_range hP.complete h).mpr
+  intro i x hx
+  obtain ⟨y, rfl⟩ := hx
+  have hker : h (τ.kerProjector a hcop hAnn i y) ∈ LinearMap.ker (υ (b i)) := by
+    rw [LinearMap.mem_ker, ← hh i (τ.kerProjector a hcop hAnn i y),
+      LinearMap.mem_ker.mp (τ.kerProjector_mem a hcop hAnn i y), map_zero]
+  rw [← υ.range_kerProjector b hcop' hAnn' i] at hker
+  obtain ⟨z, hz⟩ := LinearMap.mem_range.mp hker
+  exact ⟨z, hz⟩
+
+/-- Kernel-equivalence coordinates commute, on their underlying values, with an
+additive map intertwining the labelled annihilating operators. No scalar-linearity
+or compatibility between the coefficient semirings is required. -/
+theorem linearEquivPiKer_apply_map
+    (υ : B →+* Module.End T N) (b : ι → B)
+    (hcop' : Pairwise fun i j ↦ IsCoprime (b i) (b j))
+    (hAnn' : υ (∏ i, b i) = 0)
+    (h : M →+ N) (hh : ∀ i, Function.Semiconj h (τ (a i)) (υ (b i)))
+    (x : M) (i : ι) :
+    (υ.linearEquivPiKer b hcop' hAnn' (h x) i : N) =
+      h (τ.linearEquivPiKer a hcop hAnn x i : M) := by
+  simpa only [linearEquivPiKer_apply] using
+    (τ.semiconj_kerProjector a hcop hAnn υ b hcop' hAnn' h hh i x).symm
+
+end Naturality
 
 end RingHom
 
