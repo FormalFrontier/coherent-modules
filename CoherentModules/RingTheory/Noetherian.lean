@@ -4,6 +4,8 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.LinearMap.Evaluation
+
 public import CoherentModules.RingTheory.Ideal.Annihilator
 public import Mathlib.Algebra.Module.NatInt
 public import Mathlib.Algebra.Module.Submodule.Range
@@ -211,15 +213,10 @@ theorem isNoetherian_semilinearMap
     [SMulCommClass R₂ S N] [Module.Finite R M] [IsNoetherian S N] :
     IsNoetherian S (M →ₛₗ[σ] N) := by
   let : AddCommGroup N := Module.addCommMonoidToAddCommGroup S (M := N)
-  obtain ⟨n, v, hv⟩ := Module.Finite.exists_fin (R := R) (M := M)
-  let ev : (M →ₛₗ[σ] N) →ₗ[S] (Fin n → N) :=
-    { toFun := fun f i ↦ f (v i)
-      map_add' := fun f g ↦ funext fun i ↦ LinearMap.add_apply f g (v i)
-      map_smul' := fun a f ↦ funext fun i ↦ LinearMap.smul_apply a f (v i) }
+  obtain ⟨n, _v, ev, _hv, _hev, hinj⟩ :=
+    LinearMap.exists_fin_injective_eval (S := S) (M := M) (N := N) σ
   have : IsNoetherian S (Fin n → N) := inferInstance
-  apply isNoetherian_of_injective ev
-  intro f g h
-  exact LinearMap.ext_on_range hv fun i ↦ congrFun h i
+  exact isNoetherian_of_injective ev hinj
 
 /-- Linear maps from a finitely generated `R`-semimodule to a Noetherian `S`-module
 are Noetherian for the canonical pointwise `S`-action when the two codomain actions
