@@ -26,6 +26,15 @@ silently restricting the assertion to the universe containing `R`.
 * `IsUniversallyCoherent.polynomial`: polynomial rings over universally coherent rings are
   universally coherent.
 * `IsUniversallyCoherent.of_isNoetherian`: Noetherian commutative rings are universally coherent.
+* `IsUniversallyCoherent.of_forall_mvPolynomial`: coherence of all finite-variable polynomial
+  rings implies universal coherence in any target universe.
+* `IsUniversallyCoherent.iff_forall_mvPolynomial`: the finite-polynomial characterization at the
+  base-ring universe.
+* `IsUniversallyCoherent.changeTargetUniverse`: base-universe universal coherence implies
+  universal coherence in an arbitrary target universe.
+
+The finite-polynomial criterion reuses Mathlib's algebra finite-presentation quotient
+characterization, together with coherent-module quotients and scalar-restriction transport.
 -/
 
 @[expose] public section
@@ -85,5 +94,54 @@ instance (priority := 100) of_isNoetherian (R : Type u) [CommRing R] [IsNoetheri
     intros
     let _ : IsNoetherianRing A := Algebra.FiniteType.isNoetherianRing R A
     exact IsCoherentRing.of_isNoetherian A
+
+universe uA uB
+
+/-- Ring equivalences preserve coherence across independently sized carriers. -/
+private theorem isCoherentRing_of_ringEquiv
+    {A : Type uA} {B : Type uB} [Ring A] [Ring B]
+    [IsCoherentRing A] (e : A ≃+* B) : IsCoherentRing B := by
+  let _ : Module A B := Module.compHom B e.toRingHom
+  let eAB : A ≃ₗ[A] B := Module.compHom.toLinearEquiv e
+  let _ : Module.IsCoherent A B := Module.IsCoherent.of_equiv eAB
+  let _ : IsScalarTower A B B := SMul.comp.isScalarTower (e : A → B)
+  exact ⟨Module.IsCoherent.of_restrictScalars A (S := B) (N := B)⟩
+
+/-- Coherence of every finite-variable polynomial ring implies universal coherence for
+finitely presented algebras in any independently chosen target universe.
+
+The proof uses `Algebra.FinitePresentation.iff` to present each target algebra as a quotient
+by a finitely generated ideal, retaining its given algebra structure. -/
+theorem of_forall_mvPolynomial (R : Type u) [CommRing R]
+    (h : ∀ n : ℕ, IsCoherentRing (MvPolynomial (Fin n) R)) :
+    IsUniversallyCoherent.{u, v} R where
+  isCoherentRing A := by
+    intros
+    obtain ⟨n, I, e, hI⟩ := Algebra.FinitePresentation.iff.mp
+      (inferInstance : Algebra.FinitePresentation R A)
+    let _ : IsCoherentRing (MvPolynomial (Fin n) R) := h n
+    let _ : Module.IsCoherent (MvPolynomial (Fin n) R) (MvPolynomial (Fin n) R ⧸ I) :=
+      Module.IsCoherent.quotient I hI
+    let _ : IsCoherentRing (MvPolynomial (Fin n) R ⧸ I) :=
+      ⟨Module.IsCoherent.of_restrictScalars (MvPolynomial (Fin n) R)
+        (S := MvPolynomial (Fin n) R ⧸ I) (N := MvPolynomial (Fin n) R ⧸ I)⟩
+    exact isCoherentRing_of_ringEquiv e.toRingEquiv
+
+/-- Universal coherence at the base-ring universe is equivalent to coherence of all
+finite-variable polynomial rings over the base. -/
+theorem iff_forall_mvPolynomial (R : Type u) [CommRing R] :
+    IsUniversallyCoherent.{u, u} R ↔
+      ∀ n : ℕ, IsCoherentRing (MvPolynomial (Fin n) R) := by
+  constructor
+  · intro hR n
+    let _ : IsUniversallyCoherent.{u, u} R := hR
+    exact IsUniversallyCoherent.isCoherentRing R (MvPolynomial (Fin n) R)
+  · exact of_forall_mvPolynomial R
+
+/-- Universal coherence at the base-ring universe implies universal coherence at any
+independently chosen target universe. This theorem does not change the target algebra. -/
+theorem changeTargetUniverse (R : Type u) [CommRing R] [IsUniversallyCoherent.{u, u} R] :
+    IsUniversallyCoherent.{u, v} R :=
+  of_forall_mvPolynomial R ((iff_forall_mvPolynomial R).mp inferInstance)
 
 end IsUniversallyCoherent

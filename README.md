@@ -744,7 +744,11 @@ Authors: Formal Frontier Agents
   supplies the Noetherian case. Finitely presented algebra extensions preserve universal
   coherence with independent base, extension and target universes. In particular, polynomial
   rings over universally coherent rings are universally coherent; no module-finiteness
-  hypothesis is needed.
+  hypothesis is needed. Coherence of all finite-variable polynomial rings characterizes
+  universal coherence at the base-ring universe and implies universal coherence in every
+  independently chosen target universe. In particular, base-universe universal coherence
+  suffices for arbitrary target universes; no converse from an arbitrary smaller target
+  universe is asserted.
 - **Square-zero kernels and projection base change.** For a commutative semiring
   `R` and an additive commutative `R`-module `M`,
   [`TrivSqZeroExt.kerIdealLinearEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
