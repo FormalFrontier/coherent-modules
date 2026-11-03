@@ -475,7 +475,16 @@ Authors: Formal Frontier Agents
   and additive commutative monoids. These equivalences concern finite products;
   coordinatewise coherence does not in general imply coherence of an infinite
   product module over its product coefficient ring.
-- **Finite presentation over coherent rings.** [`Module.isCoherent_iff_finitePresentation`](CoherentModules/FinitePresentation.lean)
+- **Coherence under scalar restriction.** For possibly noncommutative rings `R`
+  and `S`, if `S` is coherent as an `R`-module, then
+  [`Module.FinitePresentation.isCoherent_restrictScalars`](CoherentModules/FinitePresentation.lean)
+  makes every finitely presented `S`-module `N` coherent for its given `R`-action.
+  The additive commutative group `N` has its given module structures and scalar
+  towers `R → S → S` and `R → S → N`; the three universes are independent.
+  Under these hypotheses, coherence over `R`, coherence over `S`, and finite
+  presentation over `S` are equivalent. No coherence assumption on `R`,
+  Noetherianity, centrality or faithfulness is required. The identity-scalar
+  specialization [`Module.isCoherent_iff_finitePresentation`](CoherentModules/FinitePresentation.lean)
   identifies the two properties over an `IsCoherentRing R`, yielding finite
   presentation of kernels between finitely presented modules. The
   [`of_exact_five` criterion](CoherentModules/FinitePresentation.lean) gives finite

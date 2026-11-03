@@ -17,19 +17,26 @@ public import Mathlib.RingTheory.Finiteness.Cardinality
 # Finite presentation and coherence
 
 This file constructs finite-free exact data for finitely presented semimodules
-over semirings. Over rings, it identifies finitely presented modules with
-coherent modules over a coherent ring and deduces finite presentation of
-kernels between them. The scalar and module universes are independent. It also
-gives a five-term exact-sequence criterion for finite presentation of the
-middle module.
+over semirings. Over rings, a finitely presented module over a scalar ring that
+is coherent over the base ring is coherent for its given compatible base action.
+The fixed-ring specialization identifies finite presentation with coherence over
+a coherent ring and deduces finite presentation of kernels between them. The
+scalar and module universes are independent. It also gives a five-term
+exact-sequence criterion for finite presentation of the middle module.
 
 ## Main declarations
 
 * `Module.FinitePresentation.exists_fin_exact`: a finitely presented semimodule
   over a semiring admits finite-free maps forming an exact pair, with the map
   to the semimodule surjective.
-* `Module.FinitePresentation.isCoherent`: a finitely presented module over a
-  coherent ring is coherent.
+* `Module.FinitePresentation.isCoherent_restrictScalars`: a finitely presented
+  module over a scalar ring coherent over the base ring is coherent over the base.
+* `Module.isCoherent_restrictScalars_iff`: coherence over the base and scalar rings
+  is equivalent when the scalar ring is coherent over the base.
+* `Module.isCoherent_restrictScalars_iff_finitePresentation`: coherence over the
+  base is equivalent to finite presentation over a scalar ring coherent over it.
+* `Module.FinitePresentation.isCoherent`: the fixed-ring specialization over a
+  coherent ring.
 * `Module.isCoherent_iff_finitePresentation`: coherence is equivalent to finite
   presentation over a coherent ring.
 * `Module.FinitePresentation.ker`: the kernel of a map between finitely
@@ -49,7 +56,9 @@ map; no congruence presentation or cokernel universal property is asserted.
 
 The finite-free construction follows the Mathlib contributors' formalizations
 of finite presentation, finite generation, finite reindexing and exactness,
-including Andrew Yang's `Module.FinitePresentation.exists_fin`.
+including Andrew Yang's `Module.FinitePresentation.exists_fin`. Scalar restriction
+uses Mathlib's compatible scalar actions, finite images and first-isomorphism
+equivalence, together with the coherent-module finite-product and quotient APIs.
 -/
 
 @[expose] public section
@@ -100,6 +109,59 @@ private theorem FinitePresentation.exists_fin'_ring
       Function.Surjective f ∧ Function.Exact g f :=
   FinitePresentation.exists_fin_exact R M
 
+section RestrictScalars
+
+variable (R : Type u) {S : Type v} {N : Type w}
+variable [Ring R] [Ring S] [AddCommGroup N]
+variable [Module R S] [Module R N] [Module S N]
+variable [IsScalarTower R S S] [IsScalarTower R S N] [Module.IsCoherent R S]
+
+/-- A finitely presented module over a ring coherent as a module over the base ring
+is coherent for its given compatible base action.
+
+Both rings may be noncommutative, and the scalar and module universes are independent. -/
+theorem FinitePresentation.isCoherent_restrictScalars [Module.FinitePresentation S N] :
+    Module.IsCoherent R N := by
+  obtain ⟨n, m, φ, ψ, hφ, hψφ⟩ := Module.FinitePresentation.exists_fin_exact S N
+  let φR : (Fin n → S) →ₗ[R] N := φ.restrictScalars R
+  let ψR : (Fin m → S) →ₗ[R] (Fin n → S) := ψ.restrictScalars R
+  have hφR : Function.Surjective φR := hφ
+  have hExactR : Function.Exact ψR φR := hψφ
+  let _ : Module.IsCoherent R (Fin n → S) := Module.IsCoherent.pi
+  let _ : Module.Finite R (Fin m → S) := Module.Finite.pi
+  have hK : (LinearMap.ker φR).FG := by
+    rw [hExactR.linearMap_ker_eq]
+    exact Submodule.fg_range ψR
+  let _ : Module.IsCoherent R ((Fin n → S) ⧸ LinearMap.ker φR) :=
+    Module.IsCoherent.quotient _ hK
+  exact Module.IsCoherent.of_equiv (φR.quotKerEquivOfSurjective hφR)
+
+/-- If the scalar ring is coherent over the base ring, coherence over either ring
+is equivalent for the given compatible module structures. -/
+theorem isCoherent_restrictScalars_iff :
+    Module.IsCoherent R N ↔ Module.IsCoherent S N := by
+  constructor
+  · intro h
+    let _ : Module.IsCoherent R N := h
+    exact Module.IsCoherent.of_restrictScalars R
+  · intro h
+    let _ : Module.IsCoherent S N := h
+    exact Module.FinitePresentation.isCoherent_restrictScalars R (S := S)
+
+/-- If the scalar ring is coherent over the base ring, coherence over the base
+is equivalent to finite presentation over the scalar ring. -/
+theorem isCoherent_restrictScalars_iff_finitePresentation :
+    Module.IsCoherent R N ↔ Module.FinitePresentation S N := by
+  constructor
+  · intro h
+    let _ : Module.IsCoherent S N := (isCoherent_restrictScalars_iff R).mp h
+    infer_instance
+  · intro h
+    let _ : Module.FinitePresentation S N := h
+    exact Module.FinitePresentation.isCoherent_restrictScalars R (S := S)
+
+end RestrictScalars
+
 variable {R : Type u} [Ring R]
 
 namespace FinitePresentation
@@ -108,12 +170,8 @@ variable {M : Type v} [AddCommGroup M] [Module R M]
 
 /-- A finitely presented module over a coherent ring is coherent. -/
 theorem isCoherent [IsCoherentRing R] [Module.FinitePresentation R M] :
-    Module.IsCoherent R M := by
-  obtain ⟨n, K, e, hK⟩ := Module.FinitePresentation.exists_fin R M
-  let _ : Module.IsCoherent R (Fin n → R) := Module.IsCoherent.of_free R
-  let _ : Module.IsCoherent R ((Fin n → R) ⧸ K) :=
-    Module.IsCoherent.quotient K hK
-  exact Module.IsCoherent.of_equiv e.symm
+    Module.IsCoherent R M :=
+  Module.FinitePresentation.isCoherent_restrictScalars R (S := R)
 
 /-- The kernel of a linear map between finitely presented modules over a
 coherent ring is finitely presented. -/
