@@ -775,6 +775,14 @@ Authors: Formal Frontier Agents
   is faithfully flat although its generators span a proper ideal. The
   [ideal-detection consequences](CoherentModulesTest/RingTheory/Flat/LocalizationProductCriteria.lean)
   show that this ideal is not finitely generated.
+- **Faithfully flat coherence descent.**
+  [`Module.IsCoherent.of_isCoherent_tensorProduct_of_faithfullyFlat`](CoherentModules/FaithfullyFlatDescent.lean)
+  descends coherence of the canonical scalar extension `S ⊗[R] M` to the original
+  module `M`. The scalar algebra `S` may be noncommutative; no finiteness hypothesis
+  on `M` or module-finiteness of `S` is needed. The regular-module consequence
+  [`IsCoherentRing.of_faithfullyFlat`](CoherentModules/FaithfullyFlatDescent.lean)
+  descends ring coherence. The original module's additive monoid and action are
+  retained, with independent ring, algebra and module universes.
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and

@@ -46,6 +46,7 @@ public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
 public import CoherentModules.Basic
 public import CoherentModules.FinitePresentation
+public import CoherentModules.FaithfullyFlatDescent
 public import CoherentModules.Hom
 public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
