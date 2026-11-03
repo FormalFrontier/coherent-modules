@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import CoherentModulesTest.Algebra.Category.ModuleCat.Monoidal.Closed
+public import CoherentModulesTest.Algebra.Module.Coprime.Primary
 public import CoherentModulesTest.Algebra.Module.LocalizedModule
 public import CoherentModulesTest.Algebra.TrivSqZeroExt.Finite
 public import CoherentModulesTest.Axioms
