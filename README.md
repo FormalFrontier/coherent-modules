@@ -30,6 +30,12 @@ Authors: Formal Frontier Agents
   `Module.Dual.rightRegularAlgHom` gives named operators
   `F_a(φ)(x) = φ(a * x)`, with `F_a.comp F_b = F_(b * a)` and the original
   pointwise `R`-scalar structure on the dual. No finiteness or freeness is required.
+  Over a commutative ring `R` and a possibly noncommutative ring algebra `A`,
+  [`Module.Dual.coextensionEquiv`](CoherentModules/LinearAlgebra/Dual/Coextension.lean)
+  identifies opposite-algebra coextension of `R`, restricted to `R`, with the
+  original dual, intertwining coextension translation with these named operators.
+  Its generic [pointwise Hom comparison](CoherentModules/Algebra/Category/ModuleCat/ChangeOfRings.lean)
+  retains the given algebra action and allows independent scalar and module universes.
   For self-pairings,
   [`LinearMap.nondegenerate_of_surjective_of_separatingLeft`](CoherentModules/LinearAlgebra/Dual/Nondegenerate.lean)
   proves both separating directions from surjectivity and left separation;

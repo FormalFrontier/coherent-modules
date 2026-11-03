@@ -5,6 +5,7 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.Dual.Coextension
 public import CoherentModules.LinearAlgebra.Dual.End
 public import CoherentModules.LinearAlgebra.Dual.Nondegenerate
 public import CoherentModules.LinearAlgebra.Dual.TensorProduct
@@ -20,6 +21,7 @@ public import CoherentModules.LinearAlgebra.Projective.Pure
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
+public import CoherentModules.Algebra.Category.ModuleCat.ChangeOfRings
 public import CoherentModules.Algebra.Category.ModuleCat.Kernels
 public import CoherentModules.Algebra.Category.ModuleCat.Monoidal.Closed
 public import CoherentModules.Algebra.Module.Coprime
@@ -99,6 +101,8 @@ Relative generation bounds persist along every power of a left ideal over a
 semiring; a globally nilpotent ideal cannot enlarge relative generation.
 Dualization is an algebra homomorphism from the opposite endomorphism algebra;
 composing with left multiplication gives named right-translation operators on the dual.
+Coextension along the opposite algebra, restricted to the base, is linearly equivalent
+to the original dual and intertwines its translation with these named operators.
 A surjective self-pairing that separates the left slot is nondegenerate in both slots.
 For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
 and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
