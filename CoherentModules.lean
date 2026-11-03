@@ -7,6 +7,7 @@ module
 
 public import CoherentModules.LinearAlgebra.Dual.End
 public import CoherentModules.LinearAlgebra.Dual.Nondegenerate
+public import CoherentModules.LinearAlgebra.Dual.TensorProduct
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
 public import CoherentModules.LinearAlgebra.Matrix.Module

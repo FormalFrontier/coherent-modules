@@ -35,6 +35,15 @@ Authors: Formal Frontier Agents
   proves both separating directions from surjectivity and left separation;
   a bijective map to the dual is consequently nondegenerate, even for semimodules.
 
+- **Tensor–dual Frobenius criterion.** For a finite-dimensional, possibly
+  noncommutative or zero algebra `A` over a field `K`,
+  [`Module.Dual.exists_nondegenerate_mul_of_tensorProduct_equiv`](CoherentModules/LinearAlgebra/Dual/TensorProduct.lean)
+  produces a functional `λ` with both-sided nondegenerate pairing `λ(a * x)`
+  from a subspace `C` of the original dual and an equivalence
+  `e : C ⊗[K] A ≃ₗ[K] Module.Dual K A` satisfying
+  `e (c ⊗ₜ a) x = c (a * x)`. The algebra needs only `Semiring A`;
+  finiteness of `C` is derived, and the scalar and algebra universes are independent.
+
 - A module over a commutative ring is Noetherian exactly when it is finitely
   generated and the scalar ring modulo its annihilator is Noetherian
   ([criterion](CoherentModules/RingTheory/Noetherian.lean)).
