@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import CoherentModules.RingTheory.Ideal.Annihilator
+public import Mathlib.Algebra.Module.NatInt
 public import Mathlib.Algebra.Module.Submodule.Range
 public import Mathlib.LinearAlgebra.Isomorphisms
 public import Mathlib.RingTheory.Finiteness.Ideal
@@ -13,7 +14,7 @@ public import Mathlib.RingTheory.Noetherian.Basic
 public import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Noetherianity under scalar clearing and annihilator quotients
+# Noetherianity for scalar clearing, annihilator quotients, and Hom modules
 
 For a semilinear map, suppose each target element can be multiplied by a scalar
 with a left inverse into the image. Comap then reflects submodule order, so the
@@ -25,16 +26,25 @@ For regular semiring modules, unit clearing also identifies each left ideal
 with the extension of its contraction. Units need not be central or come from
 the source. Function-surjective maps satisfy unit clearing with the unit `1`.
 
-For a module over a ring whose given scalar actions commute on the module,
-Noetherianity is equivalent to finite generation and left Noetherianity of the
-scalar ring modulo the module's annihilator. Here commutation means
-`a • (b • m) = b • (a • m)` for the original action, not commutativity of the
-scalar ring. The scalar ring itself need not be Noetherian.
+For an additive commutative monoid with a module structure over a ring, finite
+generation and left Noetherianity of the scalar ring modulo its annihilator imply
+Noetherianity for the given action, without commuting scalar actions. For an
+additive commutative group whose given scalar actions commute, these conditions
+are also necessary. Here commutation means `a • (b • m) = b • (a • m)` for the
+original action, not commutativity of the scalar ring. The scalar ring itself
+need not be Noetherian.
 
 For a Noetherian module over a commutative ring, containment of ideal radicals
 after adding its annihilator gives a uniform ideal-power bound on the original
 module. No Noetherianity of the scalar ring or finite generation of the original
 ideals is required.
+
+Semilinear maps from a finitely generated semimodule to a Noetherian module over
+a ring form a Noetherian module for the canonical pointwise action, provided
+the two codomain actions commute. The scalar homomorphism is arbitrary, and
+no action on the source by the external ring is needed. The ring hypothesis
+on the external scalars is essential: Noetherian semimodules over a semiring
+need not be closed under finite products.
 
 ## References
 
@@ -46,11 +56,14 @@ Adic Modules by Formal Frontier Agents. The commuting-action generalization
 evaluates scalars on finite generators and uses Mathlib's finite-product
 Noetherianity and first isomorphism theorem. Span induction identifies the
 evaluation kernel with the annihilator, using commutation for scalar closure.
+The semilinear Hom theorem generalizes Mathlib's `isNoetherian_linearMap` by
+embedding Hom into a finite product of the codomain via generator evaluation.
+It uses Mathlib's semilinear extensionality and injective Noetherianity transfer.
 -/
 
 @[expose] public section
 
-universe uR uS uM uN
+universe uR uR₂ uS uM uN
 
 section Semiring
 
@@ -178,6 +191,47 @@ theorem isNoetherianRing_of_unit_mul_mem_range (f : R →+* S)
 
 end Semiring
 
+/-- Semilinear maps from a finitely generated semimodule to a Noetherian module
+form a Noetherian module for the canonical pointwise action of a ring whose
+codomain action commutes with the semilinear target scalars. This generalizes
+Mathlib's `isNoetherian_linearMap`; the scalar homomorphism need not be surjective. -/
+theorem isNoetherian_semilinearMap
+    {R : Type uR} {R₂ : Type uR₂} {S : Type uS} {M : Type uM} {N : Type uN}
+    [Semiring R] [Semiring R₂] [Ring S] [AddCommMonoid M] [AddCommMonoid N]
+    [Module R M] [Module R₂ N] [Module S N] (σ : R →+* R₂)
+    [SMulCommClass R₂ S N] [Module.Finite R M] [IsNoetherian S N] :
+    IsNoetherian S (M →ₛₗ[σ] N) := by
+  let : AddCommGroup N := Module.addCommMonoidToAddCommGroup S (M := N)
+  obtain ⟨n, v, hv⟩ := Module.Finite.exists_fin (R := R) (M := M)
+  let ev : (M →ₛₗ[σ] N) →ₗ[S] (Fin n → N) :=
+    { toFun := fun f i ↦ f (v i)
+      map_add' := fun f g ↦ funext fun i ↦ LinearMap.add_apply f g (v i)
+      map_smul' := fun a f ↦ funext fun i ↦ LinearMap.smul_apply a f (v i) }
+  have : IsNoetherian S (Fin n → N) := inferInstance
+  apply isNoetherian_of_injective ev
+  intro f g h
+  exact LinearMap.ext_on_range hv fun i ↦ congrFun h i
+
+/-- Linear maps from a finitely generated `R`-semimodule to a Noetherian `S`-module
+are Noetherian for the canonical pointwise `S`-action when the two codomain actions
+commute. This is the identity-hom specialization of `isNoetherian_semilinearMap`. -/
+theorem isNoetherian_linearMap_of_finite
+    {R : Type uR} {S : Type uS} {M : Type uM} {N : Type uN}
+    [Semiring R] [Ring S] [AddCommMonoid M] [AddCommMonoid N]
+    [Module R M] [Module R N] [Module S N] [SMulCommClass R S N]
+    [Module.Finite R M] [IsNoetherian S N] :
+    IsNoetherian S (M →ₗ[R] N) :=
+  isNoetherian_semilinearMap (RingHom.id R)
+
+/-- Over a commutative ring, the commuting-action Hom theorem recovers Mathlib's
+`isNoetherian_linearMap`, with the same pointwise scalar action and argument order.
+The pointwise action is characterized by `LinearMap.smul_apply`. -/
+private theorem isNoetherian_linearMap_commRing
+    (R : Type uR) (M : Type uM) (N : Type uN)
+    [CommRing R] [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
+    [IsNoetherian R M] [Module.Finite R N] : IsNoetherian R (N →ₗ[R] M) :=
+  isNoetherian_linearMap_of_finite (R := R) (S := R) (M := N) (N := M)
+
 section Ring
 
 /-- If the given scalar actions of a ring on a Noetherian module commute, the quotient
@@ -221,6 +275,53 @@ theorem isNoetherianRing_quotient_annihilator
     exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
   exact isNoetherian_of_tower A hquot
 
+/-- A finitely generated module over a ring is Noetherian if the scalar ring modulo
+its annihilator is left Noetherian. Only an additive commutative monoid is required
+on the module; the given scalar actions need not commute. -/
+theorem isNoetherian_of_finite_of_isNoetherianRing_quotient_annihilator
+    {R : Type uR} {M : Type uM} [Ring R] [AddCommMonoid M] [Module R M]
+    [Module.Finite R M] [IsNoetherianRing (R ⧸ Module.annihilator R M)] :
+    IsNoetherian R M := by
+  classical
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
+  let I := Module.annihilator R M
+  let Q := R ⧸ I
+  obtain ⟨n, x, hx⟩ := Module.Finite.exists_fin (R := R) (M := M)
+  let ρ : R →+* Q := Ideal.Quotient.mk I
+  -- Compare the two scalar structures only on the quotient ring.
+  let l : Q →ₛₗ[ρ] Q :=
+    (I : Submodule R R).liftQ ρ.toSemilinearMap (by
+      intro r hr
+      change Ideal.Quotient.mk I r = 0
+      exact Ideal.Quotient.eq_zero_iff_mem.mpr hr)
+  have hl (q : Q) : l q = q := by
+    obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective (I := I) q
+    rfl
+  let : IsNoetherian R Q :=
+    (l.isNoetherian_iff_of_bijective
+      ⟨fun a b hab ↦ (hl a).symm.trans (hab.trans (hl b)), fun q ↦ ⟨q, hl q⟩⟩).mpr
+        inferInstance
+  let : IsNoetherian R (Fin n → Q) := inferInstance
+  let g : Fin n → Q →ₗ[R] M := fun i ↦
+    (I : Submodule R R).liftQ (LinearMap.toSpanSingleton R M (x i)) (by
+      intro r hr
+      change r • x i = 0
+      exact (Module.mem_annihilator.mp hr) (x i))
+  -- Natural-number scalars give the aggregation without scalar-commutation assumptions on R.
+  let f : (Fin n → Q) →ₗ[R] M := LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g
+  have hf (i : Fin n) : f (Pi.single i (ρ 1)) = x i := by
+    rw [show f = LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g from rfl,
+      LinearMap.lsum_piSingle]
+    change (LinearMap.toSpanSingleton R M (x i)) 1 = x i
+    exact LinearMap.toSpanSingleton_apply_one (R := R) (M := M) (x i)
+  have hrange : LinearMap.range f = ⊤ := by
+    apply top_unique
+    rw [← hx]
+    apply Submodule.span_le.mpr
+    rintro _ ⟨i, rfl⟩
+    exact LinearMap.mem_range.mpr ⟨Pi.single i (ρ 1), hf i⟩
+  exact isNoetherian_of_surjective_semilinear f (LinearMap.range_eq_top.mp hrange)
+
 /-- A module over a ring whose given scalar actions commute is Noetherian if and only if
 it is finitely generated and its scalar ring modulo its annihilator is left Noetherian. -/
 theorem isNoetherian_iff_finite_and_isNoetherianRing_quotient_annihilator
@@ -228,51 +329,14 @@ theorem isNoetherian_iff_finite_and_isNoetherianRing_quotient_annihilator
     [SMulCommClass R R M] :
     IsNoetherian R M ↔
       Module.Finite R M ∧ IsNoetherianRing (R ⧸ Module.annihilator R M) := by
-  classical
   constructor
   · intro h
     let : IsNoetherian R M := h
     exact ⟨inferInstance, isNoetherianRing_quotient_annihilator (A := R) M⟩
   · rintro ⟨hfinite, hquot⟩
     let : Module.Finite R M := hfinite
-    let I := Module.annihilator R M
-    let Q := R ⧸ I
-    let : IsNoetherianRing Q := hquot
-    obtain ⟨n, x, hx⟩ := Module.Finite.exists_fin (R := R) (M := M)
-    let ρ : R →+* Q := Ideal.Quotient.mk I
-    -- Compare the two scalar structures only on the quotient ring.
-    let l : Q →ₛₗ[ρ] Q :=
-      (I : Submodule R R).liftQ ρ.toSemilinearMap (by
-        intro r hr
-        change Ideal.Quotient.mk I r = 0
-        exact Ideal.Quotient.eq_zero_iff_mem.mpr hr)
-    have hl (q : Q) : l q = q := by
-      obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective (I := I) q
-      rfl
-    let : IsNoetherian R Q :=
-      (l.isNoetherian_iff_of_bijective
-        ⟨fun a b hab ↦ (hl a).symm.trans (hab.trans (hl b)), fun q ↦ ⟨q, hl q⟩⟩).mpr
-          inferInstance
-    let : IsNoetherian R (Fin n → Q) := inferInstance
-    let g : Fin n → Q →ₗ[R] M := fun i ↦
-      (I : Submodule R R).liftQ (LinearMap.toSpanSingleton R M (x i)) (by
-        intro r hr
-        change r • x i = 0
-        exact (Module.mem_annihilator.mp hr) (x i))
-    -- Natural-number scalars give the aggregation without scalar-commutation assumptions on R.
-    let f : (Fin n → Q) →ₗ[R] M := LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g
-    have hf (i : Fin n) : f (Pi.single i (ρ 1)) = x i := by
-      rw [show f = LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g from rfl,
-        LinearMap.lsum_piSingle]
-      change (LinearMap.toSpanSingleton R M (x i)) 1 = x i
-      exact LinearMap.toSpanSingleton_apply_one (R := R) (M := M) (x i)
-    have hrange : LinearMap.range f = ⊤ := by
-      apply top_unique
-      rw [← hx]
-      apply Submodule.span_le.mpr
-      rintro _ ⟨i, rfl⟩
-      exact LinearMap.mem_range.mpr ⟨Pi.single i (ρ 1), hf i⟩
-    exact isNoetherian_of_surjective_semilinear f (LinearMap.range_eq_top.mp hrange)
+    let : IsNoetherianRing (R ⧸ Module.annihilator R M) := hquot
+    exact isNoetherian_of_finite_of_isNoetherianRing_quotient_annihilator (R := R) (M := M)
 
 end Ring
 

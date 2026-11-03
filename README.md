@@ -75,7 +75,20 @@ Authors: Formal Frontier Agents
   Noetherian exactly when it is finitely generated and the scalar ring modulo
   its annihilator is left Noetherian
   ([criterion](CoherentModules/RingTheory/Noetherian.lean)). In particular, this
-  applies to every module over a commutative ring.
+  applies to every module over a commutative ring. The sufficient direction
+  holds over any ring for an additive commutative monoid with its given module
+  structure, without commuting scalar actions.
+
+- **Noetherian semilinear Hom.** For semirings `R`, `R₂`, a ring `S`, a finitely
+  generated `R`-semimodule `M`, and a Noetherian `S`-module `N` with a commuting
+  `R₂`-action,
+  [`isNoetherian_semilinearMap`](CoherentModules/RingTheory/Noetherian.lean)
+  makes `M →ₛₗ[σ] N` Noetherian for the canonical pointwise `S`-action, for every
+  `σ : R →+* R₂`. The five universes are independent; no surjectivity of `σ`,
+  scalar commutativity or ambient Noetherianity is required.
+  `isNoetherian_linearMap_of_finite` gives the plain-linear specialization and
+  recovers Mathlib's `isNoetherian_linearMap` proposition in its commutative-ring
+  case, with the same pointwise action.
 
 - **Hom and End of matrix columns.** Over an arbitrary possibly noncommutative
   semiring `R`, finite-sum matrix actions retain the given coefficient-module
