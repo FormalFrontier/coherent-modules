@@ -688,6 +688,19 @@ modules are not excluded. Consult the linked source statements and
 [guide](docs/Guide.md) for exact hypotheses. This is not a coherent-sheaf theory
 or a claim to formalize an entire source.
 
+## Supporting linear algebra
+
+- **Semilinear Hom left exactness.** For semirings `R`, `R₂`, `S` and any
+  `σ : R →+* R₂`,
+  [`LinearMap.exact_lcompₛₗ_of_exact_of_surjective`](CoherentModules/LinearAlgebra/LinearMap/Exact.lean)
+  gives exactness of the canonical `S`-linear precomposition maps for an exact
+  pair of `R`-linear maps `U → V → M` with surjective second map.
+  Here `U`, `V`, `N` are additive
+  commutative monoids, `M` is an additive commutative group, and the given
+  `R₂`- and `S`-actions on `N` commute. No `S`-action on the sources,
+  cancellation in `N`, or surjectivity of `σ` is required; all seven carrier
+  universes are independent.
+
 ## Scalar clearing and Noetherianity
 
 For a semilinear map `f : M →ₛₗ[φ] N` over arbitrary semirings, suppose each

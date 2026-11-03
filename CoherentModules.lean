@@ -11,6 +11,7 @@ public import CoherentModules.LinearAlgebra.Dual.Nondegenerate
 public import CoherentModules.LinearAlgebra.Dual.TensorProduct
 public import CoherentModules.LinearAlgebra.End.Local
 public import CoherentModules.LinearAlgebra.End.StableKernelRange
+public import CoherentModules.LinearAlgebra.LinearMap.Exact
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
 public import CoherentModules.LinearAlgebra.Matrix.Module
