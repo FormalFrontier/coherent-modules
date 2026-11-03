@@ -16,6 +16,7 @@ public import CoherentModules.LinearAlgebra.End.Local
 public import CoherentModules.LinearAlgebra.End.StableKernelRange
 public import CoherentModules.LinearAlgebra.Finsupp.LSum
 public import CoherentModules.LinearAlgebra.FinsuppPi
+public import CoherentModules.LinearAlgebra.KrullSchmidt
 public import CoherentModules.LinearAlgebra.LinearMap.Exact
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
@@ -126,7 +127,11 @@ Simultaneous one-step stability of the kernel and range of a module endomorphism
 gives a canonical nilpotent/invertible sum decomposition over semiring scalars
 on an additive commutative group, natural for arbitrary linear intertwiners.
 Over arbitrary ring scalars, an indecomposable finite-length module has a local
-endomorphism ring, and each endomorphism is nilpotent or a unit.
+endomorphism ring, and each endomorphism is nilpotent or a unit. Noetherian or
+Artinian modules separately admit finite internal decompositions into nonzero
+indecomposable submodules. Supplied finite internal decompositions with local
+endomorphism rings match up to reindexing and linear equivalence, and a common
+finite-length module cancels from a product with arbitrary remaining factors.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal. The two-sided ideal lattice of any
 unital, possibly nonassociative ring is coatomic.

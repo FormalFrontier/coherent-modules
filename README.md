@@ -44,6 +44,25 @@ Authors: Formal Frontier Agents
   the cited ring-module setting; the local-endomorphism theorem retains ring
   scalars. See [references and credit](#references-and-credit).
 
+- **Internal Krull–Schmidt decompositions and cancellation.** Over any ring, a
+  Noetherian module or an Artinian module is a finite internal direct sum of
+  nonzero indecomposable submodules; the two chain conditions are separate
+  existence hypotheses. Each existence witness includes `A i ≠ ⊥` alongside
+  categorical indecomposability. Two supplied finite internal decompositions of
+  linearly equivalent modules match up to an equivalence of index types and
+  linear equivalences of summands when all summands have local endomorphism
+  rings. Indecomposable summands and finite length of one total give the same
+  matching. Both matching conclusions include `∀ i, A i ≠ ⊥` and
+  `∀ j, B j ≠ ⊥`, derived from the given hypotheses. Arbitrary finite index
+  types use the caller's decidable equality instances and may be empty;
+  existence uses the stock equality instance on `Fin n`. The matching is
+  existential, not required to preserve the given coordinates. A common
+  finite-length module `P` cancels from `P × M ≃ₗ[R] P × N`, with no chain
+  condition on `M` or `N`; `P` may be zero. Zero modules, including those over
+  a zero ring, have the empty decomposition. See
+  [`KrullSchmidt`](CoherentModules/LinearAlgebra/KrullSchmidt.lean), which realizes
+  the categorical theorems of Homological Algebra through `ModuleCat`.
+
 - **Dual endomorphisms.** Over a commutative semiring `R`,
   [`Module.End.dualMapAlgHom`](CoherentModules/LinearAlgebra/Dual/End.lean)
   bundles dualization as an algebra homomorphism from the opposite endomorphism
@@ -727,6 +746,13 @@ modules are not excluded. Consult the linked source statements and
 or a claim to formalize an entire source.
 
 ## Supporting linear algebra
+
+- **Images of direct-sum summands.** Over a semiring, any linear equivalence
+  `(⨁ i, A i) ≃ₗ[R] M` makes the ranges of its singleton-component maps an
+  internal direct sum in `M`. The singleton inclusions and internality use the
+  caller's decidable equality instance on the index type. The additive carriers
+  need only be commutative monoids, and the index type need not be finite; see
+  [`DirectSum.isInternal_range_comp_lof`](CoherentModules/LinearAlgebra/DirectSum/Range.lean).
 
 - **Semilinear Hom left exactness.** For semirings `R`, `R₂`, `S` and any
   `σ : R →+* R₂`,

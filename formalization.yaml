@@ -15,7 +15,8 @@ project:
     finitely generated ideals, annihilator localization for finitely generated
     semimodules, relative generation by nilpotent ideals, and finite-generation,
     finite-presentation, finite-projectivity and flatness descent under injective
-    tensor units in Lean.
+    tensor units, internal Krull–Schmidt decompositions and finite-length
+    cancellation in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -58,6 +59,34 @@ highlights:
         file: "CoherentModules/RingTheory/Flat/Pure.lean"
       - declaration: "Module.Flat.iff_flat_tensorProduct_of_injective"
         file: "CoherentModules/RingTheory/Flat/Pure.lean"
+
+  - title: "Internal Krull–Schmidt decompositions and cancellation"
+    statement: >-
+      Over any possibly noncommutative ring, a Noetherian module or an Artinian
+      module is a finite internal direct sum of nonzero indecomposable
+      submodules, with an explicit A i ≠ ⊥ fact paired with each summand's
+      categorical indecomposability. Two supplied finite internal decompositions
+      of linearly equivalent modules have matching summands up to linear
+      equivalence when all summands have local endomorphism rings.
+      Indecomposable summands and finite length of one total suffice instead.
+      Both matching conclusions include explicit nonzero facts for each supplied
+      family. Arbitrary finite index types use the caller's decidable equality
+      instances and may be empty; existence uses stock equality on Fin n.
+      Matching is existential; no preservation of the given coordinates or
+      canonical choice is asserted. A common finite-length module P, possibly
+      zero, cancels from P × M ≃ₗ[R] P × N with no chain condition on M or N.
+      Zero modules, including those over a zero ring, have the empty decomposition.
+    declarations:
+      - declaration: "Submodule.exists_fin_isInternal_indecomposable_of_isNoetherian"
+        file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
+      - declaration: "Submodule.exists_fin_isInternal_indecomposable_of_isArtinian"
+        file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
+      - declaration: "DirectSum.IsInternal.exists_equiv_of_linearEquiv_of_isLocalRing_end"
+        file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
+      - declaration: "DirectSum.IsInternal.exists_equiv_of_linearEquiv_of_indecomposable_of_isFiniteLength"
+        file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
+      - declaration: "LinearEquiv.nonempty_of_prod_of_isFiniteLength"
+        file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
 
 sources:
   - title: "Coherent rings, coherent modules and finite presentation"
