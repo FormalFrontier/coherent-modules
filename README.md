@@ -488,6 +488,25 @@ Authors: Formal Frontier Agents
   commutative group `N` from `R` to `S` when `S` is finite over `R` and the given
   module structures form scalar towers `R → S → S` and `R → S → N`.
   No coherence of `S` over `R` is required, and the three universes are independent.
+- **Coherent dependent direct sums.** For an arbitrary index type, a possibly
+  noncommutative ring `R`, and additive commutative monoids `M i` with their
+  given `R`-module structures,
+  [`Module.IsCoherent.directSum_iff`](CoherentModules/RingTheory/DirectSum.lean)
+  gives
+  ```lean
+  Module.IsCoherent R (DirectSum ι M) ↔
+    (∀ i, Module.IsCoherent R (M i)) ∧ Set.Finite {i | ¬ Subsingleton (M i)}
+  ```
+  Thus the nontrivial summands, not the ambient index type, must form a finite
+  set. Coherence means finite generation and finite presentation of every
+  finitely generated submodule. Empty index types, zero summands and zero
+  rings are allowed; no base-ring coherence, Noetherianity, faithfulness or
+  commutativity assumption is added. The index, ring and summand universes
+  are independent. `Module.IsCoherent.of_directSum` reflects coherence to
+  each original coordinate without a finite-index assumption. The supporting
+  [`Module.Finite.finite_nontrivial_summands`](CoherentModules/LinearAlgebra/DirectSum.lean)
+  already obtains finiteness of the nontrivial summands from finite generation
+  over a semiring.
 - **Coherence over product coefficient rings.** For any dependent family of
   possibly noncommutative rings `R i` and additive commutative monoids `M i` with
   their given `R i`-module structures,
@@ -952,6 +971,15 @@ faithful-flatness criterion, import `CoherentModules.RingTheory.Flat.TensorProdu
 the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.lean)
 uses nonfinite free abelian groups in independent universes and an empty-index
 boundary.
+
+For coherence of a dependent direct sum, import
+`CoherentModules.RingTheory.DirectSum`. Given coordinate coherence `hM` and
+`hActive : Set.Finite {i | ¬ Subsingleton (M i)}`, use
+`(Module.IsCoherent.directSum_iff (R := R) (M := M)).2 ⟨hM, hActive⟩`.
+Conversely, the `.1` direction returns both coordinate coherence and the
+finite set of nontrivial summands. With coherence of the sum available as an
+instance, `Module.IsCoherent.of_directSum (R := R) (M := M) i` gives coherence
+of a single coordinate directly.
 
 For a family of principal localizations, import
 `CoherentModules.RingTheory.Flat.Localization` and apply

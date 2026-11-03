@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.Algebra.DirectSum.Module
+public import Mathlib.RingTheory.Finiteness.Basic
 
 /-!
 # Direct sums across a zero complement
@@ -321,3 +322,36 @@ theorem linearEquivIntOfSubsingletonNeg_symm_lof_of_neg
 end Int
 
 end DirectSum
+
+namespace Module.Finite
+
+/-- A finitely generated direct sum has only finitely many nontrivial summands. -/
+theorem finite_nontrivial_summands
+    {ι : Type uI} {R : Type uR} {M : ι → Type uA} [Semiring R]
+    [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)]
+    [Module.Finite R (DirectSum ι M)] : Set.Finite {i | ¬ Subsingleton (M i)} := by
+  classical
+  have hcompact : IsCompactElement (⊤ : Submodule R (DirectSum ι M)) :=
+    (Submodule.fg_iff_compact _).mp Module.Finite.fg_top
+  obtain ⟨s, hs⟩ := hcompact.exists_finset_of_le_iSup
+    (fun i ↦ LinearMap.range (DirectSum.lof R ι M i))
+    (le_of_eq (DFinsupp.iSup_range_lsingle (R := R) (M := M)).symm)
+  refine s.finite_toSet.subset ?_
+  intro i hi
+  by_contra his
+  have hker : (⊤ : Submodule R (DirectSum ι M)) ≤
+      LinearMap.ker (DirectSum.component R ι M i) :=
+    hs.trans <| iSup₂_le fun j hj ↦
+      LinearMap.range_le_ker_iff.mpr <|
+        DFinsupp.lapply_comp_lsingle_of_ne i j (by
+          intro hij
+          subst j
+          exact his hj)
+  apply hi
+  have hzero (m : M i) : m = 0 := by
+    have hm := LinearMap.mem_ker.mp
+      (hker (Submodule.mem_top : DirectSum.lof R ι M i m ∈ ⊤))
+    simpa only [DirectSum.component.lof_self] using hm
+  exact ⟨fun x y ↦ (hzero x).trans (hzero y).symm⟩
+
+end Module.Finite
