@@ -23,6 +23,20 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Polynomial intertwining.** For an arbitrary semiring `S`, additive commutative
+  monoids `M`, `N`, and coefficient representations `σ : S →+* AddMonoid.End M`,
+  `τ : S →+* AddMonoid.End N`, an additive map `h : M →+ N` that intertwines
+  every `σ s` with `τ s` and the selected endomorphisms `f` with `g` also
+  intertwines their plain polynomial evaluations. The
+  [semilinear version](CoherentModules/LinearAlgebra/LinearMap/Evaluation.lean)
+  uses the given module structures over independent semirings `R`, `R₂`, any
+  scalar homomorphism `η : R →+* R₂`, an `η`-semilinear map `h`, and representations
+  into the respective linear endomorphism semirings. The hypotheses
+  `(τ s).comp h = h.comp (σ s)` for every `s` and `g.comp h = h.comp f` imply
+  `(p.eval₂ τ g).comp h = h.comp (p.eval₂ σ f)`. All five carrier universes
+  are independent. No coefficient/end commutation, finiteness, or module
+  structure on the semilinear Hom is required.
+
 - **Stable kernels and ranges.** For an additive commutative group with its given
   module structure over a possibly zero, noncommutative semiring, simultaneous
   one-step stability at a natural bound, including zero, gives the specified
