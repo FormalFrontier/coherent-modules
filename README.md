@@ -475,6 +475,23 @@ Authors: Formal Frontier Agents
   and additive commutative monoids. These equivalences concern finite products;
   coordinatewise coherence does not in general imply coherence of an infinite
   product module over its product coefficient ring.
+- **Finite presentation over product coefficient rings.** For any dependent family
+  of possibly noncommutative rings `R i` and additive commutative monoids `M i`
+  with their given `R i`-module structures,
+  [`Module.FinitePresentation.of_piRing`](CoherentModules/RingTheory/Pi.lean)
+  reflects finite presentation of `Π i, M i` over `Π i, R i` to each coordinate.
+  This direction allows an arbitrary index type. For `[Finite ι]`,
+  `Module.FinitePresentation.piRing_iff` gives the converse as well:
+  ```lean
+  Module.FinitePresentation (∀ i, R i) (∀ i, M i) ↔
+    ∀ i, Module.FinitePresentation (R i) (M i)
+  ```
+  The action is `(r • m) i = r i • m i`; the index, coefficient and module
+  universes are independent. No supplied additive group structure, coherence,
+  Noetherianity, commutativity or nontriviality is required. Empty products and
+  zero factors are allowed. The
+  [varying-rank client](CoherentModulesTest/FinitePresentationPi.lean) combines
+  free modules over the integers and a noncommutative integer matrix ring.
 - **Coherence under scalar restriction.** For possibly noncommutative rings `R`
   and `S`, if `S` is coherent as an `R`-module, then
   [`Module.FinitePresentation.isCoherent_restrictScalars`](CoherentModules/FinitePresentation.lean)
