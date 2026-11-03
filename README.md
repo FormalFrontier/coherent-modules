@@ -741,7 +741,10 @@ Authors: Formal Frontier Agents
 - **Universal coherence.** [`IsUniversallyCoherent`](CoherentModules/UniversallyCoherent.lean)
   asserts coherence for finitely presented commutative algebras in an independently
   chosen target universe; the library derives base coherence at `v = u` and
-  supplies the Noetherian case.
+  supplies the Noetherian case. Finitely presented algebra extensions preserve universal
+  coherence with independent base, extension and target universes. In particular, polynomial
+  rings over universally coherent rings are universally coherent; no module-finiteness
+  hypothesis is needed.
 - **Square-zero kernels and projection base change.** For a commutative semiring
   `R` and an additive commutative `R`-module `M`,
   [`TrivSqZeroExt.kerIdealLinearEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)

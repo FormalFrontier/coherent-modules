@@ -21,6 +21,10 @@ silently restricting the assertion to the universe containing `R`.
 
 * `IsUniversallyCoherent`: every finitely presented commutative algebra is coherent.
 * `IsUniversallyCoherent.isCoherentRing_of_algEquiv`: transport along an algebra equivalence.
+* `IsUniversallyCoherent.of_finitePresentation`: finitely presented algebra extensions preserve
+  universal coherence, with independent base, extension and target universes.
+* `IsUniversallyCoherent.polynomial`: polynomial rings over universally coherent rings are
+  universally coherent.
 * `IsUniversallyCoherent.of_isNoetherian`: Noetherian commutative rings are universally coherent.
 -/
 
@@ -52,6 +56,27 @@ theorem isCoherentRing_of_algEquiv (R : Type u) {A : Type v} {B : Type w}
     (e : A ≃ₐ[R] B) : IsCoherentRing B := by
   let _ : Algebra.FinitePresentation R B := Algebra.FinitePresentation.equiv e
   exact IsUniversallyCoherent.isCoherentRing R B
+
+/-- A finitely presented commutative algebra over a universally coherent ring is universally
+coherent, with independent base, extension and target universes.
+
+Finite presentation here is as an algebra, not as a module. The proof uses
+`Algebra.FinitePresentation.trans` for the composite algebra structure. -/
+theorem of_finitePresentation (R : Type u) (S : Type v)
+    [CommRing R] [CommRing S] [Algebra R S] [Algebra.FinitePresentation R S]
+    [IsUniversallyCoherent.{u, w} R] : IsUniversallyCoherent.{v, w} S where
+  isCoherentRing T := by
+    intros
+    let _ : Algebra R T := Algebra.compHom T (algebraMap R S)
+    let _ : IsScalarTower R S T := IsScalarTower.of_algebraMap_eq (fun _ => rfl)
+    let _ : Algebra.FinitePresentation R T := Algebra.FinitePresentation.trans R S T
+    exact IsUniversallyCoherent.isCoherentRing R T
+
+/-- Polynomial rings over universally coherent rings are universally coherent, with the
+same independently chosen target-algebra universe. -/
+theorem polynomial (R : Type u) [CommRing R] [IsUniversallyCoherent.{u, w} R] :
+    IsUniversallyCoherent.{u, w} (Polynomial R) :=
+  of_finitePresentation R (Polynomial R)
 
 /-- Every Noetherian commutative ring is universally coherent. -/
 instance (priority := 100) of_isNoetherian (R : Type u) [CommRing R] [IsNoetherianRing R] :
