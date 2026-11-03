@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
+public import CoherentModules.LinearAlgebra.Matrix.TwoSidedIdeal
 
 public import CoherentModules.LinearAlgebra.Dual.Coextension
 public import CoherentModules.LinearAlgebra.Dual.End
