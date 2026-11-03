@@ -9,6 +9,8 @@ public import CoherentModules.LinearAlgebra.Dual.Coextension
 public import CoherentModules.LinearAlgebra.Dual.End
 public import CoherentModules.LinearAlgebra.Dual.Nondegenerate
 public import CoherentModules.LinearAlgebra.Dual.TensorProduct
+public import CoherentModules.LinearAlgebra.End.Local
+public import CoherentModules.LinearAlgebra.End.StableKernelRange
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
 public import CoherentModules.LinearAlgebra.Matrix.Module
@@ -107,6 +109,11 @@ A surjective self-pairing that separates the left slot is nondegenerate in both 
 For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
 and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
 for empty indices it remains surjective.
+Simultaneous one-step stability of the kernel and range of a module endomorphism
+gives a canonical nilpotent/invertible sum decomposition over semiring scalars
+on an additive commutative group, natural for arbitrary linear intertwiners.
+Over arbitrary ring scalars, an indecomposable finite-length module has a local
+endomorphism ring, and each endomorphism is nilpotent or a unit.
 A direct sum of canonical principal localizations is faithfully flat exactly
 when its generators span the unit ideal. The two-sided ideal lattice of any
 unital, possibly nonassociative ring is coatomic.

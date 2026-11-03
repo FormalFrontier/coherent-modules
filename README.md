@@ -23,6 +23,27 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Stable kernels and ranges.** For an additive commutative group with its given
+  module structure over a possibly zero, noncommutative semiring, simultaneous
+  one-step stability at a natural bound, including zero, gives the specified
+  sum equivalence from the power kernel and range. The kernel restriction is
+  nilpotent and the range restriction is an automorphism. Canonical projections
+  are independent of the stable bound and natural for arbitrary linear
+  intertwiners. Noetherianity and Artinianity of the module give a common bound;
+  the separate Noetherian-surjective and Artinian-injective automorphism
+  criteria retain their asymmetric hypotheses. See
+  [`StableKernelRange`](CoherentModules/LinearAlgebra/End/StableKernelRange.lean).
+  Over arbitrary ring scalars, a finite-length module that is categorically
+  indecomposable has a local endomorphism ring, and each endomorphism is
+  nilpotent or a unit. The indecomposable predicate already excludes the zero
+  module; see [`Local`](CoherentModules/LinearAlgebra/End/Local.lean).
+  The classical ring-module antecedents are Fitting's lemma and its
+  indecomposable finite-length local-endomorphism consequence, as presented in
+  Wisbauer, *Foundations of Module and Ring Theory*, §§31.13 and 32.4(3)(iii).
+  The explicit-one-step semiring/additive-group decomposition above generalizes
+  the cited ring-module setting; the local-endomorphism theorem retains ring
+  scalars. See [references and credit](#references-and-credit).
+
 - **Dual endomorphisms.** Over a commutative semiring `R`,
   [`Module.End.dualMapAlgHom`](CoherentModules/LinearAlgebra/Dual/End.lean)
   bundles dualization as an algebra homomorphism from the opposite endomorphism
@@ -797,6 +818,21 @@ are allowed. The [guide's measured cost baseline](docs/Guide.md#build-and-audit-
 is historical and qualified, not a present-day resource guarantee.
 
 ## References and credit
+
+The classical ring-module sources for the stable kernel/range decomposition
+and the indecomposable finite-length local-endomorphism theorem are Robert
+Wisbauer, [*Foundations of Module and Ring Theory: A Handbook for Study and
+Research*](https://www.math.uni-duesseldorf.de/~wisbauer/book.pdf), Gordon and
+Breach, 1991, §31.13 (Fitting's lemma) and §32.4(3)(iii) with its proof
+(nilpotent-or-invertible endomorphisms and locality). The decomposition here
+uses explicit one-step stability over semiring scalars with additive-group
+carriers, without global chain conditions; that broader statement is not
+attributed to the book. The local-endomorphism conclusion remains a
+ring-module result. Formal Frontier Agents wrote the Lean proofs using
+Mathlib's chain-stability, restriction, complement-equivalence, categorical
+indecomposability and local-ring APIs. Mathematical attribution to Wisbauer
+is distinct from this formalization credit; no source prose, proof code or
+scans are reproduced.
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
 localization, tensor products and categorical infrastructure. Finiteness descent

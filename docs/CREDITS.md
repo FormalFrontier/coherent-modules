@@ -8,6 +8,23 @@ implied. Review applies to the exact version reviewed, not later changes.
 
 ## Mathematical work
 
+The classical Fitting decomposition and the local-endomorphism theorem for a
+nonzero indecomposable finite-length module are credited to their published
+ring-module treatment in Robert Wisbauer,
+[*Foundations of Module and Ring Theory: A Handbook for Study and
+Research*](https://www.math.uni-duesseldorf.de/~wisbauer/book.pdf), Gordon and
+Breach, 1991, §31.13 and §32.4(3)(iii), including the latter's
+nilpotent-or-invertible argument. This is a reference for the classical results,
+not a claim of their first publication. Formal Frontier Agents developed the
+explicit-one-step semiring/additive-group decomposition and its coordinate,
+projection, uniqueness and naturality API; the local-endomorphism conclusion
+retains ring scalars. The book is not claimed to state the broader semiring
+result. The independently written Lean proofs reuse Mathlib's chains,
+restrictions, complement sum equivalence, categorical indecomposability and
+local-ring criteria. This mathematical-source credit supplements, rather than
+replaces, credit to Mathlib and its authors. No source prose, proof code, scans
+or excerpts from the book are distributed with the library.
+
 Anchor contributed the original coherent-module foundation, kernel closure and
 universal-coherence construction, coordinated integration, and wrote the
 standalone guide. Other Formal Frontier AI-agent contributors developed the
