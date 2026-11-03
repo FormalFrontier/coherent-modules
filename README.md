@@ -44,9 +44,11 @@ Authors: Formal Frontier Agents
   `e (c ⊗ₜ a) x = c (a * x)`. The algebra needs only `Semiring A`;
   finiteness of `C` is derived, and the scalar and algebra universes are independent.
 
-- A module over a commutative ring is Noetherian exactly when it is finitely
-  generated and the scalar ring modulo its annihilator is Noetherian
-  ([criterion](CoherentModules/RingTheory/Noetherian.lean)).
+- A module over a ring whose given scalar actions commute on the module is
+  Noetherian exactly when it is finitely generated and the scalar ring modulo
+  its annihilator is left Noetherian
+  ([criterion](CoherentModules/RingTheory/Noetherian.lean)). In particular, this
+  applies to every module over a commutative ring.
 
 - **Hom and End of matrix columns.** Over an arbitrary possibly noncommutative
   semiring `R`, finite-sum matrix actions retain the given coefficient-module
