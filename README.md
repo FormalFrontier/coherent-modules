@@ -442,7 +442,8 @@ Authors: Formal Frontier Agents
   commutative monoid with its given module structure. Neither ambient ring
   must be Noetherian; no flatness, faithfulness or finite presentation is
   assumed. This includes finite-type algebras and arbitrary localizations.
-- **Coherent modules and kernels.** [`Module.IsCoherent`](CoherentModules/Basic.lean)
+- **Coherent modules and kernels.** For a ring and an additive commutative monoid
+  with its given module structure, [`Module.IsCoherent`](CoherentModules/Basic.lean)
   means finite generation together with finite presentation of every finitely
   generated submodule. [`Module.IsCoherent.iff_finite_and_fg_ker`](CoherentModules/Basic.lean)
   characterizes this by finitely generated kernels of *all* linear maps from
@@ -455,7 +456,7 @@ Authors: Formal Frontier Agents
   module structures form scalar towers `R → S → S` and `R → S → N`.
   No coherence of `S` over `R` is required, and the three universes are independent.
 - **Coherence over product coefficient rings.** For a finite dependent family of
-  possibly noncommutative rings `R i` and additive commutative groups `M i` with
+  possibly noncommutative rings `R i` and additive commutative monoids `M i` with
   their given `R i`-module structures,
   [`Module.IsCoherent.piRing_iff`](CoherentModules/RingTheory/Pi.lean) gives
   ```lean

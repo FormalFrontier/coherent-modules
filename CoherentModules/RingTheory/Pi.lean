@@ -270,11 +270,22 @@ private theorem piRingSupportedMap_ker_map {n : ℕ} (i : ι)
       rfl
     · exact piRingSupportedMap_apply_ne i f x h
 
+end Modules
+
+section OriginalMonoids
+
+variable {ι : Type uι} {R : ι → Type uR} {M : ι → Type uM}
+variable [_root_.Finite ι] [∀ i, Ring (R i)]
+variable [∀ i, AddCommMonoid (M i)] [∀ i, Module (R i) (M i)]
+
 /-- A finite dependent product is coherent over its product coefficient ring exactly when
-all coordinate modules are coherent over their given coefficient rings. The action on the
-product is `(r • m) i = r i • m i`; no commutativity or nontriviality is required. -/
+all coordinate modules are coherent over their given coefficient rings. The module carriers
+need only their given additive commutative monoid structures. The action on the product is
+`(r • m) i = r i • m i`; no commutativity or nontriviality is required. -/
 theorem piRing_iff :
     Module.IsCoherent (∀ i, R i) (∀ i, M i) ↔ ∀ i, Module.IsCoherent (R i) (M i) := by
+  let : ∀ i, AddCommGroup (M i) := fun i =>
+    Module.addCommMonoidToAddCommGroup (R i) (M := M i)
   constructor
   · intro h i
     obtain ⟨hfinite, hker⟩ := iff_finite_and_fg_ker.mp h
@@ -297,7 +308,7 @@ theorem piRing_iff :
         (M := fun i => LinearMap.ker (piRingCoordinate g i))).mpr hfinite
     exact Module.Finite.iff_fg.mp (Module.Finite.equiv (piRingKerEquiv g).symm)
 
-end Modules
+end OriginalMonoids
 
 end Module.IsCoherent
 

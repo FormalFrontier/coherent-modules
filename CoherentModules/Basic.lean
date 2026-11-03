@@ -35,10 +35,10 @@ universe u v w x
 
 namespace Module
 
-section Ring
+section OriginalMonoids
 
 variable (R : Type u) [Ring R]
-variable (M : Type v) [AddCommGroup M] [Module R M]
+variable (M : Type v) [AddCommMonoid M] [Module R M]
 
 /-- A module is coherent if it is finitely generated and every finitely
 generated submodule is finitely presented. -/
@@ -55,6 +55,7 @@ instance IsCoherent.toFinite [Module.IsCoherent R M] : Module.Finite R M :=
 /-- Every coherent module is finitely presented. -/
 instance IsCoherent.toFinitePresentation [Module.IsCoherent R M] :
     Module.FinitePresentation R M := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
   let _ : Module.FinitePresentation R (⊤ : Submodule R M) :=
     IsCoherent.finitePresentation_submodule ⊤ Module.Finite.fg_top
   exact Module.FinitePresentation.of_equiv Submodule.topEquiv
@@ -65,6 +66,7 @@ theorem IsCoherent.iff_finite_and_fg_ker :
     Module.IsCoherent R M ↔
       Module.Finite R M ∧
         ∀ (n : ℕ) (f : (Fin n → R) →ₗ[R] M), (LinearMap.ker f).FG := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
   constructor
   · intro h
     let _ : Module.IsCoherent R M := h
@@ -87,17 +89,34 @@ theorem IsCoherent.iff_finite_and_fg_ker :
 
 /-- A finitely generated submodule of a coherent module is coherent. -/
 theorem IsCoherent.submodule [Module.IsCoherent R M] (N : Submodule R M) (hN : N.FG) :
-    Module.IsCoherent R N where
-  finite := Module.Finite.of_fg hN
-  finitePresentation_submodule P hP := by
-    let f : P →ₗ[R] M := N.subtype ∘ₗ P.subtype
-    have hf : Function.Injective f :=
-      (Submodule.injective_subtype N).comp (Submodule.injective_subtype P)
-    let _ : Module.Finite R P := Module.Finite.of_fg hP
-    have hrange : (LinearMap.range f).FG := Submodule.fg_range f
-    let _ : Module.FinitePresentation R (LinearMap.range f) :=
-      IsCoherent.finitePresentation_submodule _ hrange
-    exact Module.FinitePresentation.of_equiv (LinearEquiv.ofInjective f hf).symm
+    Module.IsCoherent R N := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
+  exact
+    { finite := Module.Finite.of_fg hN
+      finitePresentation_submodule P hP := by
+        let f : P →ₗ[R] M := N.subtype ∘ₗ P.subtype
+        have hf : Function.Injective f :=
+          (Submodule.injective_subtype N).comp (Submodule.injective_subtype P)
+        let _ : Module.Finite R P := Module.Finite.of_fg hP
+        have hrange : (LinearMap.range f).FG := Submodule.fg_range f
+        let _ : Module.FinitePresentation R (LinearMap.range f) :=
+          IsCoherent.finitePresentation_submodule _ hrange
+        -- Keep the given submodule monoids when using the group-level transport.
+        let : AddCommGroup P := Module.addCommMonoidToAddCommGroup R (M := P)
+        let : AddCommGroup (LinearMap.range f) :=
+          Module.addCommMonoidToAddCommGroup R (M := LinearMap.range f)
+        exact Module.FinitePresentation.of_equiv
+          (R := R) (M := LinearMap.range f) (N := P)
+          (LinearEquiv.ofInjective f hf).symm }
+
+end OriginalMonoids
+
+section Ring
+
+variable (R : Type u) [Ring R]
+variable (M : Type v) [AddCommGroup M] [Module R M]
+
+variable {R M}
 
 /-- The range of a linear map from a finite module into a coherent module is coherent. -/
 theorem IsCoherent.range {N : Type w} [AddCommGroup N] [Module R N]
