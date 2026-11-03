@@ -6,7 +6,9 @@ Contributors: Anchor
 module
 
 public import CoherentModules.Basic
+public import CoherentModules.Localization
 public import Mathlib.RingTheory.FinitePresentation
+public import Mathlib.RingTheory.MvPolynomial.Localization
 public import Mathlib.RingTheory.Polynomial.Basic
 
 /-!
@@ -32,9 +34,13 @@ silently restricting the assertion to the universe containing `R`.
   base-ring universe.
 * `IsUniversallyCoherent.changeTargetUniverse`: base-universe universal coherence implies
   universal coherence in an arbitrary target universe.
+* `IsUniversallyCoherent.of_isLocalization`: arbitrary localizations of base-universe
+  universally coherent rings are universally coherent in any target universe.
 
 The finite-polynomial criterion reuses Mathlib's algebra finite-presentation quotient
 characterization, together with coherent-module quotients and scalar-restriction transport.
+Localization closure reuses coherent-module localization and Mathlib's polynomial-localization
+instance.
 -/
 
 @[expose] public section
@@ -143,5 +149,23 @@ independently chosen target universe. This theorem does not change the target al
 theorem changeTargetUniverse (R : Type u) [CommRing R] [IsUniversallyCoherent.{u, u} R] :
     IsUniversallyCoherent.{u, v} R :=
   of_forall_mvPolynomial R ((iff_forall_mvPolynomial R).mp inferInstance)
+
+/-- Arbitrary localizations of a universally coherent commutative ring are universally
+coherent in any independently chosen target-algebra universe.
+
+The source universal-coherence hypothesis is at the base-ring universe. The proof uses
+coherence of localized modules and the finite-polynomial criterion; neither finitely many
+denominators nor algebra finite presentation of the localization is required. -/
+theorem of_isLocalization
+    {R : Type u} [CommRing R] [IsUniversallyCoherent.{u, u} R]
+    (M : Submonoid R) (S : Type v) [CommRing S] [Algebra R S]
+    [IsLocalization M S] : IsUniversallyCoherent.{v, w} S := by
+  refine of_forall_mvPolynomial S fun n => ?_
+  let _ : IsCoherentRing (MvPolynomial (Fin n) R) :=
+    IsUniversallyCoherent.isCoherentRing R (MvPolynomial (Fin n) R)
+  let _ : Algebra (MvPolynomial (Fin n) R) (MvPolynomial (Fin n) S) :=
+    MvPolynomial.algebraMvPolynomial
+  exact ⟨Module.IsCoherent.of_isLocalizedModule (M.map (MvPolynomial.C (σ := Fin n)))
+    (Algebra.linearMap (MvPolynomial (Fin n) R) (MvPolynomial (Fin n) S))⟩
 
 end IsUniversallyCoherent
