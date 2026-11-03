@@ -14,16 +14,17 @@ import Mathlib.RingTheory.Finiteness.Cardinality
 /-!
 # Coherence and finite presentation over dependent products of rings
 
-A finite dependent product of modules is coherent over the product of its coefficient
-rings exactly when every coordinate module is coherent. The scalar action is the
+Coherence of an arbitrary dependent product reflects to each coordinate module over its
+given ring. For a finite index type, coherence over the product coefficient ring is
+equivalent to coherence of every coordinate module. The scalar action is the
 coordinatewise action of the given modules, not an action through a common base ring.
 Specializing to the regular modules gives the corresponding criterion for coherent rings.
 
-The proof uses the finite-generation comparison `Module.Finite.piRing_iff` and the
-finite-free kernel criterion for coherence. A product-linear map from a finite free module
-has coordinate maps over the individual rings; their kernels form a product linearly
-equivalent to the original kernel. Conversely, a map supported at one coordinate realizes
-every local kernel as a semilinear image of a product-linear kernel.
+Coherence reflection uses the finite-free kernel criterion: a map supported at one
+coordinate realizes every local kernel as a semilinear image of a product-linear kernel.
+Coordinate finite generation follows from finite presentation reflection. For the converse
+with finite indices, the finite-generation comparison `Module.Finite.piRing_iff` and a
+linear equivalence between a product-linear kernel and its coordinate kernels give coherence.
 
 Finite presentation reflects to each coordinate for arbitrary index types. With finite
 indices it is equivalent to coordinatewise finite presentation, over the original actions.
@@ -46,10 +47,10 @@ namespace Module.IsCoherent
 
 section Free
 
-variable {ι : Type uι} (R : ι → Type uR) [_root_.Finite ι] [∀ i, Ring (R i)]
+variable {ι : Type uι} (R : ι → Type uR) [∀ i, Ring (R i)]
 
 -- Compose the finite-function equivalences with the finitely supported comparison.
-private noncomputable def piRingFreeEquiv (n : ℕ) :
+private noncomputable def piRingFreeEquiv [_root_.Finite ι] (n : ℕ) :
     (Fin n → ∀ i, R i) ≃ₗ[∀ i, R i] (∀ i, Fin n → R i) := by
   let e : (∀ i, Fin n →₀ R i) ≃ₗ[∀ i, R i] (∀ i, Fin n → R i) :=
     { Equiv.piCongrRight (fun i =>
@@ -59,14 +60,15 @@ private noncomputable def piRingFreeEquiv (n : ℕ) :
   exact (Finsupp.linearEquivFunOnFinite (∀ i, R i) (∀ i, R i) (Fin n)).symm.trans
     ((Finsupp.piLinearEquiv R R).trans e)
 
-private theorem piRingFreeEquiv_apply (n : ℕ) (x : Fin n → ∀ i, R i) (i : ι)
-    (k : Fin n) : piRingFreeEquiv R n x i k = x k i := by
+private theorem piRingFreeEquiv_apply [_root_.Finite ι] (n : ℕ)
+    (x : Fin n → ∀ i, R i) (i : ι) (k : Fin n) : piRingFreeEquiv R n x i k = x k i := by
   change (Finsupp.piLinearEquiv R R
     ((Finsupp.linearEquivFunOnFinite (∀ i, R i) (∀ i, R i) (Fin n)).symm x) i) k = _
   simp only [Finsupp.piLinearEquiv_apply, Finsupp.linearEquivFunOnFinite_symm_apply]
 
-private theorem piRingFreeEquiv_symm_apply (n : ℕ) (v : ∀ i, Fin n → R i)
-    (k : Fin n) (i : ι) : (piRingFreeEquiv R n).symm v k i = v i k := by
+private theorem piRingFreeEquiv_symm_apply [_root_.Finite ι] (n : ℕ)
+    (v : ∀ i, Fin n → R i) (k : Fin n) (i : ι) :
+    (piRingFreeEquiv R n).symm v k i = v i k := by
   simpa only [piRingFreeEquiv_apply] using
     congrArg (fun z : ∀ i, Fin n → R i => z i k)
       ((piRingFreeEquiv R n).apply_symm_apply v)
@@ -77,7 +79,6 @@ private def piRingFreeProj (n : ℕ) (i : ι) :
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-omit [_root_.Finite ι] in
 private theorem piRingFreeProj_apply (n : ℕ) (i : ι) (x : Fin n → ∀ j, R j)
     (k : Fin n) : piRingFreeProj R n i x k = x k i := rfl
 
@@ -86,7 +87,7 @@ end Free
 section Modules
 
 variable {ι : Type uι} {R : ι → Type uR} {M : ι → Type uM}
-variable [_root_.Finite ι] [∀ i, Ring (R i)]
+variable [∀ i, Ring (R i)]
 variable [∀ i, AddCommGroup (M i)] [∀ i, Module (R i) (M i)]
 
 private def piRingCoordinate {n : ℕ}
@@ -95,7 +96,6 @@ private def piRingCoordinate {n : ℕ}
   Fintype.linearCombination (R i) (fun k => g (Pi.single k 1) i)
 
 -- Basis expansion uses direct coordinate projection and does not need a finite index type.
-omit [_root_.Finite ι] in
 private theorem piRingCoordinate_eval {n : ℕ}
     (g : (Fin n → ∀ i, R i) →ₗ[∀ i, R i] (∀ i, M i))
     (x : Fin n → ∀ i, R i) (i : ι) :
@@ -108,7 +108,6 @@ private theorem piRingCoordinate_eval {n : ℕ}
     _ = piRingCoordinate g i (piRingFreeProj R n i x) := by
       simp only [piRingCoordinate, Fintype.linearCombination_apply, piRingFreeProj_apply]
 
-omit [_root_.Finite ι] in
 private theorem piRingCoordinate_ker_map {n : ℕ}
     (g : (Fin n → ∀ j, R j) →ₗ[∀ j, R j] (∀ j, M j)) (i : ι) :
     (LinearMap.ker g).map (piRingFreeProj R n i) =
@@ -149,7 +148,6 @@ private theorem piRingCoordinate_ker_map {n : ℕ}
       exact Pi.single_eq_same i 0
     · exact Pi.single_eq_of_ne h 0
 
-omit [_root_.Finite ι] in
 private theorem piRingCoordinate_surjective {n : ℕ}
     (g : (Fin n → ∀ j, R j) →ₗ[∀ j, R j] (∀ j, M j))
     (hg : Function.Surjective g) (i : ι) :
@@ -160,7 +158,7 @@ private theorem piRingCoordinate_surjective {n : ℕ}
   refine ⟨piRingFreeProj R n i x, ?_⟩
   rw [← piRingCoordinate_eval g x i, hx, Pi.single_eq_same]
 
-private theorem mem_piRingKer_iff {n : ℕ}
+private theorem mem_piRingKer_iff [_root_.Finite ι] {n : ℕ}
     (g : (Fin n → ∀ i, R i) →ₗ[∀ i, R i] (∀ i, M i))
     (x : Fin n → ∀ i, R i) :
     x ∈ LinearMap.ker g ↔
@@ -180,7 +178,7 @@ private theorem mem_piRingKer_iff {n : ℕ}
     rw [piRingCoordinate_eval g x i, hproj i]
     exact LinearMap.mem_ker.mp (hx i)
 
-private noncomputable def piRingKerEquiv {n : ℕ}
+private noncomputable def piRingKerEquiv [_root_.Finite ι] {n : ℕ}
     (g : (Fin n → ∀ i, R i) →ₗ[∀ i, R i] (∀ i, M i)) :
     LinearMap.ker g ≃ₗ[∀ i, R i] (∀ i, LinearMap.ker (piRingCoordinate g i)) where
   toFun x i := ⟨piRingFreeEquiv R n x.1 i, (mem_piRingKer_iff g x.1).mp x.2 i⟩
@@ -228,7 +226,6 @@ private noncomputable def piRingSupportedMap {n : ℕ} (i : ι)
       simp only [Pi.smul_apply', Pi.single_eq_same]; rfl
     · simp only [Pi.smul_apply', Pi.single_eq_of_ne h, smul_zero]
 
-omit [_root_.Finite ι] in
 private theorem piRingSupportedMap_apply_same {n : ℕ} (i : ι)
     (f : (Fin n → R i) →ₗ[R i] M i) (x : Fin n → ∀ j, R j) :
     piRingSupportedMap i f x i = f (piRingFreeProj R n i x) := by
@@ -236,7 +233,6 @@ private theorem piRingSupportedMap_apply_same {n : ℕ} (i : ι)
   change (Pi.single i (f (piRingFreeProj R n i x))) i = _
   exact Pi.single_eq_same i _
 
-omit [_root_.Finite ι] in
 private theorem piRingSupportedMap_apply_ne {n : ℕ} (i : ι)
     (f : (Fin n → R i) →ₗ[R i] M i) (x : Fin n → ∀ j, R j) {j : ι}
     (h : j ≠ i) : piRingSupportedMap i f x j = 0 := by
@@ -244,7 +240,6 @@ private theorem piRingSupportedMap_apply_ne {n : ℕ} (i : ι)
   change (Pi.single i (f (piRingFreeProj R n i x))) j = _
   exact Pi.single_eq_of_ne h _
 
-omit [_root_.Finite ι] in
 private theorem piRingSupportedMap_ker_map {n : ℕ} (i : ι)
     (f : (Fin n → R i) →ₗ[R i] M i) :
     (LinearMap.ker (piRingSupportedMap i f)).map (piRingFreeProj R n i) =
@@ -272,60 +267,7 @@ private theorem piRingSupportedMap_ker_map {n : ℕ} (i : ι)
 
 end Modules
 
-section OriginalMonoids
-
-variable {ι : Type uι} {R : ι → Type uR} {M : ι → Type uM}
-variable [_root_.Finite ι] [∀ i, Ring (R i)]
-variable [∀ i, AddCommMonoid (M i)] [∀ i, Module (R i) (M i)]
-
-/-- A finite dependent product is coherent over its product coefficient ring exactly when
-all coordinate modules are coherent over their given coefficient rings. The module carriers
-need only their given additive commutative monoid structures. The action on the product is
-`(r • m) i = r i • m i`; no commutativity or nontriviality is required. -/
-theorem piRing_iff :
-    Module.IsCoherent (∀ i, R i) (∀ i, M i) ↔ ∀ i, Module.IsCoherent (R i) (M i) := by
-  let : ∀ i, AddCommGroup (M i) := fun i =>
-    Module.addCommMonoidToAddCommGroup (R i) (M := M i)
-  constructor
-  · intro h i
-    obtain ⟨hfinite, hker⟩ := iff_finite_and_fg_ker.mp h
-    refine iff_finite_and_fg_ker.mpr
-      ⟨(Module.Finite.piRing_iff (R := R) (M := M)).mp hfinite i, ?_⟩
-    intro n f
-    have hfg := (hker n (piRingSupportedMap i f)).map (piRingFreeProj R n i)
-    rwa [piRingSupportedMap_ker_map] at hfg
-  · intro h
-    apply iff_finite_and_fg_ker.mpr
-    refine ⟨(Module.Finite.piRing_iff (R := R) (M := M)).mpr
-      (fun i => (iff_finite_and_fg_ker.mp (h i)).1), ?_⟩
-    intro n g
-    have hfinite : ∀ i, Module.Finite (R i) (LinearMap.ker (piRingCoordinate g i)) := by
-      intro i
-      exact Module.Finite.of_fg
-        ((iff_finite_and_fg_ker.mp (h i)).2 n (piRingCoordinate g i))
-    let _ : Module.Finite (∀ i, R i) (∀ i, LinearMap.ker (piRingCoordinate g i)) :=
-      (Module.Finite.piRing_iff (R := R)
-        (M := fun i => LinearMap.ker (piRingCoordinate g i))).mpr hfinite
-    exact Module.Finite.iff_fg.mp (Module.Finite.equiv (piRingKerEquiv g).symm)
-
-end OriginalMonoids
-
 end Module.IsCoherent
-
-/-- A finite dependent product of possibly noncommutative rings is coherent exactly when
-every factor is coherent. This is the regular-module specialization of
-`Module.IsCoherent.piRing_iff`, and includes empty products and zero rings. -/
-theorem isCoherentRing_pi_iff {ι : Type uι} {R : ι → Type uR}
-    [Finite ι] [∀ i, Ring (R i)] :
-    IsCoherentRing (∀ i, R i) ↔ ∀ i, IsCoherentRing (R i) := by
-  constructor
-  · intro h
-    let _ := h
-    have hm := (Module.IsCoherent.piRing_iff (R := R) (M := R)).mp inferInstance
-    exact fun i => ⟨hm i⟩
-  · intro h
-    let _ : ∀ i, IsCoherentRing (R i) := h
-    exact ⟨(Module.IsCoherent.piRing_iff (R := R) (M := R)).mpr fun _ => inferInstance⟩
 
 namespace Module.FinitePresentation
 
@@ -416,3 +358,73 @@ theorem piRing_iff [_root_.Finite ι] :
 end OriginalMonoids
 
 end Module.FinitePresentation
+
+namespace Module.IsCoherent
+
+/-- Coherence of a dependent product over the product coefficient ring implies coherence
+of each coordinate over its given ring. The index type is arbitrary, and the module
+carriers keep their given additive commutative monoids and scalar actions. -/
+theorem of_piRing
+    {ι : Type uι} {R : ι → Type uR} {M : ι → Type uM}
+    [∀ i, Ring (R i)] [∀ i, AddCommMonoid (M i)] [∀ i, Module (R i) (M i)] :
+    Module.IsCoherent (∀ i, R i) (∀ i, M i) → ∀ i, Module.IsCoherent (R i) (M i) := by
+  intro h i
+  let : ∀ j, AddCommGroup (M j) := fun j =>
+    Module.addCommMonoidToAddCommGroup (R j) (M := M j)
+  let : Module.IsCoherent (∀ j, R j) (∀ j, M j) := h
+  let : Module.FinitePresentation (R i) (M i) :=
+    Module.FinitePresentation.of_piRing R M i
+  refine iff_finite_and_fg_ker.mpr ⟨inferInstance, ?_⟩
+  intro n f
+  have hfg := ((iff_finite_and_fg_ker.mp h).2 n (piRingSupportedMap i f)).map
+    (piRingFreeProj R n i)
+  rwa [piRingSupportedMap_ker_map] at hfg
+
+section OriginalMonoids
+
+variable {ι : Type uι} {R : ι → Type uR} {M : ι → Type uM}
+variable [_root_.Finite ι] [∀ i, Ring (R i)]
+variable [∀ i, AddCommMonoid (M i)] [∀ i, Module (R i) (M i)]
+
+/-- A finite dependent product is coherent over its product coefficient ring exactly when
+all coordinate modules are coherent over their given coefficient rings. The module carriers
+need only their given additive commutative monoid structures. The action on the product is
+`(r • m) i = r i • m i`; no commutativity or nontriviality is required. -/
+theorem piRing_iff :
+    Module.IsCoherent (∀ i, R i) (∀ i, M i) ↔ ∀ i, Module.IsCoherent (R i) (M i) := by
+  let : ∀ i, AddCommGroup (M i) := fun i =>
+    Module.addCommMonoidToAddCommGroup (R i) (M := M i)
+  constructor
+  · exact of_piRing
+  · intro h
+    apply iff_finite_and_fg_ker.mpr
+    refine ⟨(Module.Finite.piRing_iff (R := R) (M := M)).mpr
+      (fun i => (iff_finite_and_fg_ker.mp (h i)).1), ?_⟩
+    intro n g
+    have hfinite : ∀ i, Module.Finite (R i) (LinearMap.ker (piRingCoordinate g i)) := by
+      intro i
+      exact Module.Finite.of_fg
+        ((iff_finite_and_fg_ker.mp (h i)).2 n (piRingCoordinate g i))
+    let _ : Module.Finite (∀ i, R i) (∀ i, LinearMap.ker (piRingCoordinate g i)) :=
+      (Module.Finite.piRing_iff (R := R)
+        (M := fun i => LinearMap.ker (piRingCoordinate g i))).mpr hfinite
+    exact Module.Finite.iff_fg.mp (Module.Finite.equiv (piRingKerEquiv g).symm)
+
+end OriginalMonoids
+
+end Module.IsCoherent
+
+/-- A finite dependent product of possibly noncommutative rings is coherent exactly when
+every factor is coherent. This is the regular-module specialization of
+`Module.IsCoherent.piRing_iff`, and includes empty products and zero rings. -/
+theorem isCoherentRing_pi_iff {ι : Type uι} {R : ι → Type uR}
+    [Finite ι] [∀ i, Ring (R i)] :
+    IsCoherentRing (∀ i, R i) ↔ ∀ i, IsCoherentRing (R i) := by
+  constructor
+  · intro h
+    let _ := h
+    have hm := (Module.IsCoherent.piRing_iff (R := R) (M := R)).mp inferInstance
+    exact fun i => ⟨hm i⟩
+  · intro h
+    let _ : ∀ i, IsCoherentRing (R i) := h
+    exact ⟨(Module.IsCoherent.piRing_iff (R := R) (M := R)).mpr fun _ => inferInstance⟩
