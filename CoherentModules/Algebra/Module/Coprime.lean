@@ -4,13 +4,14 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.Algebra.Module.Coprime.Kernel
 public import Mathlib.Algebra.Module.Basic
 public import Mathlib.LinearAlgebra.Pi
 public import Mathlib.RingTheory.Coprime.Basic
 public import Mathlib.RingTheory.Ideal.Operations
 
 /-!
-# Unit-ideal scalar families in semimodules
+# Coprime scalar gluing and kernel decompositions
 
 A family of scalars generating the unit ideal recovers a unique common parameter from
 compatible semimodule elements. The index type is arbitrary, and the scalar actions
@@ -21,6 +22,11 @@ For two scalars, a Bézout identity gives this gluing principle. Here `IsCoprime
 means that `r * a + s * b = 1` for some scalars `r, s`, not merely that `a` and `b`
 have no common nonunit divisor. The range-membership criterion specializes to
 Mathlib's coprime divisibility criterion on the regular semimodule.
+
+The imported kernel API gives an explicit finite product decomposition for a
+commutative semiring represented by linear endomorphisms, assuming pairwise
+Bézout coprimality and annihilation by the product. Its inverse sums the kernel
+inclusions. It includes relative polynomial evaluation and scalar torsion.
 
 ## References
 

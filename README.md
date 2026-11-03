@@ -276,6 +276,16 @@ Authors: Formal Frontier Agents
   membership in the range of multiplication by `a` after multiplying by `b`.
   The two universes are independent; no subtraction, additive cancellation,
   nontriviality or finiteness is assumed.
+- **Finite coprime-kernel decompositions.** Let a commutative semiring `A` act through
+  a representation `τ : A →+* Module.End R M`, where `R` is any semiring and `M` is
+  an additive commutative `R`-semimodule. For a finite labelled pairwise Bézout-coprime
+  family `a`, the sole annihilation premise `τ (∏ i, a i) = 0` gives
+  [`RingHom.linearEquivPiKer`](CoherentModules/Algebra/Module/Coprime/Kernel.lean),
+  an explicit equivalence with the product of the labelled kernels. Its inverse sums
+  the kernel inclusions, and its projectors are independent of the whole Bézout
+  partition used to compute them. Empty families, zero semirings and noncommutative
+  scalar semirings are allowed; no subtraction or additive cancellation is needed.
+  Polynomial evaluation and scalar torsion decompositions are specializations.
 - **Finite generation under pointwise unimodular clearing.** For arbitrary,
   possibly noncommutative semirings `R`, `S` and `f : M →ₛₗ[φ] N` between
   additive commutative left semimodules,
