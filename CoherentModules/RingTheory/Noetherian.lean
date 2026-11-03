@@ -192,6 +192,58 @@ theorem isNoetherianRing_quotient_annihilator
     exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
   exact isNoetherian_of_tower A hquot
 
+/-- A module over a commutative ring is Noetherian if and only if it is finite and its scalar
+ring modulo its annihilator is Noetherian. -/
+theorem isNoetherian_iff_finite_and_isNoetherianRing_quotient_annihilator
+    {R : Type*} {M : Type*} [CommRing R] [AddCommGroup M] [Module R M] :
+    IsNoetherian R M ↔
+      Module.Finite R M ∧ IsNoetherianRing (R ⧸ Module.annihilator R M) := by
+  classical
+  constructor
+  · intro h
+    let : IsNoetherian R M := h
+    exact ⟨inferInstance, isNoetherianRing_quotient_annihilator (A := R) M⟩
+  · rintro ⟨hfinite, hquot⟩
+    let : Module.Finite R M := hfinite
+    let I := Module.annihilator R M
+    let Q := R ⧸ I
+    let : IsNoetherianRing Q := hquot
+    obtain ⟨n, x, hx⟩ := Module.Finite.exists_fin (R := R) (M := M)
+    let ρ : R →+* Q := Ideal.Quotient.mk I
+    -- Compare the two scalar structures only on the quotient ring.
+    let l : Q →ₛₗ[ρ] Q :=
+      (I : Submodule R R).liftQ ρ.toSemilinearMap (by
+        intro r hr
+        change Ideal.Quotient.mk I r = 0
+        exact Ideal.Quotient.eq_zero_iff_mem.mpr hr)
+    have hl (q : Q) : l q = q := by
+      obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective (I := I) q
+      rfl
+    let : IsNoetherian R Q :=
+      (l.isNoetherian_iff_of_bijective
+        ⟨fun a b hab ↦ (hl a).symm.trans (hab.trans (hl b)), fun q ↦ ⟨q, hl q⟩⟩).mpr
+          inferInstance
+    let : IsNoetherian R (Fin n → Q) := inferInstance
+    let g : Fin n → Q →ₗ[R] M := fun i ↦
+      (I : Submodule R R).liftQ (LinearMap.toSpanSingleton R M (x i)) (by
+        intro r hr
+        change r • x i = 0
+        exact (Module.mem_annihilator.mp hr) (x i))
+    -- Natural-number scalars give the aggregation without scalar-commutation assumptions on R.
+    let f : (Fin n → Q) →ₗ[R] M := LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g
+    have hf (i : Fin n) : f (Pi.single i (ρ 1)) = x i := by
+      rw [show f = LinearMap.lsum R (fun _ : Fin n ↦ Q) ℕ g from rfl,
+        LinearMap.lsum_piSingle]
+      change (LinearMap.toSpanSingleton R M (x i)) 1 = x i
+      exact LinearMap.toSpanSingleton_apply_one (R := R) (M := M) (x i)
+    have hrange : LinearMap.range f = ⊤ := by
+      apply top_unique
+      rw [← hx]
+      apply Submodule.span_le.mpr
+      rintro _ ⟨i, rfl⟩
+      exact LinearMap.mem_range.mpr ⟨Pi.single i (ρ 1), hf i⟩
+    exact isNoetherian_of_surjective_semilinear f (LinearMap.range_eq_top.mp hrange)
+
 namespace Ideal
 
 /-- On a Noetherian module, containment of radicals after adding the annihilator

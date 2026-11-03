@@ -23,6 +23,10 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- A module over a commutative ring is Noetherian exactly when it is finitely
+  generated and the scalar ring modulo its annihilator is Noetherian
+  ([criterion](CoherentModules/RingTheory/Noetherian.lean)).
+
 - **Hom and End of matrix columns.** Over an arbitrary possibly noncommutative
   semiring `R`, finite-sum matrix actions retain the given coefficient-module
   structures. For a finite nonempty index `I`,
