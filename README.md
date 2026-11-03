@@ -492,6 +492,20 @@ Authors: Formal Frontier Agents
   zero factors are allowed. The
   [varying-rank client](CoherentModulesTest/FinitePresentationPi.lean) combines
   free modules over the integers and a noncommutative integer matrix ring.
+- **Finite presentation along scalar towers.** For possibly noncommutative rings
+  `R`, `S` and an additive commutative monoid `N` with its given `R`- and
+  `S`-module structures and towers `R → S → S` and `R → S → N`,
+  [`Module.FinitePresentation.trans_of_tower`](CoherentModules/FinitePresentation.lean)
+  gives finite presentation of `N` over `R` from finite presentation of `S`
+  over `R` and of `N` over `S`. Conversely, `of_restrictScalars` gives finite
+  presentation over `S` from finite presentation over `R` assuming only that
+  `S` is finite over `R`. Thus `restrictScalars_iff` equates the two finite-
+  presentation properties when `S` is finitely presented over `R`, without
+  assuming either property of `N` in advance. The three universes are
+  independent; no coherence, Noetherianity, centrality or faithfulness is
+  required. `trans_of_algebra` recovers the type and argument order of Mathlib's
+  commutative-algebra `Module.FinitePresentation.trans` as a corollary of the
+  scalar-tower theorem.
 - **Coherence under scalar restriction.** For possibly noncommutative rings `R`
   and `S`, if `S` is coherent as an `R`-module, then
   [`Module.FinitePresentation.isCoherent_restrictScalars`](CoherentModules/FinitePresentation.lean)
@@ -985,6 +999,13 @@ API. The finite-generation comparison uses Mathlib's finite generating
 families and finitely supported linear combinations. These product results
 retain the given coordinate module structures over possibly noncommutative
 coefficient rings and semirings.
+
+Finite-presentation transitivity along scalar towers generalizes Andrew Yang's
+Mathlib `Module.FinitePresentation.trans`, with its commutative-algebra case
+proved through the general theorem. Transitivity and finite-scalar descent
+reuse Mathlib's fixed-ring finite-product presentations, finite generation
+under scalar restriction, finite-free surjections, and kernel and quotient
+criteria, retaining the given scalar actions.
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
 localization, tensor products and categorical infrastructure. Finiteness descent
