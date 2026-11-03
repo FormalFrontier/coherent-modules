@@ -439,13 +439,21 @@ Authors: Formal Frontier Agents
   realized by its universal property, not a surjective map. The
   [`of_localizationSpan'` theorem](CoherentModules/Localization.lean) descends
   coherence from localizations away from a family whose ideal span is `⊤`.
-- **Hom, tensor, and categories.** [`linearMap`](CoherentModules/Hom.lean) and
-  [`tensorProduct`](CoherentModules/TensorProduct.lean) make the Hom module and
-  tensor product coherent when the first argument is finitely presented and
-  the second coherent. Neither theorem assumes a coherent or Noetherian base;
-  they are not global instances. [`CoherentModuleCat`](CoherentModules/ModuleCat.lean)
-  is a transparent full subcategory with abelian structure obtained through
-  generic category constructions.
+- **Hom, tensor, and categories.** For semirings `R`, `R₂`, a ring `S`, and any
+  `σ : R →+* R₂`, [`Module.IsCoherent.semilinearMap`](CoherentModules/Hom.lean)
+  makes `M →ₛₗ[σ] N` coherent over `S` when the additive commutative group `M`
+  is finitely presented over `R` and the additive commutative group `N` is
+  coherent over `S`, with commuting given `R₂`- and `S`-actions on `N`.
+  The five universes are independent and the Hom action is pointwise. No
+  `S`-action on `M`, `R`-action on `N`, scalar commutativity or surjectivity
+  of `σ` is required. The existing `linearMap` theorem is its same-base
+  commutative-ring specialization. Over a commutative ring,
+  [`tensorProduct`](CoherentModules/TensorProduct.lean) makes the tensor product
+  coherent when the first argument is finitely presented and the second
+  coherent. These are theorems, not global instances, and assume neither
+  coherence nor Noetherianity of an ambient scalar ring.
+  [`CoherentModuleCat`](CoherentModules/ModuleCat.lean) is a transparent full
+  subcategory with abelian structure obtained through generic category constructions.
 - **Finite-module tensor zero detection.** For an arbitrary additive commutative
   `R`-module `P` over a `CommRing R`,
   [`Module.forall_maximal_smul_top_ne_top_iff_forall_finite_tensorProduct`](CoherentModules/LinearAlgebra/TensorProduct/FiniteDetection.lean)
@@ -674,8 +682,9 @@ Authors: Formal Frontier Agents
   generated.
 
 The foundation, finite-presentation and coherent-module category results allow
-arbitrary `Ring`. Localization of coherent modules, coherent Hom/tensor closure,
-and universal coherence use `CommRing`.
+arbitrary `Ring`. Coherent semilinear Hom allows arbitrary source and target
+scalar `Semiring`s with a commuting `Ring` action on the target. Localization
+of coherent modules, coherent tensor closure, and universal coherence use `CommRing`.
 The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
