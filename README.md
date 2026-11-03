@@ -749,8 +749,11 @@ Authors: Formal Frontier Agents
   universal coherence at the base-ring universe and implies universal coherence in every
   independently chosen target universe. In particular, base-universe universal coherence
   suffices for arbitrary target universes; no converse from an arbitrary smaller target
-  universe is asserted. Arbitrary localizations of base-universe universally coherent rings
-  are universally coherent, with independent localization and target universes. No finite
+  universe is asserted. Polynomial rings in an arbitrary type of variables over a
+  base-universe universally coherent ring are universally coherent, with independent
+  variable and target universes; neither finitely many variables nor a Noetherian base is
+  required. Arbitrary localizations of base-universe universally coherent rings are
+  universally coherent, with independent localization and target universes. No finite
   denominator family or algebra finite-presentation hypothesis on the localization is needed.
 - **Square-zero kernels and projection base change.** For a commutative semiring
   `R` and an additive commutative `R`-module `M`,

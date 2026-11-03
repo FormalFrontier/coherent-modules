@@ -7,9 +7,15 @@ module
 
 public import CoherentModules.Basic
 public import CoherentModules.Localization
+public import Mathlib.Algebra.MvPolynomial.Equiv
+public import Mathlib.Algebra.MvPolynomial.Variables
+public import Mathlib.LinearAlgebra.TensorProduct.Pi
+public import Mathlib.Logic.Equiv.Set
 public import Mathlib.RingTheory.FinitePresentation
+public import Mathlib.RingTheory.MvPolynomial.Basic
 public import Mathlib.RingTheory.MvPolynomial.Localization
 public import Mathlib.RingTheory.Polynomial.Basic
+public import Mathlib.RingTheory.TensorProduct.Finite
 
 /-!
 # Universally coherent rings
@@ -34,11 +40,17 @@ silently restricting the assertion to the universe containing `R`.
   base-ring universe.
 * `IsUniversallyCoherent.changeTargetUniverse`: base-universe universal coherence implies
   universal coherence in an arbitrary target universe.
+* `IsUniversallyCoherent.mvPolynomial`: polynomial rings in an arbitrary type of variables
+  over a base-universe universally coherent ring are universally coherent in any target universe.
 * `IsUniversallyCoherent.of_isLocalization`: arbitrary localizations of base-universe
   universally coherent rings are universally coherent in any target universe.
 
 The finite-polynomial criterion reuses Mathlib's algebra finite-presentation quotient
 characterization, together with coherent-module quotients and scalar-restriction transport.
+Arbitrary-variable polynomial closure passes to finite-support charts, using Mathlib's
+polynomial equivalences and monomial bases, flat kernel base change, and tensor-product
+finiteness. The kernel comparison reuses work of Jingting Wang and Nailin Guan; tensor-product
+finiteness reuses work of Kim Morrison and Johan Commelin.
 Localization closure reuses coherent-module localization and Mathlib's polynomial-localization
 instance.
 -/
@@ -149,6 +161,150 @@ independently chosen target universe. This theorem does not change the target al
 theorem changeTargetUniverse (R : Type u) [CommRing R] [IsUniversallyCoherent.{u, u} R] :
     IsUniversallyCoherent.{u, v} R :=
   of_forall_mvPolynomial R ((iff_forall_mvPolynomial R).mp inferInstance)
+
+/-- Polynomial rings in an arbitrary type of variables over a universally coherent
+commutative ring are universally coherent in any target-algebra universe.
+
+The source universal-coherence hypothesis is at the base-ring universe. The proof descends each
+finite row to its finite variable support and uses the monomial basis in the remaining variables
+to compare kernels by flat base change. -/
+theorem mvPolynomial (R : Type u) [CommRing R]
+    [IsUniversallyCoherent.{u, u} R] (σ : Type v) :
+    IsUniversallyCoherent.{max u v, w} (MvPolynomial σ R) := by
+  classical
+  have h (τ : Type v) : IsCoherentRing (MvPolynomial τ R) := by
+    let D := MvPolynomial τ R
+    refine ⟨Module.IsCoherent.iff_finite_and_fg_ker.mpr ⟨inferInstance, ?_⟩⟩
+    intro n g
+    -- All entries of the row lie in one finite-variable polynomial subalgebra.
+    let p : Fin n → D := fun i => g (Pi.single i 1)
+    let F : Finset τ := Finset.univ.biUnion fun i => (p i).vars
+    let s : Set τ := ↑F
+    let ι : Type v := s
+    let κ : Type v := ↥(sᶜ)
+    let A := MvPolynomial ι R
+    let Q := MvPolynomial κ A
+    let j : A →ₐ[R] D := MvPolynomial.rename ((↑) : ι → τ)
+    let a : Fin n → A := fun i =>
+      (p i).killCompl (f := ((↑) : ι → τ)) Subtype.val_injective
+    have ha (i : Fin n) : j (a i) = p i := by
+      have hs : ((p i).vars : Set τ) ⊆ s := by
+        intro x hx
+        change x ∈ F
+        exact Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ i, hx⟩
+      obtain ⟨q, hq⟩ := MvPolynomial.exists_rename_eq_of_vars_subset_range
+        (p i) ((↑) : ι → τ) Subtype.val_injective (by
+          rw [Subtype.range_coe]
+          exact hs)
+      change MvPolynomial.rename ((↑) : ι → τ)
+        ((p i).killCompl (f := ((↑) : ι → τ)) Subtype.val_injective) = p i
+      rw [← hq, MvPolynomial.killCompl_rename_app]
+    let _ : Finite ι := inferInstance
+    let _ : IsUniversallyCoherent.{u, max u v} R := changeTargetUniverse R
+    let _ : IsCoherentRing A := IsUniversallyCoherent.isCoherentRing R A
+    let _ : Algebra A D := j.toRingHom.toAlgebra
+    let _ : IsScalarTower R A D := IsScalarTower.of_algebraMap_eq fun r => by
+      change (MvPolynomial.C r : D) = j (MvPolynomial.C r)
+      exact (MvPolynomial.rename_C _ r).symm
+    let _ : IsScalarTower A D D := IsScalarTower.right
+    -- The complementary monomials give a basis for this particular chart extension.
+    let vF : κ ⊕ ι ≃ τ :=
+      (Equiv.sumComm κ ι).trans (Equiv.Set.sumCompl s)
+    let E : D ≃ₐ[R] Q :=
+      (MvPolynomial.renameEquiv R vF.symm).trans (MvPolynomial.sumAlgEquiv R κ ι)
+    have hE : E.toAlgHom.comp j = IsScalarTower.toAlgHom R A Q := by
+      apply MvPolynomial.algHom_ext
+      intro i
+      have hi : vF.symm i.val = Sum.inr i := by
+        apply vF.injective
+        rw [vF.apply_symm_apply]
+        exact (Equiv.Set.sumCompl_apply_inl s i).symm
+      change (MvPolynomial.sumAlgEquiv R κ ι)
+        (MvPolynomial.rename vF.symm
+          (MvPolynomial.rename ((↑) : ι → τ) (MvPolynomial.X i))) =
+        MvPolynomial.C (MvPolynomial.X i)
+      rw [MvPolynomial.rename_X, MvPolynomial.rename_X, hi,
+        MvPolynomial.sumAlgEquiv_X_inr]
+    let EA : D ≃ₐ[A] Q :=
+      { E.toRingEquiv with commutes' := fun a => AlgHom.congr_fun hE a }
+    let b : Module.Basis (κ →₀ ℕ) A D :=
+      (MvPolynomial.basisMonomials κ A).map EA.symm.toLinearEquiv
+    let _ : Module.Free A D := Module.Free.of_basis b
+    let _ : Module.Flat A D := Module.Flat.of_free
+    let rA : (Fin n → A) →ₗ[A] A :=
+      { toFun := fun x => ∑ i, x i * a i
+        map_add' := fun x y => by simp [add_mul, Finset.sum_add_distrib]
+        map_smul' := fun c x => by
+          change (∑ i, (c * x i) * a i) = c * ∑ i, x i * a i
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun i _ => mul_assoc c (x i) (a i) }
+    let rD : (Fin n → D) →ₗ[D] D :=
+      { toFun := fun x => ∑ i, x i * p i
+        map_add' := fun x y => by simp [add_mul, Finset.sum_add_distrib]
+        map_smul' := fun c x => by
+          change (∑ i, (c * x i) * p i) = c * ∑ i, x i * p i
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun i _ => mul_assoc c (x i) (p i) }
+    have hrD : rD = g := by
+      apply LinearMap.ext
+      intro x
+      change (∑ i, x i * p i) = g x
+      calc
+        (∑ i, x i * p i) = ∑ i, g (Pi.single i (x i)) := by
+          apply Finset.sum_congr rfl
+          intro i _
+          have hs : Pi.single i (x i) = x i • Pi.single i (1 : D) := by
+            simpa only [smul_eq_mul, mul_one] using (Pi.single_smul' i (x i) (1 : D))
+          simpa only [p, map_smul, smul_eq_mul] using (congrArg g hs).symm
+        _ = g (∑ i, Pi.single i (x i)) := by rw [map_sum]
+        _ = g x := by rw [LinearMap.sum_single_apply]
+    let h2 : (Fin n → A) →ₗ[A] (Fin n → D) :=
+      { toFun := fun x i => j (x i)
+        map_add' := fun x y => by funext i; exact j.map_add _ _
+        map_smul' := fun c x => by
+          funext i
+          change j (c * x i) = c • j (x i)
+          rw [Algebra.smul_def, RingHom.algebraMap_toAlgebra]
+          exact j.map_mul _ _ }
+    let h3 : A →ₗ[A] D := Algebra.linearMap A D
+    have square (x : Fin n → A) : rD (h2 x) = j (rA x) := by
+      change (∑ i, j (x i) * p i) = j (∑ i, x i * a i)
+      simp only [map_sum, map_mul, ha]
+    let KA : Submodule A (Fin n → A) := LinearMap.ker rA
+    let KD : Submodule D (Fin n → D) := LinearMap.ker rD
+    let h1 : KA →ₗ[A] KD :=
+      (h2.comp KA.subtype).codRestrict (KD.restrictScalars A) fun x => by
+        change rD (h2 x.val) = 0
+        rw [square, show rA x.val = 0 from x.property, map_zero]
+    -- Flat base change identifies the kernels without any surjectivity assumption on the row.
+    have H2 : IsBaseChange D h2 :=
+      IsBaseChange.of_equiv (TensorProduct.piScalarRight A D D (Fin n))
+        (fun x => by
+          funext i
+          rw [TensorProduct.piScalarRight_apply, TensorProduct.piScalarRightHom_tmul]
+          change x i • (1 : D) = j (x i)
+          rw [Algebra.smul_def, mul_one, RingHom.algebraMap_toAlgebra]
+          exact congrFun (AlgHom.coe_toRingHom j) (x i))
+    have H3 : IsBaseChange D h3 := IsBaseChange.linearMap A D
+    have H1 : IsBaseChange D h1 :=
+      IsBaseChange.of_left_exact D h1 h2 h3
+        (f := KA.subtype) (g := rA) (f' := KD.subtype) (g' := rD)
+        (by ext x i; rfl)
+        (LinearMap.ext fun x => (square x).symm)
+        H2 H3
+        (LinearMap.exact_subtype_ker_map rA) (Submodule.injective_subtype KA)
+        (LinearMap.exact_subtype_ker_map rD) (Submodule.injective_subtype KD)
+    have hKA : KA.FG :=
+      (Module.IsCoherent.iff_finite_and_fg_ker.mp
+        (inferInstance : Module.IsCoherent A A)).2 n rA
+    let _ : Module.Finite A KA := Module.Finite.of_fg hKA
+    let _ : Module.Finite D (TensorProduct A D KA) := Module.Finite.base_change A D KA
+    let _ : Module.Finite D KD := Module.Finite.equiv H1.equiv
+    have hKD : KD.FG := Module.Finite.iff_fg.mp inferInstance
+    simpa only [KD, hrD] using hKD
+  refine of_forall_mvPolynomial (MvPolynomial σ R) fun n => ?_
+  let _ : IsCoherentRing (MvPolynomial (Fin n ⊕ σ) R) := h (Fin n ⊕ σ)
+  exact isCoherentRing_of_ringEquiv (MvPolynomial.sumAlgEquiv R (Fin n) σ).toRingEquiv
 
 /-- Arbitrary localizations of a universally coherent commutative ring are universally
 coherent in any independently chosen target-algebra universe.
