@@ -77,6 +77,17 @@ Authors: Formal Frontier Agents
   [`KrullSchmidt`](CoherentModules/LinearAlgebra/KrullSchmidt.lean), which realizes
   the categorical theorems of Homological Algebra through `ModuleCat`.
 
+- **Additive intertwining by ranges.** An additive map between commutative monoids
+  intertwines a finite family of source endomorphisms summing to the identity with
+  an orthogonal idempotent target family if and only if it maps each source range
+  into its corresponding target range. No source orthogonality, target completeness,
+  subtraction or cancellation is required, and the monoid and index universes are
+  independent. The arbitrary-index range-action lemma also supplies the coordinate
+  calculation for the existing linear product-of-ranges equivalence through
+  Mathlib's canonical endomorphism action. See
+  [`OrthogonalIdempotents.semiconj_iff_mapsTo_range`](CoherentModules/RingTheory/Idempotents.lean)
+  and [`linearEquivPiRange`](CoherentModules/LinearAlgebra/DirectSum/Idempotents.lean).
+
 - **Finite coarsening of complete orthogonal idempotents.** Over any possibly
   noncommutative `Semiring A`, summing a finite complete orthogonal family over
   the fibres of an arbitrary map `q : I → J` gives a complete orthogonal family

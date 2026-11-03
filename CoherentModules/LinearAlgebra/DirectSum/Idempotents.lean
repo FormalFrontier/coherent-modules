@@ -4,9 +4,10 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.RingTheory.Idempotents
 public import Mathlib.Algebra.DirectSum.Module
+public import Mathlib.Algebra.Module.End
 public import Mathlib.LinearAlgebra.Pi
-public import Mathlib.RingTheory.Idempotents
 
 /-!
 # Ranges of complete orthogonal endomorphisms
@@ -21,7 +22,9 @@ nor cancellation. Zero ranges and empty index types are allowed; for an empty fa
 completeness forces the identity endomorphism to be zero.
 
 The construction uses Mathlib's complete orthogonal idempotents, range-restricted linear
-maps, product maps and finite direct-sum comparison.
+maps, product maps and finite direct-sum comparison. The range-action calculation
+specializes `OrthogonalIdempotents.apply_eq_ite_of_mem_range` through Mathlib's canonical
+`Module.toAddMonoidEnd` action.
 -/
 
 @[expose] public section
@@ -39,12 +42,11 @@ omit [Fintype ι] in
 private theorem apply_coe_range [DecidableEq ι] (hP : OrthogonalIdempotents P)
     (i j : ι) (x : LinearMap.range (P i)) :
     P j (x : M) = if j = i then (x : M) else 0 := by
+  let F : Module.End R M →+* AddMonoid.End M :=
+    Module.toAddMonoidEnd (Module.End R M) M
   obtain ⟨y, hy⟩ := LinearMap.mem_range.mp x.property
-  rw [← hy, ← Module.End.mul_apply, hP.mul_eq]
-  split_ifs with h
-  · subst j
-    rfl
-  · rfl
+  have hx : (x : M) ∈ Set.range (F (P i)) := ⟨y, hy⟩
+  exact (hP.map F).apply_eq_ite_of_mem_range i j hx
 
 /-- A semimodule is linearly equivalent to the product of the ranges of a finite complete
 orthogonal family of endomorphisms. The coordinates are the given endomorphisms, and the
