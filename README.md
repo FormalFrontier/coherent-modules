@@ -77,10 +77,14 @@ Authors: Formal Frontier Agents
   then `A` modulo the annihilator of its original action is left Noetherian;
   see
   [`isNoetherianRing_quotient_annihilator_of_finite`](CoherentModules/RingTheory/Noetherian.lean).
+  If `M` is an additive commutative group, finite generation over `C` and
+  coherence over `A` instead give a coherent annihilator quotient, as a
+  regular left module over the quotient ring; see
+  [`isCoherentRing_quotient_annihilator_of_finite`](CoherentModules/RingTheory/Quotient.lean).
   The three universes are independent. Neither scalar type needs to be
   Noetherian, and the `A`-action need not commute with itself.
-  Taking `C = A` recovers the self-commuting criterion: for an additive
-  commutative group with a self-commuting `A`-action, Noetherianity over `A`
+  Taking `C = A` in the Noetherian result recovers the self-commuting criterion:
+  for an additive commutative group with a self-commuting `A`-action, Noetherianity over `A`
   is equivalent to finite generation over `A` and left Noetherianity of the
   annihilator quotient. In particular, this applies over every commutative
   ring. The sufficient direction holds over any ring for an additive
@@ -426,7 +430,11 @@ Authors: Formal Frontier Agents
   finite-rank free modules, including rank zero. The same leaf proves closure
   under finitely generated submodules, finite products, kernels and cokernels,
   quotients by finitely generated submodules, and extensions (with the stated
-  exactness and endpoint conditions).
+  exactness and endpoint conditions). For rings `R` and `S`,
+  `Module.IsCoherent.of_restrictScalars` transfers coherence of an additive
+  commutative group `N` from `R` to `S` when `S` is finite over `R` and the given
+  module structures form scalar towers `R → S → S` and `R → S → N`.
+  No coherence of `S` over `R` is required, and the three universes are independent.
 - **Finite presentation over coherent rings.** [`Module.isCoherent_iff_finitePresentation`](CoherentModules/FinitePresentation.lean)
   identifies the two properties over an `IsCoherentRing R`, yielding finite
   presentation of kernels between finitely presented modules. The
@@ -891,7 +899,11 @@ The commutative annihilator-quotient criterion follows the formalization in
 Adic Modules by Formal Frontier Agents. Its two-scalar generalization uses this
 library's commuting-action Hom theorem, Mathlib's scalar representation and
 pointwise linear-map actions, and Mathlib's Noetherian transfer, first-isomorphism
-and scalar-tower machinery.
+and scalar-tower machinery. The coherent annihilator-quotient theorem follows
+its scalar representation and kernel calculation, using finite-generator
+evaluation into a finite product and coherence transfer along module-finite
+scalar towers. These arguments reuse Mathlib's finite-presentation, range,
+scalar-restriction and linear-equivalence APIs.
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
 localization, tensor products and categorical infrastructure. Finiteness descent

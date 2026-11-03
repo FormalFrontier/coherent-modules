@@ -25,6 +25,7 @@ of its finitely generated submodules are finitely presented.
 * `Module.IsCoherent.iff_finite_and_fg_ker`: characterization by kernels of maps from
   finite-rank free modules.
 * `Module.IsCoherent.of_exact`: coherence of the middle term of a short exact sequence.
+* `Module.IsCoherent.of_restrictScalars`: coherence over a module-finite scalar extension.
 * `IsCoherentRing`: coherent rings.
 -/
 
@@ -277,6 +278,36 @@ instance IsCoherent.pi :
   · exact fun ih ↦ IsCoherent.of_equiv (LinearEquiv.piOptionEquivProd R).symm
 
 end Ring
+
+/-- If `S` is finite over `R`, coherence over `R` implies coherence over `S` for
+compatible given module structures. -/
+theorem IsCoherent.of_restrictScalars (R : Type u) {S : Type v} {N : Type w}
+    [Ring R] [Ring S] [AddCommGroup N]
+    [Module R S] [Module R N] [Module S N]
+    [IsScalarTower R S S] [IsScalarTower R S N]
+    [Module.Finite R S] [Module.IsCoherent R N] : Module.IsCoherent S N := by
+  let _ : Module.Finite S N := Module.Finite.of_restrictScalars_finite R S N
+  apply IsCoherent.iff_finite_and_fg_ker.mpr
+  refine ⟨inferInstance, ?_⟩
+  intro n g
+  let _ : Module.Finite R (Fin n → S) := inferInstance
+  let gR : (Fin n → S) →ₗ[R] N := g.restrictScalars R
+  let _ : Module.IsCoherent R (LinearMap.range gR) := IsCoherent.range gR
+  have hfg : (LinearMap.ker gR).FG := by
+    simpa only [LinearMap.ker_rangeRestrict] using
+      Module.FinitePresentation.fg_ker gR.rangeRestrict
+        (LinearMap.surjective_rangeRestrict gR)
+  -- Compare the two kernel carriers with their given scalar actions.
+  let KR : Submodule R (Fin n → S) := LinearMap.ker gR
+  let KS : Submodule S (Fin n → S) := LinearMap.ker g
+  let _ : Module.Finite R KR := Module.Finite.of_fg hfg
+  have hK : KR = KS.restrictScalars R := LinearMap.ker_restrictScalars R g
+  let eK : KR ≃ₗ[R] KS :=
+    (LinearEquiv.ofEq KR (KS.restrictScalars R) hK).trans
+      ((KS.restrictScalarsEquiv R).restrictScalars R)
+  let _ : Module.Finite R KS := Module.Finite.equiv eK
+  let _ : Module.Finite S KS := Module.Finite.of_restrictScalars_finite R S KS
+  exact Module.Finite.iff_fg.mp inferInstance
 
 end Module
 

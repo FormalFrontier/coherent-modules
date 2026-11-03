@@ -74,6 +74,7 @@ public import CoherentModules.RingTheory.Morita.Matrix
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
 public import CoherentModules.RingTheory.Noetherian.Retraction
+public import CoherentModules.RingTheory.Quotient
 public import CoherentModules.RingTheory.TwoSidedIdeal.Atoms
 public import CoherentModules.TensorProduct
 public import CoherentModules.UniversallyCoherent
@@ -82,6 +83,7 @@ public import CoherentModules.UniversallyCoherent
 # Coherent rings and modules
 
 Public entry point for coherent modules, finite presentation, localization,
+coherence of annihilator quotients under two commuting scalar actions,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary
 commutative rings, submodule adic cofinality with Noetherian-ring and
