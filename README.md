@@ -407,7 +407,7 @@ Authors: Formal Frontier Agents
   usual flatness. No faithful action, finiteness or additive cancellation is
   required. The identity coefficient equivalence accepts the same ordinary
   linear equivalence as Mathlib's fixed-ring flatness API.
-- **Finiteness and flatness under pure scalar extension.** Let `R : Type uR`
+- **Finiteness, projectivity and flatness under pure scalar extension.** Let `R : Type uR`
   be a commutative ring, `S` an `R`-algebra and `M : Type uM` an additive
   commutative monoid with its given `R`-module structure. Suppose the canonical
   map `N → S ⊗[R] N`, `n ↦ 1 ⊗ n`, is injective for every additive commutative
@@ -426,10 +426,14 @@ Authors: Formal Frontier Agents
   also gives `Module.Flat S (S ⊗[R] M) ↔ Module.Flat R M`.
   The tensor has its canonical left-factor `S`-action; `M` needs no `S`-action
   or supplied additive group structure. All three carrier universes are
-  independent. No flatness of `S` over `R` is assumed. The
-  [finite-projectivity client](CoherentModulesTest/RingTheory/Finiteness/Pure.lean)
-  combines these results with Mathlib's finite-projective and finitely presented
-  flat criteria to descend finite projectivity when `S` is commutative.
+  independent. No flatness of `S` over `R` is assumed.
+  [`Module.finite_projective_of_tensorProduct_of_injective`](CoherentModules/LinearAlgebra/Projective/Pure.lean)
+  descends finite projectivity for any possibly noncommutative `Semiring S`:
+  if `S ⊗[R] M` is finite and projective over `S`, then `M` is finite and
+  projective over `R`. Finite presentation of `M` is derived, not assumed.
+  The [clients](CoherentModulesTest/RingTheory/Finiteness/Pure.lean) also
+  retain the commutative-target proof using finitely presented flat modules
+  and apply the noncommutative result using a linear scalar retraction.
 - **Annihilators under finite-limit-preserving scalar extension.** For a
   `CommSemiring R`, a possibly noncommutative `Semiring S` with `Algebra R S`,
   and a finitely generated semimodule `M`,
@@ -729,7 +733,12 @@ finite extended module, or
 `Module.FinitePresentation.of_finitePresentation_tensorProduct_of_injective R M S hunit`
 to a finitely presented extended module. Both use the tensor-unit injectivity
 hypothesis stated above, on the original module and canonical scalar actions.
-The [clients](CoherentModulesTest/RingTheory/Finiteness/Pure.lean) also compare
+For finite-projectivity descent, import
+`CoherentModules.LinearAlgebra.Projective.Pure` and apply
+`Module.finite_projective_of_tensorProduct_of_injective R M S hunit`.
+The scalar algebra may be a noncommutative semiring; no finite-presentation
+or flatness premise is needed. The
+[clients](CoherentModulesTest/RingTheory/Finiteness/Pure.lean) also compare
 faithfully flat descent and split-retraction membership and order reflection
 on the same modules and maps.
 

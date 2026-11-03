@@ -14,7 +14,8 @@ project:
     arbitrary subsets, and localization saturation commuting with colons by
     finitely generated ideals, annihilator localization for finitely generated
     semimodules, relative generation by nilpotent ideals, and finite-generation,
-    finite-presentation and flatness descent under injective tensor units in Lean.
+    finite-presentation, finite-projectivity and flatness descent under injective
+    tensor units in Lean.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -32,7 +33,7 @@ highlights:
     declarations:
       - declaration: "Module.IsCoherent.iff_finite_and_fg_ker"
         file: "CoherentModules/Basic.lean"
-  - title: "Finiteness and flatness under injective tensor units"
+  - title: "Finiteness, projectivity and flatness under injective tensor units"
     statement: >-
       Let R be a commutative ring, S an R-algebra and M an additive commutative
       monoid with its given R-module structure. Assume the canonical unit
@@ -40,8 +41,10 @@ highlights:
       in Type (max uR uM). For a possibly noncommutative semiring S,
       S ⊗[R] M is finitely generated over S if and only if M is finitely
       generated over R. For a possibly noncommutative ring S, the corresponding
-      finite-presentation equivalence holds. For a commutative ring S, flatness
-      is likewise equivalent. All three carrier universes are independent;
+      finite-presentation equivalence holds. If S ⊗[R] M is finite and projective
+      over any possibly noncommutative semiring S, M is finite and projective
+      over R; finite presentation of M is derived internally. For a commutative
+      ring S, flatness is likewise equivalent. All three carrier universes are independent;
       S need not be flat over R, and M needs neither an S-action nor a supplied
       additive group structure.
     declarations:
@@ -49,6 +52,8 @@ highlights:
         file: "CoherentModules/RingTheory/Finiteness/Pure.lean"
       - declaration: "Module.FinitePresentation.iff_finitePresentation_tensorProduct_of_injective"
         file: "CoherentModules/RingTheory/Finiteness/Pure.lean"
+      - declaration: "Module.finite_projective_of_tensorProduct_of_injective"
+        file: "CoherentModules/LinearAlgebra/Projective/Pure.lean"
       - declaration: "Module.Flat.of_flat_tensorProduct_of_injective"
         file: "CoherentModules/RingTheory/Flat/Pure.lean"
       - declaration: "Module.Flat.iff_flat_tensorProduct_of_injective"
@@ -177,6 +182,8 @@ status:
     all additive commutative R-semimodules in Type (max uR uM) reflects finite
     generation along extension to a possibly noncommutative semiring S and
     finite presentation along extension to a possibly noncommutative ring S.
+    Finite projectivity descends along extension to a possibly noncommutative
+    semiring S, without a finite-presentation premise on the original module.
     It also reflects membership, inclusions and finite generation of extended
     submodule images. For commutative S it reflects flatness. The tensor has
     its canonical left-factor S-action, and ascent gives the corresponding
@@ -184,8 +191,8 @@ status:
     assumed flat over R. The original module carries only its given additive
     commutative monoid and R-action; group structures are derived internally
     where needed, without an additional scalar action on M.
-    No coherence, projectivity, nontriviality or nonzero-module assumption or
-    complete source coverage is asserted.
+    No coherence, nontriviality or nonzero-module assumption or complete source
+    coverage is asserted.
 
 review:
   status: "other: revision-specific independent AI-agent review"

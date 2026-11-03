@@ -13,6 +13,7 @@ public import CoherentModules.LinearAlgebra.Matrix.Reconstruction
 public import CoherentModules.LinearAlgebra.Matrix.ReconstructionCoherence
 public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModules.LinearAlgebra.Matrix.Submodule
+public import CoherentModules.LinearAlgebra.Projective.Pure
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
@@ -83,7 +84,9 @@ scalar extension, the coherent-module category, universal
 coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
-and direct sums. Flatness is invariant under compatible semilinear equivalences
+and direct sums. Finite projectivity descends under injective tensor units along
+central scalar extensions to possibly noncommutative semirings, without flatness
+of the scalar algebra. Flatness is invariant under compatible semilinear equivalences
 of modules over equivalent commutative semirings, with mono-flatness understood
 over semirings.
 Extension of left ideals along a unital semiring homomorphism preserves products

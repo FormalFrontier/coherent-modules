@@ -13,7 +13,9 @@ import Mathlib.RingTheory.Flat.FaithfullyFlat.Algebra
 
 Finite projectivity descends by combining finite-presentation descent with
 flatness descent and Mathlib's finitely presented flat criterion. The module
-retains its given additive commutative monoid and scalar action.
+retains its given additive commutative monoid and scalar action. For a possibly
+noncommutative semiring algebra, a linear scalar retraction also supplies the
+unit-injectivity hypothesis for direct finite-projectivity descent.
 
 The faithfully flat specializations agree with Mathlib's finite-generation and
 submodule-order theorems on the same algebra and modules. The order comparison
@@ -109,3 +111,13 @@ example {R : Type uR} {S : Type uS} [CommRing R] [Semiring S] [Algebra R S]
         (fun P _ _ => (tensorUnit_leftInverse p hp P).injective) N K =
       Submodule.baseChange_le_iff_of_linearRetraction p hp N K :=
   ⟨Subsingleton.elim _ _, Subsingleton.elim _ _⟩
+
+/-- A linear scalar retraction supplies the tensor-unit hypothesis even for a
+noncommutative semiring algebra; it need not preserve multiplication. -/
+example {R : Type uR} [CommRing R] {S : Type uS} [Semiring S] [Algebra R S]
+    {M : Type uM} [AddCommMonoid M] [Module R M]
+    [Module.Finite S (S ⊗[R] M)] [Module.Projective S (S ⊗[R] M)]
+    (p : S →ₗ[R] R) (hp : p (1 : S) = 1) :
+    Module.Finite R M ∧ Module.Projective R M :=
+  Module.finite_projective_of_tensorProduct_of_injective R M S
+    (fun N _ _ ↦ (tensorUnit_leftInverse p hp N).injective)
