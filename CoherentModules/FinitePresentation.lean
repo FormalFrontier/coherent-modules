@@ -2,22 +2,32 @@
 SPDX-License-Identifier: Apache-2.0
 Authors: Formal Frontier Agents
 Contributors: Formal Frontier AI agents
+
+The finite-free reindexing construction is adapted from Mathlib:
+Copyright (c) 2024 Andrew Yang. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Andrew Yang
 -/
 module
 
 public import CoherentModules.Basic
+public import Mathlib.RingTheory.Finiteness.Cardinality
 
 /-!
-# Finitely presented modules over coherent rings
+# Finite presentation and coherence
 
-This file identifies finitely presented modules with coherent modules over a
-coherent ring and deduces finite presentation of kernels between them.  The
-results hold for arbitrary rings and modules in independent universes.  It also
+This file constructs finite-free exact data for finitely presented semimodules
+over semirings. Over rings, it identifies finitely presented modules with
+coherent modules over a coherent ring and deduces finite presentation of
+kernels between them. The scalar and module universes are independent. It also
 gives a five-term exact-sequence criterion for finite presentation of the
 middle module.
 
 ## Main declarations
 
+* `Module.FinitePresentation.exists_fin_exact`: a finitely presented semimodule
+  over a semiring admits finite-free maps forming an exact pair, with the map
+  to the semimodule surjective.
 * `Module.FinitePresentation.isCoherent`: a finitely presented module over a
   coherent ring is coherent.
 * `Module.isCoherent_iff_finitePresentation`: coherence is equivalent to finite
@@ -27,6 +37,19 @@ middle module.
 * `Module.FinitePresentation.of_exact_five`: in a sequence of five modules
   exact at the middle three, suitable finiteness hypotheses on the other four
   imply finite presentation of the middle module.
+
+## Implementation notes
+
+Over semirings, `Module.FinitePresentation` controls a finitely generated zero
+fiber, not all pairs with equal image. Accordingly, `Function.Exact` in the
+finite-free result means that the zero fiber is the range of the preceding
+map; no congruence presentation or cokernel universal property is asserted.
+
+## References
+
+The finite-free construction follows the Mathlib contributors' formalizations
+of finite presentation, finite generation, finite reindexing and exactness,
+including Andrew Yang's `Module.FinitePresentation.exists_fin`.
 -/
 
 @[expose] public section
@@ -34,6 +57,48 @@ middle module.
 universe u v w v1 v2 v3 v4 v5
 
 namespace Module
+
+section Semiring
+
+variable (R : Type u) (M : Type v) [Semiring R] [AddCommMonoid M] [Module R M]
+
+/-- A finitely presented semimodule admits a surjective map from a finite free
+semimodule whose zero fiber is the range of a map from a finite free semimodule.
+
+Over semirings, `Function.Exact` records only zero-fiber exactness, not a
+congruence presentation or a cokernel universal property. This generalizes
+Mathlib's `Module.FinitePresentation.exists_fin'`. -/
+theorem FinitePresentation.exists_fin_exact [Module.FinitePresentation R M] :
+    ∃ (n m : ℕ) (g : (Fin n → R) →ₗ[R] M)
+      (f : (Fin m → R) →ₗ[R] (Fin n → R)),
+      Function.Surjective g ∧ Function.Exact f g := by
+  classical
+  obtain ⟨s, hs, hK⟩ := Module.FinitePresentation.out (R := R) (M := M)
+  let p : (s →₀ R) →ₗ[R] M := Finsupp.linearCombination R ((↑) : s → M)
+  let e : (s →₀ R) ≃ₗ[R] (Fin s.card → R) :=
+    Finsupp.lcongr s.equivFin (LinearEquiv.refl R R) ≪≫ₗ
+      Finsupp.linearEquivFunOnFinite R R (Fin s.card)
+  obtain ⟨m, h, hh⟩ :=
+    (Submodule.fg_iff_exists_fin_linearMap R (s →₀ R) (N := LinearMap.ker p)).mp hK
+  have hp : Function.Surjective p := by
+    apply LinearMap.range_eq_top.mp
+    simpa [p, Finsupp.range_linearCombination] using hs
+  refine ⟨s.card, m, p ∘ₗ e.symm.toLinearMap, e.toLinearMap ∘ₗ h, ?_, ?_⟩
+  · exact hp.comp e.symm.surjective
+  · exact (LinearEquiv.conj_exact_iff_exact h p e).mpr
+      (LinearMap.exact_iff.mpr hh.symm)
+
+end Semiring
+
+section Ring
+
+private theorem FinitePresentation.exists_fin'_ring
+    (R : Type u) (M : Type v) [Ring R] [AddCommGroup M] [Module R M]
+    [Module.FinitePresentation R M] :
+    ∃ (n m : ℕ) (f : (Fin n → R) →ₗ[R] M)
+      (g : (Fin m → R) →ₗ[R] (Fin n → R)),
+      Function.Surjective f ∧ Function.Exact g f :=
+  FinitePresentation.exists_fin_exact R M
 
 variable {R : Type u} [Ring R]
 
@@ -112,5 +177,7 @@ theorem isCoherent_iff_finitePresentation
   · intro h
     let _ : Module.FinitePresentation R M := h
     exact Module.FinitePresentation.isCoherent
+
+end Ring
 
 end Module
