@@ -5,6 +5,8 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.Algebra.TrivSqZeroExt.Artinian
+
 public import CoherentModules.Algebra.TrivSqZeroExt.Coherent
 public import CoherentModules.LinearAlgebra.Matrix.TwoSidedIdeal
 

@@ -4,6 +4,8 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.Algebra.TrivSqZeroExt.Kernel
+
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import Mathlib.Algebra.Module.NatInt
 public import Mathlib.Algebra.Module.Opposite
@@ -38,28 +40,10 @@ private theorem isNoetherian_ker_fstHom_iff
     IsNoetherian (TrivSqZeroExt R M)
         (RingHom.ker ((TrivSqZeroExt.fstHom ℕ R M).toRingHom)) ↔
       IsNoetherian R M := by
-  let σ : TrivSqZeroExt R M →+* R := (fstHom ℕ R M).toRingHom
+  let σ : TrivSqZeroExt R M →+* R := fstHom ℕ R M
   let : RingHomSurjective σ := ⟨fun r ↦ ⟨inl r, rfl⟩⟩
-  let f : RingHom.ker σ →ₛₗ[σ] M :=
-    { toFun := fun x ↦ (x : TrivSqZeroExt R M).snd
-      map_add' := fun x y ↦ snd_add (x : TrivSqZeroExt R M) y
-      map_smul' := by
-        intro a x
-        have hx : (x : TrivSqZeroExt R M).fst = 0 := x.property
-        change (a * (x : TrivSqZeroExt R M)).snd = a.fst • (x : TrivSqZeroExt R M).snd
-        simp [snd_mul, hx] }
-  have hf : Function.Bijective f := by
-    constructor
-    · intro x y h
-      apply Subtype.ext
-      apply TrivSqZeroExt.ext
-      · have hx : (x : TrivSqZeroExt R M).fst = 0 := x.property
-        have hy : (y : TrivSqZeroExt R M).fst = 0 := y.property
-        exact hx.trans hy.symm
-      · exact h
-    · intro m
-      exact ⟨⟨inr m, rfl⟩, rfl⟩
-  exact LinearMap.isNoetherian_iff_of_bijective f hf
+  exact LinearMap.isNoetherian_iff_of_bijective
+    (kerFstHomSnd R M) (kerFstHomSnd_bijective R M)
 
 example :
     IsNoetherian (TrivSqZeroExt ℕ ℕ)
