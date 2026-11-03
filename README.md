@@ -77,6 +77,15 @@ Authors: Formal Frontier Agents
   [`KrullSchmidt`](CoherentModules/LinearAlgebra/KrullSchmidt.lean), which realizes
   the categorical theorems of Homological Algebra through `ModuleCat`.
 
+- **Finite coarsening of complete orthogonal idempotents.** Over any possibly
+  noncommutative `Semiring A`, summing a finite complete orthogonal family over
+  the fibres of an arbitrary map `q : I → J` gives a complete orthogonal family
+  indexed by `J`. Both index types have `Fintype` instances, with decidable equality
+  needed only on `J`; the three universes are independent. The map need not be
+  surjective: unused labels have value zero. Empty index types and zero semirings
+  are allowed; no additive inverses, cancellation or centrality is required. See
+  [`CompleteOrthogonalIdempotents.sum_fiberwise`](CoherentModules/RingTheory/Idempotents.lean).
+
 - **Dual endomorphisms.** Over a commutative semiring `R`,
   [`Module.End.dualMapAlgHom`](CoherentModules/LinearAlgebra/Dual/End.lean)
   bundles dualization as an algebra homomorphism from the opposite endomorphism

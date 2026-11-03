@@ -81,6 +81,7 @@ public import CoherentModules.RingTheory.Ideal.Maps
 public import CoherentModules.RingTheory.Ideal.Operations
 public import CoherentModules.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModules.RingTheory.Ideal.TwoSided
+public import CoherentModules.RingTheory.Idempotents
 public import CoherentModules.RingTheory.Morita.Matrix
 public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
