@@ -8,6 +8,7 @@ module
 public import CoherentModules.Algebra.TrivSqZeroExt.Coherent
 public import CoherentModules.LinearAlgebra.Matrix.TwoSidedIdeal
 
+public import CoherentModules.LinearAlgebra.DirectSum.Idempotents
 public import CoherentModules.RingTheory.Artinian.Hom
 
 public import CoherentModules.LinearAlgebra.Dual.Coextension
