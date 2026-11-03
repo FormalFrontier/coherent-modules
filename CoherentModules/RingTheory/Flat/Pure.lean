@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.TensorProduct.Submodule
 public import Mathlib.LinearAlgebra.Quotient.Basic
 public import Mathlib.LinearAlgebra.TensorProduct.Pi
 public import Mathlib.LinearAlgebra.TensorProduct.Prod
@@ -172,21 +173,12 @@ private theorem isTrivialRelation_of_tensor_coefficients
       have hc' : ∑ i, a i • b i j = 0 := by
         simpa only [Algebra.smul_def] using hc j
       simpa [v, Pi.single_apply, ite_smul] using hc'
-  let C := T ⧸ LinearMap.range L
-  let q : T →ₗ[R] C := (LinearMap.range L).mkQ
-  have hq : q v = 0 := by
-    apply hunit C
-    change (1 : S) ⊗ₜ[R] q v = (1 : S) ⊗ₜ[R] (0 : C)
-    rw [TensorProduct.tmul_zero]
-    calc
-      (1 : S) ⊗ₜ[R] q v = q.lTensor S ((1 : S) ⊗ₜ[R] v) := rfl
-      _ = q.lTensor S (L.lTensor S w) := congrArg (q.lTensor S) hw.symm
-      _ = (q.comp L).lTensor S w := (LinearMap.lTensor_comp_apply S q L w).symm
-      _ = 0 := by
-        rw [show q.comp L = 0 from LinearMap.range_mkQ_comp L]
-        simp
-  have hv : v ∈ LinearMap.range L :=
-    (Submodule.Quotient.mk_eq_zero (LinearMap.range L)).mp hq
+  have hv : v ∈ LinearMap.range L := by
+    apply (Submodule.one_tmul_mem_baseChange_iff_of_injective
+      (R := R) (S := S) (M := T) hunit (LinearMap.range L) v).mp
+    change (1 : S) ⊗ₜ[R] v ∈ LinearMap.range ((LinearMap.range L).subtype.lTensor S)
+    rw [← LinearMap.lTensor_range]
+    exact ⟨w, hw⟩
   obtain ⟨e, he⟩ := hv
   rw [hL_apply] at he
   refine ⟨k, fun i j => e (i, j), n, ?_, ?_⟩
