@@ -71,13 +71,21 @@ Authors: Formal Frontier Agents
   `e (c ⊗ₜ a) x = c (a * x)`. The algebra needs only `Semiring A`;
   finiteness of `C` is derived, and the scalar and algebra universes are independent.
 
-- A module over a ring whose given scalar actions commute on the module is
-  Noetherian exactly when it is finitely generated and the scalar ring modulo
-  its annihilator is left Noetherian
-  ([criterion](CoherentModules/RingTheory/Noetherian.lean)). In particular, this
-  applies to every module over a commutative ring. The sufficient direction
-  holds over any ring for an additive commutative monoid with its given module
-  structure, without commuting scalar actions.
+- **Annihilator quotients with two scalar actions.** Suppose a ring `A` and a
+  semiring `C` act on the same additive commutative monoid `M`, with commuting
+  given actions. If `M` is finitely generated over `C` and Noetherian over `A`,
+  then `A` modulo the annihilator of its original action is left Noetherian;
+  see
+  [`isNoetherianRing_quotient_annihilator_of_finite`](CoherentModules/RingTheory/Noetherian.lean).
+  The three universes are independent. Neither scalar type needs to be
+  Noetherian, and the `A`-action need not commute with itself.
+  Taking `C = A` recovers the self-commuting criterion: for an additive
+  commutative group with a self-commuting `A`-action, Noetherianity over `A`
+  is equivalent to finite generation over `A` and left Noetherianity of the
+  annihilator quotient. In particular, this applies over every commutative
+  ring. The sufficient direction holds over any ring for an additive
+  commutative monoid with its given module structure, without a commutation
+  hypothesis.
 
 - **Noetherian semilinear Hom.** For semirings `R`, `R₂`, a ring `S`, a finitely
   generated `R`-semimodule `M`, and a Noetherian `S`-module `N` with a commuting
@@ -846,6 +854,12 @@ Mathlib's chain-stability, restriction, complement-equivalence, categorical
 indecomposability and local-ring APIs. Mathematical attribution to Wisbauer
 is distinct from this formalization credit; no source prose, proof code or
 scans are reproduced.
+
+The commutative annihilator-quotient criterion follows the formalization in
+Adic Modules by Formal Frontier Agents. Its two-scalar generalization uses this
+library's commuting-action Hom theorem, Mathlib's scalar representation and
+pointwise linear-map actions, and Mathlib's Noetherian transfer, first-isomorphism
+and scalar-tower machinery.
 
 These classical constructions use Lean and mathlib's modules, exact sequences,
 localization, tensor products and categorical infrastructure. Finiteness descent

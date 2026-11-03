@@ -26,13 +26,19 @@ For regular semiring modules, unit clearing also identifies each left ideal
 with the extension of its contraction. Units need not be central or come from
 the source. Function-surjective maps satisfy unit clearing with the unit `1`.
 
-For an additive commutative monoid with a module structure over a ring, finite
-generation and left Noetherianity of the scalar ring modulo its annihilator imply
-Noetherianity for the given action, without commuting scalar actions. For an
-additive commutative group whose given scalar actions commute, these conditions
-are also necessary. Here commutation means `a • (b • m) = b • (a • m)` for the
-original action, not commutativity of the scalar ring. The scalar ring itself
-need not be Noetherian.
+Suppose a ring `A` and a semiring `C` act on the same additive commutative monoid
+`M`, and the given actions commute. Finite generation over `C` and Noetherianity
+over `A` imply that `A` modulo the annihilator of its given action is left
+Noetherian. The scalar types and module carrier have independent universes, and
+neither scalar type needs to be Noetherian. The proof uses the `A`-module of
+`C`-linear endomorphisms, not Noetherianity of their ring.
+
+Taking `C = A` gives necessity in the annihilator-quotient criterion for an
+additive commutative group whose given scalar action commutes with itself.
+Conversely, for an additive commutative monoid over a ring, finite generation
+over that ring and left Noetherianity of its annihilator quotient imply
+Noetherianity, without commuting scalar actions. Self-commutation means
+`a • (b • m) = b • (a • m)` for the original action, not commutativity of the ring.
 
 For a Noetherian module over a commutative ring, containment of ideal radicals
 after adding its annihilator gives a uniform ideal-power bound on the original
@@ -52,10 +58,13 @@ The argument uses Mathlib's submodule comap and ascending-chain criterion, and
 extends the ideal unit-clearing argument in this library to semimodules. The
 left-inverse formulation retains only the scalar recovery needed in that argument.
 The commutative annihilator-quotient criterion follows the formalization in
-Adic Modules by Formal Frontier Agents. The commuting-action generalization
-evaluates scalars on finite generators and uses Mathlib's finite-product
-Noetherianity and first isomorphism theorem. Span induction identifies the
-evaluation kernel with the annihilator, using commutation for scalar closure.
+Adic Modules by Formal Frontier Agents. The two-scalar generalization uses this
+library's commuting-action Hom theorem and Mathlib's canonical pointwise
+linear-map actions. The scalar representation formed with
+`LinearMap.toSpanSingleton` at the identity endomorphism sends `a` to `m ↦ a • m`.
+Its range is a Noetherian `A`-module and its kernel is the original annihilator.
+Mathlib's first isomorphism theorem and quotient-ring scalar tower then give
+left Noetherianity of the quotient.
 The semilinear Hom theorem generalizes Mathlib's `isNoetherian_linearMap` by
 embedding Hom into a finite product of the codomain via generator evaluation.
 It uses Mathlib's semilinear extensionality and injective Noetherianity transfer.
@@ -234,46 +243,48 @@ private theorem isNoetherian_linearMap_commRing
 
 section Ring
 
+/-- If `M` is Noetherian over a ring `A` and finitely generated over a semiring `C`
+whose given action commutes with the given `A`-action, then `A` modulo the annihilator
+of its original action is left Noetherian. No Noetherianity assumption on `A` or `C`
+is required. -/
+theorem isNoetherianRing_quotient_annihilator_of_finite
+    {A : Type uR} {C : Type uS} {M : Type uM}
+    [Ring A] [Semiring C] [AddCommMonoid M]
+    [Module A M] [Module C M] [SMulCommClass A C M]
+    [Module.Finite C M] [IsNoetherian A M] :
+    IsNoetherianRing (A ⧸ Module.annihilator A M) := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup A (M := M)
+  let : SMulCommClass C A M := SMulCommClass.symm A C M
+  let : IsNoetherian A (M →ₗ[C] M) :=
+    isNoetherian_linearMap_of_finite (R := C) (S := A)
+  let f : A →ₗ[A] (M →ₗ[C] M) :=
+    LinearMap.toSpanSingleton A (M →ₗ[C] M) (LinearMap.id : M →ₗ[C] M)
+  let : IsNoetherian A (LinearMap.range f) :=
+    isNoetherian_of_injective (LinearMap.range f).subtype Subtype.val_injective
+  have hker : LinearMap.ker f = (Module.annihilator A M : Submodule A A) := by
+    ext a
+    constructor
+    · intro ha
+      apply Module.mem_annihilator.mpr
+      intro m
+      exact LinearMap.congr_fun (LinearMap.mem_ker.mp ha) m
+    · intro ha
+      apply LinearMap.mem_ker.mpr
+      ext m
+      exact (Module.mem_annihilator.mp ha) m
+  have hquot : IsNoetherian A (A ⧸ Module.annihilator A M) := by
+    rw [← hker]
+    exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
+  exact isNoetherian_of_tower A hquot
+
 /-- If the given scalar actions of a ring on a Noetherian module commute, the quotient
 by the module's annihilator is left Noetherian. No Noetherianity assumption on the
 scalar ring is required. -/
 theorem isNoetherianRing_quotient_annihilator
     {A : Type uR} [Ring A] (X : Type uM) [AddCommGroup X] [Module A X]
     [SMulCommClass A A X] [IsNoetherian A X] :
-    IsNoetherianRing (A ⧸ Module.annihilator A X) := by
-  classical
-  obtain ⟨n, x, hx⟩ := Module.Finite.exists_fin (R := A) (M := X)
-  let f : A →ₗ[A] (Fin n → X) :=
-    LinearMap.pi fun i ↦ LinearMap.toSpanSingleton A X (x i)
-  have : IsNoetherian A (Fin n → X) := inferInstance
-  have : IsNoetherian A (LinearMap.range f) :=
-    isNoetherian_of_injective (LinearMap.range f).subtype Subtype.val_injective
-  have hker : LinearMap.ker f = (Module.annihilator A X : Submodule A A) := by
-    ext a
-    constructor
-    · intro ha
-      apply Module.mem_annihilator.mpr
-      intro m
-      have hm : m ∈ Submodule.span A (Set.range x) := by
-        rw [hx]
-        exact Submodule.mem_top
-      induction hm using Submodule.span_induction with
-      | mem y hy =>
-        obtain ⟨i, rfl⟩ := hy
-        exact congrFun (LinearMap.mem_ker.mp ha) i
-      | zero => exact smul_zero a
-      | add y z _ _ hy hz => rw [smul_add, hy, hz, add_zero]
-      | smul b y _ hy =>
-        -- Commutation of the original actions makes the vectors killed by a scalar stable.
-        rw [smul_comm a b y, hy, smul_zero]
-    · intro ha
-      apply LinearMap.mem_ker.mpr
-      funext i
-      exact (Module.mem_annihilator.mp ha) (x i)
-  have hquot : IsNoetherian A (A ⧸ Module.annihilator A X) := by
-    rw [← hker]
-    exact f.quotKerEquivRange.isNoetherian_iff.mpr inferInstance
-  exact isNoetherian_of_tower A hquot
+    IsNoetherianRing (A ⧸ Module.annihilator A X) :=
+  isNoetherianRing_quotient_annihilator_of_finite (A := A) (C := A) (M := X)
 
 /-- A finitely generated module over a ring is Noetherian if the scalar ring modulo
 its annihilator is left Noetherian. Only an additive commutative monoid is required
