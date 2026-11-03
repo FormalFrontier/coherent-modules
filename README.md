@@ -701,6 +701,16 @@ or a claim to formalize an entire source.
   cancellation in `N`, or surjectivity of `σ` is required; all seven carrier
   universes are independent.
 
+- **Semilinear maps from free semimodules.**
+  [`Finsupp.lliftₛₗ`](CoherentModules/LinearAlgebra/Finsupp/LSum.lean) identifies
+  families `ι → N` with `σ`-semilinear maps `(ι →₀ R) →ₛₗ[σ] N`, linearly over
+  `S`, for semirings `R`, `R₂`, `S` and any `σ : R →+* R₂`. The additive
+  commutative monoid `N` retains its given commuting `R₂`- and `S`-module
+  structures; no `R`-action on `N` or finiteness of `ι` is required. The API
+  characterizes extensions by their values on unit generators, gives the
+  support-sum formula, and identifies the identity specialization with Mathlib's
+  `Finsupp.llift`. All five carrier universes are independent.
+
 ## Scalar clearing and Noetherianity
 
 For a semilinear map `f : M →ₛₗ[φ] N` over arbitrary semirings, suppose each
