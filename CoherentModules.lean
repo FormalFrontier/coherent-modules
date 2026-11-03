@@ -55,6 +55,7 @@ public import CoherentModules.RingTheory.Flat.CategoryTheory
 public import CoherentModules.RingTheory.Flat.DirectSum
 public import CoherentModules.RingTheory.Flat.Equiv
 public import CoherentModules.RingTheory.Flat.FaithfullyFlat
+public import CoherentModules.RingTheory.Flat.FiniteWindows
 public import CoherentModules.RingTheory.Flat.Localization
 public import CoherentModules.RingTheory.Flat.Pure
 public import CoherentModules.RingTheory.Flat.TensorProduct
@@ -99,7 +100,9 @@ scalar extension, the coherent-module category, universal
 coherence, Hom/tensor closure,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
-and direct sums. Finite projectivity descends under injective tensor units along
+and direct sums. Flatness and faithful flatness of ring maps can be tested on
+subring windows containing arbitrary finite subsets of the source and target.
+Finite projectivity descends under injective tensor units along
 central scalar extensions to possibly noncommutative semirings, without flatness
 of the scalar algebra. Flatness is invariant under compatible semilinear equivalences
 of modules over equivalent commutative semirings, with mono-flatness understood
