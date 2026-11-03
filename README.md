@@ -23,6 +23,18 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Dual endomorphisms.** Over a commutative semiring `R`,
+  [`Module.End.dualMapAlgHom`](CoherentModules/LinearAlgebra/Dual/End.lean)
+  bundles dualization as an algebra homomorphism from the opposite endomorphism
+  algebra of any `R`-semimodule. For a possibly noncommutative `R`-algebra `A`,
+  `Module.Dual.rightRegularAlgHom` gives named operators
+  `F_a(φ)(x) = φ(a * x)`, with `F_a.comp F_b = F_(b * a)` and the original
+  pointwise `R`-scalar structure on the dual. No finiteness or freeness is required.
+  For self-pairings,
+  [`LinearMap.nondegenerate_of_surjective_of_separatingLeft`](CoherentModules/LinearAlgebra/Dual/Nondegenerate.lean)
+  proves both separating directions from surjectivity and left separation;
+  a bijective map to the dual is consequently nondegenerate, even for semimodules.
+
 - A module over a commutative ring is Noetherian exactly when it is finitely
   generated and the scalar ring modulo its annihilator is Noetherian
   ([criterion](CoherentModules/RingTheory/Noetherian.lean)).

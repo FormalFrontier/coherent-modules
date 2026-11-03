@@ -5,6 +5,8 @@ Contributors: Anchor and other Formal Frontier AI agents
 -/
 module
 
+public import CoherentModules.LinearAlgebra.Dual.End
+public import CoherentModules.LinearAlgebra.Dual.Nondegenerate
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
 public import CoherentModules.LinearAlgebra.Matrix.Module
@@ -94,6 +96,9 @@ when the extension of the first factor is two-sided, and preserves all powers
 when the extended ideal is two-sided.
 Relative generation bounds persist along every power of a left ideal over a
 semiring; a globally nilpotent ideal cannot enlarge relative generation.
+Dualization is an algebra homomorphism from the opposite endomorphism algebra;
+composing with left multiplication gives named right-translation operators on the dual.
+A surjective self-pairing that separates the left slot is nondegenerate in both slots.
 For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
 and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
 for empty indices it remains surjective.
