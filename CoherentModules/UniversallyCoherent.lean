@@ -7,6 +7,7 @@ module
 
 public import CoherentModules.Basic
 public import CoherentModules.Localization
+public import Mathlib.Algebra.Algebra.Equiv
 public import Mathlib.Algebra.MvPolynomial.Equiv
 public import Mathlib.Algebra.MvPolynomial.Variables
 public import Mathlib.LinearAlgebra.TensorProduct.Pi
@@ -38,8 +39,8 @@ silently restricting the assertion to the universe containing `R`.
   rings implies universal coherence in any target universe.
 * `IsUniversallyCoherent.iff_forall_mvPolynomial`: the finite-polynomial characterization at the
   base-ring universe.
-* `IsUniversallyCoherent.changeTargetUniverse`: base-universe universal coherence implies
-  universal coherence in an arbitrary target universe.
+* `IsUniversallyCoherent.changeTargetUniverse`: universal coherence in a target universe at
+  least as large as the base-ring universe implies universal coherence in any target universe.
 * `IsUniversallyCoherent.mvPolynomial`: polynomial rings in an arbitrary type of variables
   over a base-universe universally coherent ring are universally coherent in any target universe.
 * `IsUniversallyCoherent.of_isLocalization`: arbitrary localizations of base-universe
@@ -53,6 +54,17 @@ finiteness. The kernel comparison reuses work of Jingting Wang and Nailin Guan; 
 finiteness reuses work of Kim Morrison and Johan Commelin.
 Localization closure reuses coherent-module localization and Mathlib's polynomial-localization
 instance.
+
+## References
+
+* Kazuhiro Fujiwara and Fumiharu Kato,
+  [*Foundations of Rigid Geometry I*](https://arxiv.org/abs/1308.4734v5),
+  arXiv:1308.4734v5 (2017-02-28), Chapter 0, §3.3, Definition 3.3.7 and its
+  following paragraph (printed p. 104): the definition and finitely
+  presented-algebra and localization closure of universal coherence.
+  The finite-polynomial criterion here is a derived reformulation. Arbitrary-variable
+  polynomial closure is a specialization of Exercise 0.3.3 (printed p. 105), not
+  a formalization of its general filtered-colimit assertion.
 -/
 
 @[expose] public section
@@ -62,8 +74,16 @@ universe u v w
 /-- A commutative ring is universally coherent (for target algebras in `Type v`) if every
 finitely presented commutative algebra in that universe is a coherent ring.
 
+At the base-ring target universe, this is the algebra-finite-presentation definition of
+Fujiwara and Kato, *Foundations of Rigid Geometry I*, arXiv:1308.4734v5, Chapter 0,
+Definition 3.3.7 (printed p. 104).
+
 The target-algebra universe is deliberately independent of the universe containing the base
-ring. Use `IsUniversallyCoherent.{u, v} R` when that universe is not inferred from an algebra. -/
+ring. Use `IsUniversallyCoherent.{u, v} R` when that universe is not inferred from an algebra.
+For the source's ordinary fixed-universe meaning, use a target universe containing the base,
+in particular `IsUniversallyCoherent.{u, u} R`. An unconstrained smaller target universe can
+make the condition weaker. `changeTargetUniverse` passes from a target universe at least as
+large as the base to every target universe; no smaller-target converse is asserted. -/
 class IsUniversallyCoherent (R : Type u) [CommRing R] : Prop where
   isCoherentRing (A : Type v) [CommRing A] [Algebra R A]
     [Algebra.FinitePresentation R A] : IsCoherentRing A
@@ -156,11 +176,26 @@ theorem iff_forall_mvPolynomial (R : Type u) [CommRing R] :
     exact IsUniversallyCoherent.isCoherentRing R (MvPolynomial (Fin n) R)
   · exact of_forall_mvPolynomial R
 
-/-- Universal coherence at the base-ring universe implies universal coherence at any
-independently chosen target universe. This theorem does not change the target algebra. -/
-theorem changeTargetUniverse (R : Type u) [CommRing R] [IsUniversallyCoherent.{u, u} R] :
-    IsUniversallyCoherent.{u, v} R :=
-  of_forall_mvPolynomial R ((iff_forall_mvPolynomial R).mp inferInstance)
+private theorem isCoherentRing_of_ulift.{liftExtra}
+    (R : Type u) (A : Type v) [CommRing R] [CommRing A] [Algebra R A]
+    [Algebra.FinitePresentation R A]
+    [IsUniversallyCoherent.{u, max v liftExtra} R] : IsCoherentRing A := by
+  let e : A ≃ₐ[R] ULift.{liftExtra} A := (ULift.algEquiv (R := R)).symm
+  let _ : Algebra.FinitePresentation R (ULift.{liftExtra} A) :=
+    Algebra.FinitePresentation.equiv e
+  let _ : IsCoherentRing (ULift.{liftExtra} A) :=
+    IsUniversallyCoherent.isCoherentRing R (ULift.{liftExtra} A)
+  exact isCoherentRing_of_ringEquiv e.symm.toRingEquiv
+
+/-- Universal coherence in a target universe at least as large as the base-ring universe
+implies universal coherence in any independently chosen target universe.
+This theorem does not change the target algebra or its given algebra structure. -/
+theorem changeTargetUniverse.{sourceExtra} (R : Type u) [CommRing R]
+    [IsUniversallyCoherent.{u, max u sourceExtra} R] :
+    IsUniversallyCoherent.{u, v} R := by
+  apply of_forall_mvPolynomial R
+  intro n
+  exact isCoherentRing_of_ulift.{u, u, sourceExtra} R (MvPolynomial (Fin n) R)
 
 /-- Polynomial rings in an arbitrary type of variables over a universally coherent
 commutative ring are universally coherent in any target-algebra universe.
