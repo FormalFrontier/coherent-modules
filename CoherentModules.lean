@@ -51,6 +51,7 @@ public import CoherentModules.FinitePresentation
 public import CoherentModules.FaithfullyFlatDescent
 public import CoherentModules.Hom
 public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
+public import CoherentModules.LinearAlgebra.TensorProduct.BaseChange
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteSurjectivity
 public import CoherentModules.LinearAlgebra.TensorProduct.Generation

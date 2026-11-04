@@ -899,6 +899,14 @@ or a claim to formalize an entire source.
 
 ## Supporting linear algebra
 
+- **Balanced base change.** For a commutative semiring tower `C → A → B`, set
+  `S = A ⊗[C] B`. The equivalence
+  [`Algebra.TensorProduct.cancelBaseChangeRight`](CoherentModules/LinearAlgebra/TensorProduct/BaseChange.lean)
+  identifies `B ⊗[A] S` with `B ⊗[C] B` over `S`, using the right-factor
+  action on the source and restriction along `(A → B) ⊗ id` on the target.
+  Composing with `commRight` gives `S ⊗[A] B ≃ₐ[S] B ⊗[C] B`. No flatness
+  or finiteness is required, and all three carrier universes are independent.
+
 - **Images of direct-sum summands.** Over a semiring, any linear equivalence
   `(⨁ i, A i) ≃ₗ[R] M` makes the ranges of its singleton-component maps an
   internal direct sum in `M`. The singleton inclusions and internality use the
