@@ -7,7 +7,8 @@ project:
     Coherent rings and modules, finite-presentation criteria, exact-sequence
     closure, localization and descent, coherent-module categories, universal
     coherence, Hom and tensor-product closure, finite square-zero kernels and
-    projection base change, finite-type ideal/module transfer, left Noetherianity
+    projection base change, the finite-dimensionality criterion for coherent
+    idealizations over fields, finite-type ideal/module transfer, left Noetherianity
     under scalar clearing, pointwise unimodular finite-generation ascent for
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
     Noetherian modules, finite-submodule adic cofinality, radical colons of
@@ -88,6 +89,26 @@ highlights:
       - declaration: "LinearEquiv.nonempty_of_prod_of_isFiniteLength"
         file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
 
+  - title: "Coherence of idealizations over fields"
+    statement: >-
+      For a field k and its given vector space V in independent universes,
+      the canonical trivial square-zero extension k ⋉ V is coherent if and
+      only if V is finitely generated over k, equivalently finite-dimensional.
+      The zero space is allowed; finite generation does not mean a finite
+      underlying set. More generally, for a possibly noncommutative ring R
+      and a bimodule M with its given commuting left and right actions,
+      left coherence of R ⋉ M implies finite generation of M on the left
+      whenever r ↦ r • v is injective for one vector v. The right action
+      need not be central. Sufficiency holds for a left coherent base and a
+      coefficient bimodule finitely presented on the left.
+    declarations:
+      - declaration: "TrivSqZeroExt.finite_of_isCoherentRing_of_injective_smul"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean"
+      - declaration: "TrivSqZeroExt.isCoherentRing_iff_finite"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean"
+      - declaration: "TrivSqZeroExt.isCoherentRing"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean"
+
 sources:
   - title: "Coherent rings, coherent modules and finite presentation"
     type: "folklore"
@@ -164,7 +185,14 @@ status:
     argument and coherent second argument. Square-zero kernel and projection
     base-change results hold over commutative semirings and additive commutative
     modules; kernel finiteness requires a finite module, while base change does
-    not. Ideal/module predicate transfer is over finite-type algebras of a
+    not. For a field and its given vector space, the canonical idealization is
+    coherent exactly when the vector space is finitely generated, including the
+    zero space and with independent scalar and vector universes. For a ring
+    and its given compatible bimodule, coherence of the extension implies left
+    finite generation when scalar multiplication on one vector is injective;
+    no centrality of the right action is assumed. The sufficient condition is
+    left coherence of the base and left finite presentation of the coefficients.
+    Ideal/module predicate transfer is over finite-type algebras of a
     commutative ring, assuming isomorphism invariance and descent along every
     compatible surjective square-zero algebra map. The base universe is independent
     of the common algebra/module universe. Semilinear image bounds hold over
