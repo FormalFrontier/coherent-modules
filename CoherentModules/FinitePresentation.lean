@@ -17,7 +17,10 @@ public import Mathlib.RingTheory.Finiteness.Cardinality
 # Finite presentation and coherence
 
 This file constructs finite-free exact data for finitely presented semimodules
-over semirings. Over rings, finite presentation is transitive along scalar towers
+over semirings. Along a surjective unit-reflecting semiring homomorphism, it
+characterizes finite presentation of the regular target with restricted scalars
+by finite generation of the zero kernel. Over rings, finite presentation is
+transitive along scalar towers
 and descends from the base ring when the scalar ring is module-finite, for additive
 commutative monoids with their given compatible actions. A finitely presented
 module over a scalar ring that is coherent over the base ring is coherent for
@@ -459,3 +462,100 @@ theorem isCoherent_iff_finitePresentation
 end Ring
 
 end Module
+
+/-- For a surjective unit-reflecting semiring homomorphism, finite presentation of the
+restriction of scalars on the regular target module is equivalent to finite generation of
+its zero kernel. Here finite presentation means a finite spanning subset whose own linear
+combination map has finitely generated zero kernel, not a congruence presentation. -/
+theorem RingHom.finitePresentation_compHom_iff_fg_ker
+    {R : Type u} {S : Type v} [rR : Semiring R] [rS : Semiring S]
+    (f : R →+* S) [IsLocalHom f] (hf : Function.Surjective f) :
+    @Module.FinitePresentation R S rR (inferInstance : AddCommMonoid S)
+        (Module.compHom S f) ↔
+      (@LinearMap.ker (R := R) (R₂ := R) (M := R) (M₂ := S)
+        (τ₁₂ := RingHom.id R) rR rR
+        (inferInstance : AddCommMonoid R) (inferInstance : AddCommMonoid S)
+        (inferInstance : Module R R) (Module.compHom S f)
+        (Module.compHom.toLinearMap f)).FG := by
+  classical
+  let : Module R S := Module.compHom S f
+  constructor
+  · intro h
+    let E := h.out
+    let s : Finset S := Classical.choose E
+    let hs := Classical.choose_spec E
+    let I := ↥s
+    let F := I →₀ R
+    let j : I → S := fun i => (i : S)
+    let L : F →ₗ[R] S := Finsupp.linearCombination R j
+    let a : I → R := fun i => Classical.choose (hf (i : S))
+    let V : F →ₗ[R] R := Finsupp.linearCombination R a
+    let fR : R →ₗ[R] S := Module.compHom.toLinearMap f
+    have hcomp : fR.comp V = L := by
+      calc
+        fR.comp V = Finsupp.linearCombination R (fR ∘ a) :=
+          (Finsupp.linearCombination_linear_comp R (v := a) fR).symm
+        _ = L := by
+          apply congrArg (Finsupp.linearCombination R)
+          funext i
+          exact Classical.choose_spec (hf (i : S))
+    have hL : Function.Surjective L := by
+      apply LinearMap.range_eq_top.mp
+      change LinearMap.range (Finsupp.linearCombination R ((↑) : s → S)) = ⊤
+      rw [← Finsupp.span_eq_range_linearCombination]
+      exact hs.1
+    let c : F := Classical.choose (hL (1 : S))
+    have hVc : f (V c) = 1 := by
+      calc
+        f (V c) = L c := DFunLike.congr_fun hcomp c
+        _ = 1 := Classical.choose_spec (hL (1 : S))
+    have h1 : IsUnit (f (V c)) := by
+      rw [hVc]
+      exact isUnit_one
+    let hU : IsUnit (V c) := IsUnit.of_map f (V c) h1
+    let u : Rˣ := IsUnit.unit hU
+    have hu : (u : R) = V c := IsUnit.unit_spec hU
+    -- Normalize the vector on the left, leaving the lifted linear map unchanged.
+    let d : F := (↑(u⁻¹) : R) • c
+    let T : R →ₗ[R] F := LinearMap.toSpanSingleton R F d
+    have hVd : V d = 1 := by
+      change V ((↑(u⁻¹) : R) • c) = 1
+      rw [map_smul, ← hu]
+      exact u.inv_mul
+    have hVT : V.comp T = LinearMap.id := by
+      apply LinearMap.ext
+      intro r
+      change V (r • d) = r
+      rw [map_smul, hVd]
+      exact mul_one r
+    have hker : (LinearMap.ker L).map V = LinearMap.ker fR := by
+      ext r
+      constructor
+      · intro hr
+        obtain ⟨x, hx, rfl⟩ := Submodule.mem_map.mp hr
+        change fR (V x) = 0
+        calc
+          fR (V x) = L x := DFunLike.congr_fun hcomp x
+          _ = 0 := hx
+      · intro hr
+        refine Submodule.mem_map.mpr ⟨T r, ?_, ?_⟩
+        · change L (T r) = 0
+          calc
+            L (T r) = fR (V (T r)) := (DFunLike.congr_fun hcomp (T r)).symm
+            _ = fR r := congrArg fR (DFunLike.congr_fun hVT r)
+            _ = 0 := hr
+        · exact DFunLike.congr_fun hVT r
+    let t : Finset F := Classical.choose hs.2
+    let k : Finset R := Finset.image (fun x : F => V x) t
+    have ht : Submodule.span R (t : Set F) = LinearMap.ker L :=
+      Classical.choose_spec hs.2
+    refine ⟨k, ?_⟩
+    calc
+      Submodule.span R (k : Set R) = (Submodule.span R (t : Set F)).map V := by
+        dsimp only [k]
+        rw [Finset.coe_image, Submodule.map_span]
+      _ = (LinearMap.ker L).map V := by rw [ht]
+      _ = LinearMap.ker fR := hker
+  · intro hk
+    exact Module.FinitePresentation.of_free_of_surjective
+      (Module.compHom.toLinearMap f) hf hk
