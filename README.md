@@ -701,6 +701,14 @@ Authors: Formal Frontier Agents
   coherence nor Noetherianity of an ambient scalar ring.
   [`CoherentModuleCat`](CoherentModules/ModuleCat.lean) is a transparent full
   subcategory with abelian structure obtained through generic category constructions.
+- **Coherent right duals.** For a possibly noncommutative `Ring R` and a finitely
+  presented left `R`-module `M` with its given `AddCommMonoid` and module structure,
+  [`Module.FinitePresentation.isCoherent_dual`](CoherentModules/Hom.lean) gives
+  `Module.IsCoherent Rᵐᵒᵖ (Module.Dual R M)` assuming only right coherence
+  `[IsCoherentRing Rᵐᵒᵖ]` of the ring. The dual uses the canonical right action
+  `(q • f) x = f x * MulOpposite.unop q` for `q : Rᵐᵒᵖ`, induced by right
+  multiplication on the codomain `R`. The ring and module universes are independent;
+  neither left coherence nor a supplied additive group structure on `M` is required.
 - **Finite-module tensor zero detection.** For an arbitrary additive commutative
   `R`-module `P` over a `CommRing R`,
   [`Module.forall_maximal_smul_top_ne_top_iff_forall_finite_tensorProduct`](CoherentModules/LinearAlgebra/TensorProduct/FiniteDetection.lean)
@@ -1103,6 +1111,15 @@ faithful-flatness criterion, import `CoherentModules.RingTheory.Flat.TensorProdu
 the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.lean)
 uses nonfinite free abelian groups in independent universes and an empty-index
 boundary.
+
+For the dual of a finitely presented left module, import `CoherentModules.Hom`
+and apply `Module.FinitePresentation.isCoherent_dual (R := R) (M := M)`.
+The ring-coherence instance is `[IsCoherentRing Rᵐᵒᵖ]`. To use the resulting
+right-module coherence in subsequent typeclass arguments, write
+```lean
+let _ : Module.IsCoherent Rᵐᵒᵖ (Module.Dual R M) :=
+  Module.FinitePresentation.isCoherent_dual
+```
 
 For homology of a three-term complex over `[Ring R]`, import
 `CoherentModules.ModuleCat` and apply

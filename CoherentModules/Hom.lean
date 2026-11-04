@@ -5,6 +5,8 @@ Contributors: Formal Frontier AI agents
 -/
 module
 
+public import Mathlib.Algebra.Module.Equiv.Opposite
+public import Mathlib.LinearAlgebra.Dual.Defs
 public import CoherentModules.Basic
 public import CoherentModules.FinitePresentation
 public import CoherentModules.LinearAlgebra.Finsupp.LSum
@@ -17,12 +19,16 @@ This file proves that semilinear maps from a finitely presented module into a co
 form a coherent module for a commuting scalar action on the target. The source and target scalar
 semirings, the acting ring, and the two module carriers have independent universes. All module
 structures are the given ones; the Hom module has the pointwise action on the target.
+In particular, over a right coherent ring, the dual of a finitely presented left module is
+coherent as a right module.
 
 ## Main declarations
 
 * `Module.IsCoherent.semilinearMap`: coherence of a semilinear-map module over an arbitrary
   scalar homomorphism, with a finitely presented group source and a coherent group target.
 * `Module.IsCoherent.linearMap`: the same-base commutative-ring specialization.
+* `Module.FinitePresentation.isCoherent_dual`: coherence of the right dual of a finitely
+  presented left module over a right coherent ring.
 
 ## Implementation notes
 
@@ -166,3 +172,24 @@ theorem linearMap [Module.FinitePresentation R M] [Module.IsCoherent R N] :
   Module.IsCoherent.semilinearMap (R₂ := R) (S := R) (M := M) (N := N) (RingHom.id R)
 
 end Module.IsCoherent
+
+universe vM
+
+namespace Module.FinitePresentation
+
+/-- Over a right coherent ring, the dual of a finitely presented left module is coherent
+as a right module.
+
+The canonical right action is `(q • f) x = f x * MulOpposite.unop q` for `q : Rᵐᵒᵖ`.
+No left coherence assumption is needed. -/
+theorem isCoherent_dual
+    {R : Type uR} [Ring R] {M : Type vM} [AddCommMonoid M] [Module R M]
+    [Module.FinitePresentation R M] [IsCoherentRing Rᵐᵒᵖ] :
+    Module.IsCoherent Rᵐᵒᵖ (Module.Dual R M) := by
+  let _ : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
+  let _ : Module.IsCoherent Rᵐᵒᵖ R :=
+    Module.IsCoherent.of_equiv (MulOpposite.opLinearEquiv Rᵐᵒᵖ (M := R)).symm
+  exact Module.IsCoherent.semilinearMap (R₂ := R) (S := Rᵐᵒᵖ)
+    (M := M) (N := R) (RingHom.id R)
+
+end Module.FinitePresentation
