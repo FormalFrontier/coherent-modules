@@ -100,6 +100,73 @@ namespace Module
 
 section Semiring
 
+/-- A surjective image of a finite free semimodule whose zero kernel is finitely generated
+is finitely presented in Mathlib's sense: a finite subset spans the target and the
+linear-combination map on that subset has finitely generated zero kernel.
+
+Over a semiring this does not assert finite generation of a relation congruence.
+The finite-image basis construction follows Mathlib's
+`Module.finitePresentation_of_free_of_surjective`; the kernel is transported by a
+split map of semimodules, without subtraction. -/
+theorem FinitePresentation.of_free_of_surjective
+    {R : Type u} {P : Type v} {M : Type w}
+    [sR : Semiring R] [aP : AddCommMonoid P] [aM : AddCommMonoid M]
+    [muP : Module R P] [muM : Module R M]
+    [freeP : Module.Free R P] [finiteP : Module.Finite R P]
+    (f : P →ₗ[R] M) (hf : Function.Surjective f) (hk : (LinearMap.ker f).FG) :
+    Module.FinitePresentation R M := by
+  classical
+  let I : Type v := Module.Free.ChooseBasisIndex R P
+  let : Fintype I := Module.Free.ChooseBasisIndex.fintype R P
+  let b : Basis I R P := Module.Free.chooseBasis R P
+  let e : P ≃ₗ[R] (I →₀ R) := b.repr
+  let s : Finset M := (Set.finite_range (f ∘ b)).toFinset
+  let J : Type w := ↥s
+  let π : I → J := fun i ↦ ⟨f (b i), by simp [s]⟩
+  have hπ : Function.Surjective π := by
+    rintro ⟨x, hx⟩
+    obtain ⟨i, rfl⟩ : ∃ i, f (b i) = x := by simpa [s] using hx
+    exact ⟨i, rfl⟩
+  let σ : J → I := fun j ↦ Classical.choose (hπ j)
+  have hσ : ∀ j, π (σ j) = j := fun j ↦ Classical.choose_spec (hπ j)
+  have hπval : Subtype.val ∘ π = f ∘ b := rfl
+  have hπσ : π ∘ σ = id := funext hσ
+  have hσval : f ∘ b ∘ σ = Subtype.val := by
+    funext j
+    exact congrArg Subtype.val (hσ j)
+  let L : (J →₀ R) →ₗ[R] M := Finsupp.linearCombination R ((↑) : J → M)
+  let T : P →ₗ[R] (J →₀ R) := Finsupp.lmapDomain R R π ∘ₗ b.repr.toLinearMap
+  let U : (J →₀ R) → P := fun c ↦ b.repr.symm (c.mapDomain σ)
+  let k : Finset P := Classical.choose hk
+  have hkspan : Submodule.span R (k : Set P) = LinearMap.ker f :=
+    Classical.choose_spec hk
+  let t : Finset (J →₀ R) := k.image T
+  have hLT (p : P) : L (T p) = f p := by
+    simp [L, T, hπval, ← Finsupp.apply_linearCombination]
+  have hTU (c : J →₀ R) : T (U c) = c := by
+    change (e (e.symm (c.mapDomain σ))).mapDomain π = c
+    rw [e.apply_symm_apply, ← Finsupp.mapDomain_comp, hπσ, Finsupp.mapDomain_id]
+  have hfU (c : J →₀ R) : f (U c) = L c := by
+    simp [U, L, Finsupp.apply_linearCombination, hσval]
+  have hker : (LinearMap.ker f).map T = LinearMap.ker L := by
+    ext c
+    simp only [Submodule.mem_map, LinearMap.mem_ker]
+    constructor
+    · rintro ⟨p, hp, rfl⟩
+      rw [hLT, hp]
+    · intro hc
+      exact ⟨U c, by rw [hfU, hc], hTU c⟩
+  have hs : Submodule.span R (s : Set M) = ⊤ := by
+    simpa [s, Set.range_comp, LinearMap.range_eq_top] using hf
+  have ht : Submodule.span R (t : Set (J →₀ R)) = LinearMap.ker L := by
+    calc
+      Submodule.span R (t : Set (J →₀ R)) =
+          (Submodule.span R (k : Set P)).map T := by
+        simp only [t, Finset.coe_image, Submodule.span_image]
+      _ = (LinearMap.ker f).map T := by rw [hkspan]
+      _ = LinearMap.ker L := hker
+  exact Module.FinitePresentation.mk ⟨s, hs, ⟨t, ht⟩⟩
+
 variable (R : Type u) (M : Type v) [Semiring R] [AddCommMonoid M] [Module R M]
 
 /-- A finitely presented semimodule admits a surjective map from a finite free

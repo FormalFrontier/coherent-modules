@@ -1,6 +1,6 @@
 name = "coherent-modules"
 version = "0.1.0"
-defaultTargets = ["CoherentModules", "CoherentModulesTest", "CoherentModulesExamples.DirectSum"]
+defaultTargets = ["CoherentModules", "CoherentModulesTest", "CoherentModulesExamples.DirectSum", "CoherentModulesExamples.FinitePresentation"]
 lintDriver = "batteries/runLinter"
 
 [[require]]
