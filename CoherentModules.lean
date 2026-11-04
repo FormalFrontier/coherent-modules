@@ -50,6 +50,7 @@ public import CoherentModules.Basic
 public import CoherentModules.FinitePresentation
 public import CoherentModules.FaithfullyFlatDescent
 public import CoherentModules.Hom
+public import CoherentModules.Retraction
 public import CoherentModules.LinearAlgebra.TensorProduct.Annihilator
 public import CoherentModules.LinearAlgebra.TensorProduct.BaseChange
 public import CoherentModules.LinearAlgebra.TensorProduct.FiniteDetection

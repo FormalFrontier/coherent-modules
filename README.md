@@ -508,6 +508,16 @@ Authors: Formal Frontier Agents
   commutative group `N` from `R` to `S` when `S` is finite over `R` and the given
   module structures form scalar towers `R → S → S` and `R → S → N`.
   No coherence of `S` over `R` is required, and the three universes are independent.
+- **Coherence along semilinear retractions.** For arbitrary rings `R`, `S` and
+  additive commutative monoids `N`, `M` with their given `R`- and `S`-module
+  structures, let `σ : R →+* S`, `τ : S →+* R`, `f : N →ₛₗ[σ] M` and
+  `g : M →ₛₗ[τ] N` satisfy `τ ∘ σ = id` and `g ∘ f = id`. Then
+  [`Module.IsCoherent.of_semilinear_retract`](CoherentModules/Retraction.lean)
+  descends coherence of `M` over `S` to coherence of `N` over `R`. The four
+  carrier universes are independent; no additional scalar action, finiteness,
+  flatness, Noetherianity, faithfulness or nontriviality assumption is required.
+  The regular-module corollary `IsCoherentRing.of_retract` says that a ring
+  retract of a coherent ring is coherent, including noncommutative rings.
 - **Coherent dependent direct sums.** For an arbitrary index type, a possibly
   noncommutative ring `R`, and additive commutative monoids `M i` with their
   given `R`-module structures,
