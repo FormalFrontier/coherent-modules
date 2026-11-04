@@ -385,6 +385,50 @@ section Fiberwise
 
 variable {J : Type uJ} [Fintype J] [DecidableEq J]
 
+/-- An additive map intertwines the sums of fine canonical kernel projectors over each
+fibre with the corresponding target kernel projectors if and only if it sends each fine
+kernel into the target kernel at its image label. The label map is arbitrary, and empty
+fibres contribute zero. No scalar-linearity or intertwining of the annihilating operators
+is required. -/
+theorem semiconj_sum_kerProjector_iff_mapsTo_ker
+    (υ : B →+* Module.End T N) (b : J → B)
+    (hcop' : Pairwise fun j k ↦ IsCoprime (b j) (b k))
+    (hAnn' : υ (∏ j, b j) = 0)
+    (q : ι → J) (h : M →+ N) :
+    (∀ j, Function.Semiconj h
+      (∑ i with q i = j, τ.kerProjector a hcop hAnn i : Module.End R M)
+      (υ.kerProjector b hcop' hAnn' j)) ↔
+      ∀ i, Set.MapsTo h (LinearMap.ker (τ (a i)) : Set M)
+        (LinearMap.ker (υ (b (q i))) : Set N) := by
+  classical
+  let F : Module.End R M →+* AddMonoid.End M :=
+    Module.toAddMonoidEnd (Module.End R M) M
+  let G : Module.End T N →+* AddMonoid.End N :=
+    Module.toAddMonoidEnd (Module.End T N) N
+  have hP := (τ.kerProjector_completeOrthogonalIdempotents a hcop hAnn).map F
+  have hQ := (υ.kerProjector_completeOrthogonalIdempotents b hcop' hAnn').map G
+  have hPrange (i : ι) : Set.range (F (τ.kerProjector a hcop hAnn i)) =
+      (LinearMap.ker (τ (a i)) : Set M) :=
+    congrArg (fun S : Submodule R M ↦ (S : Set M))
+      (τ.range_kerProjector a hcop hAnn i)
+  have hQrange (j : J) : Set.range (G (υ.kerProjector b hcop' hAnn' j)) =
+      (LinearMap.ker (υ (b j)) : Set N) :=
+    congrArg (fun S : Submodule T N ↦ (S : Set N))
+      (υ.range_kerProjector b hcop' hAnn' j)
+  have hsum_apply (j : J) (x : M) :
+      ∑ i with q i = j, (F (τ.kerProjector a hcop hAnn i)) x =
+        (∑ i with q i = j, τ.kerProjector a hcop hAnn i : Module.End R M) x := by
+    calc
+      _ = (F (∑ i with q i = j, τ.kerProjector a hcop hAnn i)) x := by
+        rw [map_sum]
+        exact (AddMonoidHom.finsetSum_apply (fun i ↦ F (τ.kerProjector a hcop hAnn i))
+          (Finset.univ.filter fun i ↦ q i = j) x).symm
+      _ = _ := rfl
+  have he := hP.semiconj_sum_fiberwise_iff_mapsTo_range hQ.toOrthogonalIdempotents q h
+  simp only [Function.comp_apply, Function.Semiconj, Finset.sum_apply,
+    hsum_apply, hPrange, hQrange] at he
+  exact he
+
 /-- An additive map intertwining each product of fine annihilating factors over a fibre
 with the corresponding target annihilating operator intertwines the sum of the fine
 canonical kernel projectors over that fibre with the target kernel projector.

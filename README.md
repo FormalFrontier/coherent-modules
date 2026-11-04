@@ -88,6 +88,21 @@ Authors: Formal Frontier Agents
   [`OrthogonalIdempotents.semiconj_iff_mapsTo_range`](CoherentModules/RingTheory/Idempotents.lean)
   and [`linearEquivPiRange`](CoherentModules/LinearAlgebra/DirectSum/Idempotents.lean).
 
+- **Fibrewise additive intertwining.** For additive commutative monoids `M`, `N`,
+  let `P : I → AddMonoid.End M` have finite index set and sum to the identity, and
+  let `Q : J → AddMonoid.End N` be an orthogonal idempotent family, with
+  decidable equality on `J`. For any `q : I → J` and additive `h : M →+ N`,
+  sending `range (P i)` into `range (Q (q i))` for every `i` implies
+  `h ∘ (∑ i with q i = j, P i) = Q j ∘ h` for every `j`. This implication uses
+  no source orthogonality; it is an equivalence when `P` is a complete orthogonal
+  idempotent family.
+  The target label set may be infinite, and `Q` need not be complete; labels may
+  be merged or omitted. An unused `Q j` need only kill `h(M)`, not vanish on all
+  of `N`. No subtraction, cancellation or scalar compatibility is required, and
+  the two monoid and two index universes are independent. See
+  [`OrthogonalIdempotents.semiconj_sum_fiberwise_of_mapsTo_range`](CoherentModules/RingTheory/Idempotents.lean)
+  and [`CompleteOrthogonalIdempotents.semiconj_sum_fiberwise_iff_mapsTo_range`](CoherentModules/RingTheory/Idempotents.lean).
+
 - **Finite coarsening of complete orthogonal idempotents.** Over any possibly
   noncommutative `Semiring A`, summing a finite complete orthogonal family over
   the fibres of an arbitrary map `q : I → J` gives a complete orthogonal family
@@ -344,6 +359,15 @@ Authors: Formal Frontier Agents
   coefficient and scalar semirings may differ; neither scalar-linearity nor
   compatibility with other represented elements is required. Same-label
   naturality is the specialization `q = id`.
+  The exact projector criterion is
+  [`RingHom.semiconj_sum_kerProjector_iff_mapsTo_ker`](CoherentModules/Algebra/Module/Coprime/Kernel.lean):
+  `h` intertwines all fibre-sums of fine projectors with the target projectors if
+  and only if it maps `ker (τ (a i))` into `ker (υ (b (q i)))` for every `i`.
+  This criterion requires no scalar-linearity or intertwining of represented
+  elements; its only annihilation premises are that both represented products
+  vanish. The eight coefficient, scalar, module and index universes are
+  independent. Both label sets are finite here because the canonical families
+  are finite.
 - **Finite generation under pointwise unimodular clearing.** For arbitrary,
   possibly noncommutative semirings `R`, `S` and `f : M →ₛₗ[φ] N` between
   additive commutative left semimodules,
