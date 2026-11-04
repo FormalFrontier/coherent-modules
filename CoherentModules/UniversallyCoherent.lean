@@ -138,12 +138,8 @@ universe uA uB
 /-- Ring equivalences preserve coherence across independently sized carriers. -/
 private theorem isCoherentRing_of_ringEquiv
     {A : Type uA} {B : Type uB} [Ring A] [Ring B]
-    [IsCoherentRing A] (e : A ≃+* B) : IsCoherentRing B := by
-  let _ : Module A B := Module.compHom B e.toRingHom
-  let eAB : A ≃ₗ[A] B := Module.compHom.toLinearEquiv e
-  let _ : Module.IsCoherent A B := Module.IsCoherent.of_equiv eAB
-  let _ : IsScalarTower A B B := SMul.comp.isScalarTower (e : A → B)
-  exact ⟨Module.IsCoherent.of_restrictScalars A (S := B) (N := B)⟩
+    [IsCoherentRing A] (e : A ≃+* B) : IsCoherentRing B :=
+  IsCoherentRing.of_ringEquiv e
 
 /-- Coherence of every finite-variable polynomial ring implies universal coherence for
 finitely presented algebras in any independently chosen target universe.

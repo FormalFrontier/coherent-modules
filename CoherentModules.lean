@@ -35,6 +35,8 @@ public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModules.LinearAlgebra.Matrix.Submodule
 public import CoherentModules.LinearAlgebra.Projective.Pure
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
+public import CoherentModules.LinearAlgebra.Prod
+public import CoherentModules.LinearAlgebra.ULift
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
 public import CoherentModules.Algebra.Category.ModuleCat.ChangeOfRings
@@ -89,6 +91,7 @@ public import CoherentModules.RingTheory.Nakayama
 public import CoherentModules.RingTheory.Noetherian
 public import CoherentModules.RingTheory.Noetherian.Retraction
 public import CoherentModules.RingTheory.Pi
+public import CoherentModules.RingTheory.Prod
 public import CoherentModules.RingTheory.Quotient
 public import CoherentModules.RingTheory.TwoSidedIdeal.Atoms
 public import CoherentModules.TensorProduct
@@ -99,6 +102,7 @@ public import CoherentModules.UniversallyCoherent
 
 Public entry point for coherent modules, finite presentation, localization,
 coherence of finite dependent products over their product coefficient rings,
+canonical binary products with independent coefficient and module universes,
 coherence of annihilator quotients under two commuting scalar actions,
 finite idealization, left Noetherianity of trivial square-zero extensions,
 ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary

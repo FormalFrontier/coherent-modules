@@ -26,7 +26,11 @@ of its finitely generated submodules are finitely presented.
   finite-rank free modules.
 * `Module.IsCoherent.of_exact`: coherence of the middle term of a short exact sequence.
 * `Module.IsCoherent.of_restrictScalars`: coherence over a module-finite scalar extension.
+* `Module.IsCoherent.of_bijective`: coherence along a bijective semilinear map over a surjective
+  coefficient homomorphism.
+* `Module.IsCoherent.semilinearEquiv_iff`: coherence under semilinear equivalence.
 * `IsCoherentRing`: coherent rings.
+* `IsCoherentRing.of_ringEquiv`: coherence along a ring equivalence.
 -/
 
 @[expose] public section
@@ -219,8 +223,7 @@ theorem IsCoherent.cokernel {N : Type w} [AddCommGroup N] [Module R N]
     Module.IsCoherent R (N ⧸ LinearMap.range f) :=
   IsCoherent.quotient _ (Submodule.fg_range f)
 
-/-- Coherence is preserved by linear equivalence. -/
-theorem IsCoherent.of_equiv {N : Type w} [AddCommGroup N] [Module R N]
+private theorem IsCoherent.of_linearEquiv {N : Type w} [AddCommGroup N] [Module R N]
     [Module.IsCoherent R M] (e : M ≃ₗ[R] N) : Module.IsCoherent R N where
   finite := Module.Finite.equiv e
   finitePresentation_submodule P hP := by
@@ -231,6 +234,11 @@ theorem IsCoherent.of_equiv {N : Type w} [AddCommGroup N] [Module R N]
     let _ : Module.FinitePresentation R (LinearMap.range f) :=
       IsCoherent.finitePresentation_submodule _ hrange
     exact Module.FinitePresentation.of_equiv (LinearEquiv.ofInjective f hf).symm
+
+/-- Coherence is preserved by linear equivalence. -/
+theorem IsCoherent.of_equiv {N : Type w} [AddCommGroup N] [Module R N]
+    [Module.IsCoherent R M] (e : M ≃ₗ[R] N) : Module.IsCoherent R N :=
+  IsCoherent.of_linearEquiv e
 
 /-- Coherence is invariant under linear equivalence. -/
 theorem IsCoherent.equiv_iff {N : Type w} [AddCommGroup N] [Module R N]
@@ -328,6 +336,36 @@ theorem IsCoherent.of_restrictScalars (R : Type u) {S : Type v} {N : Type w}
   let _ : Module.Finite S KS := Module.Finite.of_restrictScalars_finite R S KS
   exact Module.Finite.iff_fg.mp inferInstance
 
+/-- Coherence descends along a bijective semilinear map over a surjective ring homomorphism. -/
+theorem IsCoherent.of_bijective
+    {R : Type u} {S : Type v} {M : Type w} {N : Type x}
+    [Ring R] [Ring S] [AddCommMonoid M] [AddCommMonoid N]
+    [Module R M] [Module S N] {σ : R →+* S} [RingHomSurjective σ]
+    [Module.IsCoherent R M] (f : M →ₛₗ[σ] N) (hf : Function.Bijective f) :
+    Module.IsCoherent S N := by
+  let : AddCommGroup M := Module.addCommMonoidToAddCommGroup R (M := M)
+  let : AddCommGroup N := Module.addCommMonoidToAddCommGroup S (M := N)
+  let _ : Module R N := Module.compHom N σ
+  let _ : Module R S := Module.compHom S σ
+  let e : M ≃ₗ[R] N :=
+    (AddEquiv.ofBijective f.toAddHom hf).toLinearEquiv fun r m ↦ f.map_smulₛₗ r m
+  let _ : Module.IsCoherent R N := IsCoherent.of_linearEquiv e
+  let _ : Module.Finite R S :=
+    Module.Finite.of_surjective (Module.compHom.toLinearMap σ) σ.surjective
+  let _ : IsScalarTower R S S := SMul.comp.isScalarTower (σ : R → S)
+  let _ : IsScalarTower R S N := SMul.comp.isScalarTower (σ : R → S)
+  exact IsCoherent.of_restrictScalars R (S := S) (N := N)
+
+/-- Coherence is invariant under semilinear equivalence. -/
+theorem IsCoherent.semilinearEquiv_iff
+    {R : Type u} {S : Type v} {M : Type w} {N : Type x}
+    [Ring R] [Ring S] [AddCommMonoid M] [AddCommMonoid N]
+    [Module R M] [Module S N] {σ : R →+* S} {σ' : S →+* R}
+    [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] (e : M ≃ₛₗ[σ] N) :
+    Module.IsCoherent R M ↔ Module.IsCoherent S N :=
+  ⟨fun _ ↦ IsCoherent.of_bijective e.toLinearMap e.bijective,
+    fun _ ↦ IsCoherent.of_bijective e.symm.toLinearMap e.symm.bijective⟩
+
 end Module
 
 section CoherentRing
@@ -374,3 +412,10 @@ theorem Module.finitePresentation_ker_of_free
   exact Module.IsCoherent.finitePresentation_ker f
 
 end CoherentRing
+
+/-- Ring equivalences preserve coherence across independently sized carriers. -/
+theorem IsCoherentRing.of_ringEquiv
+    {R : Type u} {S : Type v} [Ring R] [Ring S]
+    [IsCoherentRing R] (e : R ≃+* S) : IsCoherentRing S := by
+  let _ : RingHomSurjective e.toRingHom := ⟨e.surjective⟩
+  exact ⟨Module.IsCoherent.of_bijective e.toRingHom.toSemilinearMap e.bijective⟩
