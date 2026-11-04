@@ -25,7 +25,9 @@ public import CoherentModules.LinearAlgebra.Finsupp.LSum
 public import CoherentModules.LinearAlgebra.FinsuppPi
 public import CoherentModules.LinearAlgebra.KrullSchmidt
 public import CoherentModules.LinearAlgebra.LinearMap.Exact
+public import CoherentModules.LinearAlgebra.Matrix.CoherentRing
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
+public import CoherentModules.LinearAlgebra.Matrix.Entrywise
 public import CoherentModules.LinearAlgebra.Matrix.Ideal
 public import CoherentModules.LinearAlgebra.Matrix.Module
 public import CoherentModules.LinearAlgebra.Matrix.Projective
@@ -136,6 +138,8 @@ composing with left multiplication gives named right-translation operators on th
 Coextension along the opposite algebra, restricted to the base, is linearly equivalent
 to the original dual and intertwines its translation with these named operators.
 A surjective self-pairing that separates the left slot is nondegenerate in both slots.
+Finite square matrix rings preserve left ring coherence, including empty indices;
+for nonempty finite indices they also reflect it.
 For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
 and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
 for empty indices it remains surjective.

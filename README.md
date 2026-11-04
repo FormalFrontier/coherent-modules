@@ -184,6 +184,21 @@ Authors: Formal Frontier Agents
   equivalent to the corresponding conditions on this row module, not to
   unrestricted conditions on the coefficient semiring.
 
+- **Coherence of finite matrix rings.** For an arbitrary, possibly noncommutative
+  or zero `Ring R`, a finite type `I` with its given decidable equality, and the
+  canonical regular left modules,
+  [`Matrix.instIsCoherentRing`](CoherentModules/LinearAlgebra/Matrix/CoherentRing.lean)
+  gives coherence of `Matrix I I R` from coherence of `R`, including empty `I`.
+  For nonempty `I`, `IsCoherentRing.of_matrix` reflects coherence and
+  `Matrix.isCoherentRing_iff` gives the equivalence. The ring and index universes
+  are independent. The supporting
+  [`Matrix.entrywiseLinearMap`](CoherentModules/LinearAlgebra/Matrix/Entrywise.lean)
+  applies a coefficient-linear map `(κ → R) →ₗ[R] R` entrywise to a family of
+  matrices, linearly for regular left matrix multiplication, over any semiring
+  and arbitrary family index `κ`. Its scalar-restricted kernel has a split
+  entry projection onto the coefficient kernel. Reflection needs nonempty `I`:
+  the empty matrix ring has one element and is coherent for every `R`.
+
 - **Left-regular elements in left Artinian rings.** For an arbitrary unital
   `Ring A` with `[IsArtinianRing A]`,
   [`IsLeftRegular.isUnit_of_isArtinianRing`](CoherentModules/RingTheory/Artinian/Regular.lean)
@@ -1151,6 +1166,13 @@ API. The finite-generation comparison uses Mathlib's finite generating
 families and finitely supported linear combinations. These product results
 retain the given coordinate module structures over possibly noncommutative
 coefficient rings and semirings.
+
+Finite matrix-ring coherence uses the finite-free kernel criterion and coherence
+ascent along scalar towers. The entrywise lift and its split kernel projection reuse
+Mathlib's coordinate linear maps, single-entry matrices and scalar restriction;
+its pointwise comparison with `LinearMap.mapMatrix` identifies the underlying
+coefficient-linear construction. Finite generation under scalar restriction gives
+the reflection argument without assuming coherence of the coefficient ring in advance.
 
 Finite-presentation transitivity along scalar towers generalizes Andrew Yang's
 Mathlib `Module.FinitePresentation.trans`, with its commutative-algebra case
