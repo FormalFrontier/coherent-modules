@@ -25,6 +25,8 @@ of its finitely generated submodules are finitely presented.
 * `Module.IsCoherent.iff_finite_and_fg_ker`: characterization by kernels of maps from
   finite-rank free modules.
 * `Module.IsCoherent.of_exact`: coherence of the middle term of a short exact sequence.
+* `Module.IsCoherent.quotient_ker_range`: coherence of cycles modulo boundaries in a three-term
+  complex.
 * `Module.IsCoherent.of_restrictScalars`: coherence over a module-finite scalar extension.
 * `Module.IsCoherent.of_bijective`: coherence along a bijective semilinear map over a surjective
   coefficient homomorphism.
@@ -35,7 +37,7 @@ of its finitely generated submodules are finitely presented.
 
 @[expose] public section
 
-universe u v w x
+universe u v w x v₀ v₁ v₂
 
 namespace Module
 
@@ -305,6 +307,27 @@ instance IsCoherent.pi :
   · exact fun ih ↦ IsCoherent.of_equiv (LinearEquiv.piOptionEquivProd R).symm
 
 end Ring
+
+/-- For a three-term complex with finite left term and coherent middle and right terms, the
+quotient of cycles by boundaries is coherent.
+
+This combines coherent-kernel and coherent-quotient closure with Mathlib's finite-image theorem. -/
+theorem IsCoherent.quotient_ker_range
+    {R : Type u} [Ring R]
+    {M₀ : Type v₀} [AddCommMonoid M₀] [Module R M₀]
+    {M₁ : Type v₁} [AddCommGroup M₁] [Module R M₁]
+    {M₂ : Type v₂} [AddCommMonoid M₂] [Module R M₂]
+    [Module.Finite R M₀]
+    [Module.IsCoherent R M₁] [Module.IsCoherent R M₂]
+    (f : M₀ →ₗ[R] M₁) (g : M₁ →ₗ[R] M₂)
+    (h : ∀ x, g (f x) = 0) :
+    Module.IsCoherent R
+      (LinearMap.ker g ⧸ LinearMap.range
+        (LinearMap.codRestrict (LinearMap.ker g) f
+          (fun x ↦ LinearMap.mem_ker.mpr (h x)))) := by
+  let : AddCommGroup M₂ := Module.addCommMonoidToAddCommGroup R (M := M₂)
+  let _ : Module.IsCoherent R (LinearMap.ker g) := IsCoherent.ker g
+  exact IsCoherent.quotient _ (Submodule.fg_range _)
 
 /-- If `S` is finite over `R`, coherence over `R` implies coherence over `S` for
 compatible given module structures. -/

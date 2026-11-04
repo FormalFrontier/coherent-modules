@@ -7,6 +7,7 @@ module
 
 public import CoherentModules.Basic
 public import Mathlib.Algebra.Category.ModuleCat.Biproducts
+public import Mathlib.Algebra.Homology.ShortComplex.ModuleCat
 public import Mathlib.CategoryTheory.Abelian.Subcategory
 
 /-!
@@ -18,10 +19,19 @@ kernels, cokernels, and finite products.  Consequently, mathlib's generic
 full-subcategory construction gives the category of coherent modules an
 `Abelian` instance.
 
+The homology of a short complex is coherent when its left term is finite and its
+middle and right terms are coherent.
+
 ## Main declarations
 
 * `ModuleCat.isCoherent`: the coherent-module object property.
 * `CoherentModuleCat`: the full subcategory of coherent modules.
+* `CategoryTheory.ShortComplex.isCoherent_homology`: coherence of homology.
+
+## References
+
+The homology result uses the kernel/image quotient closure in `CoherentModules.Basic`
+and Mathlib's short-complex homology comparison for modules, formalized by Joël Riou.
 -/
 
 @[expose] public section
@@ -108,3 +118,19 @@ Its `Abelian` instance is supplied by
 `Mathlib.CategoryTheory.Abelian.Subcategory` from the closure instances above. -/
 abbrev CoherentModuleCat (R : Type u) [Ring R] :=
   (ModuleCat.isCoherent.{u, v} R).FullSubcategory
+
+namespace CategoryTheory.ShortComplex
+
+/-- The homology of a short complex with finite left term and coherent middle and right
+terms is coherent. This follows from kernel/image quotient closure via Mathlib's linear
+homology comparison. -/
+theorem isCoherent_homology
+    {R : Type u} [Ring R] (S : ShortComplex (ModuleCat.{v} R))
+    [Module.Finite R S.X₁]
+    [Module.IsCoherent R S.X₂] [Module.IsCoherent R S.X₃] :
+    Module.IsCoherent R S.homology := by
+  let _ : Module.IsCoherent R S.moduleCatLeftHomologyData.H :=
+    Module.IsCoherent.quotient_ker_range S.f.hom S.g.hom S.moduleCat_zero_apply
+  exact Module.IsCoherent.of_equiv S.moduleCatHomologyIso.toLinearEquiv.symm
+
+end CategoryTheory.ShortComplex

@@ -558,6 +558,15 @@ Authors: Formal Frontier Agents
   commutative group `N` from `R` to `S` when `S` is finite over `R` and the given
   module structures form scalar towers `R → S → S` and `R → S → N`.
   No coherence of `S` over `R` is required, and the three universes are independent.
+- **Coherent homology.** Over any possibly noncommutative `Ring R`, a three-term
+  complex `S : CategoryTheory.ShortComplex (ModuleCat.{v} R)` with finite left
+  term `S.X₁` and coherent middle and right terms `S.X₂`, `S.X₃` has coherent
+  homology, by
+  [`CategoryTheory.ShortComplex.isCoherent_homology`](CoherentModules/ModuleCat.lean).
+  The conclusion concerns the chosen categorical `S.homology` with its given
+  `R`-action. Neither the left term nor `R` is assumed coherent, and no exactness
+  hypothesis is imposed. The ring universe is independent of the common object
+  universe `v`.
 - **Coherence along semilinear retractions.** For arbitrary rings `R`, `S` and
   additive commutative monoids `N`, `M` with their given `R`- and `S`-module
   structures, let `σ : R →+* S`, `τ : S →+* R`, `f : N →ₛₗ[σ] M` and
@@ -1095,6 +1104,16 @@ the [tensor-product client](CoherentModulesTest/RingTheory/Flat/TensorProduct.le
 uses nonfinite free abelian groups in independent universes and an empty-index
 boundary.
 
+For homology of a three-term complex over `[Ring R]`, import
+`CoherentModules.ModuleCat` and apply
+`CategoryTheory.ShortComplex.isCoherent_homology S`, with finite generation of
+`S.X₁` and coherence of `S.X₂`, `S.X₃` supplied as instances. The underlying
+`Module.IsCoherent.quotient_ker_range` in `CoherentModules.Basic` gives the
+corresponding kernel/image quotient closure for maps composing to zero between
+independently sized modules, with finite left term and coherent middle/right
+terms. The middle carrier is an additive commutative group to form the quotient;
+the left/right carriers need only additive commutative monoids.
+
 For coherence of a dependent direct sum, import
 `CoherentModules.RingTheory.DirectSum`. Given coordinate coherence `hM` and
 `hActive : Set.Finite {i | ¬ Subsingleton (M i)}`, use
@@ -1214,6 +1233,10 @@ Mathlib's coordinate linear maps, single-entry matrices and scalar restriction;
 its pointwise comparison with `LinearMap.mapMatrix` identifies the underlying
 coefficient-linear construction. Finite generation under scalar restriction gives
 the reflection argument without assuming coherence of the coefficient ring in advance.
+
+Coherence of homology specializes this library's kernel/image quotient closure
+and uses Joël Riou's Mathlib short-complex homology comparison for modules.
+The comparison is linear for the original module actions.
 
 Finite-presentation transitivity along scalar towers generalizes Andrew Yang's
 Mathlib `Module.FinitePresentation.trans`, with its commutative-algebra case
