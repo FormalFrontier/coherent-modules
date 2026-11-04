@@ -320,12 +320,15 @@ Authors: Formal Frontier Agents
   partition used to compute them. Empty families, zero semirings and noncommutative
   scalar semirings are allowed; no subtraction or additive cancellation is needed.
   Polynomial evaluation and scalar torsion decompositions are specializations.
-  Given a second such decomposition from `υ : B →+* Module.End T N` and a family
-  `b` with the same labels, pairwise coprimality and `υ (∏ i, b i) = 0`, any additive
-  map `h : M →+ N` intertwining each `τ (a i)` with `υ (b i)` also intertwines the
-  canonical projectors and preserves the underlying coordinate values. The
+  Given a second such decomposition from `υ : B →+* Module.End T N` and a finite
+  family `b : J → B`, an arbitrary map `q : I → J` regroups the fine labels. An
+  additive map `h : M →+ N` intertwining each represented fibre-product
+  `τ (∏ i with q i = j, a i)` with `υ (b j)` intertwines the corresponding sum of
+  fine canonical projectors with the target projector; each target coordinate is
+  the fibre-sum of mapped fine coordinates. Empty fibres are allowed. The
   coefficient and scalar semirings may differ; neither scalar-linearity nor
-  compatibility with other represented elements is required.
+  compatibility with other represented elements is required. Same-label
+  naturality is the specialization `q = id`.
 - **Finite generation under pointwise unimodular clearing.** For arbitrary,
   possibly noncommutative semirings `R`, `S` and `f : M →ₛₗ[φ] N` between
   additive commutative left semimodules,

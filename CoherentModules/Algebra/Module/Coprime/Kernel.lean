@@ -38,6 +38,13 @@ the kernel-equivalence coordinates. The coefficient and scalar semirings on the
 two sides may differ; no scalar-linearity or compatibility with other represented
 elements is assumed.
 
+More generally, labels may be regrouped by an arbitrary map between finite index
+sets: intertwining each fibre-product with its target annihilating operator
+intertwines the sum of the fine kernel projectors over that fibre with the target
+projector. The target coordinate is the corresponding sum of mapped fine
+coordinates. Empty fibres are allowed, and the label map need not be injective or
+surjective.
+
 For example, multiplication on `ℕ × ℕ` with factors `(1, 0)` and `(0, 1)` has
 labelled kernel projectors `(x, y) ↦ (0, y)` and `(x, y) ↦ (x, 0)`, respectively.
 No additive inverses are present in this example.
@@ -59,7 +66,7 @@ intertwining uses `OrthogonalIdempotents.semiconj_iff_mapsTo_range` and the cano
 
 public section
 
-universe uR uT uM uN uA uB uI
+universe uR uT uM uN uA uB uI uJ
 
 namespace RingHom
 
@@ -374,6 +381,71 @@ variable {T : Type uT} [Semiring T]
 variable {N : Type uN} [AddCommMonoid N] [Module T N]
 variable {B : Type uB} [CommSemiring B]
 
+section Fiberwise
+
+variable {J : Type uJ} [Fintype J] [DecidableEq J]
+
+/-- An additive map intertwining each product of fine annihilating factors over a fibre
+with the corresponding target annihilating operator intertwines the sum of the fine
+canonical kernel projectors over that fibre with the target kernel projector.
+The label map is arbitrary, and empty fibres contribute the identity factor-product
+and the zero projector sum. No scalar-linearity or compatibility with other
+represented elements is required. -/
+theorem semiconj_sum_kerProjector
+    (υ : B →+* Module.End T N) (b : J → B)
+    (hcop' : Pairwise fun j k ↦ IsCoprime (b j) (b k))
+    (hAnn' : υ (∏ j, b j) = 0)
+    (q : ι → J) (h : M →+ N)
+    (hh : ∀ j, Function.Semiconj h (τ (∏ i with q i = j, a i)) (υ (b j))) :
+    ∀ j, Function.Semiconj h
+      (∑ i with q i = j, τ.kerProjector a hcop hAnn i : Module.End R M)
+      (υ.kerProjector b hcop' hAnn' j) := by
+  classical
+  let F : Module.End R M →+* AddMonoid.End M :=
+    Module.toAddMonoidEnd (Module.End R M) M
+  let G : Module.End T N →+* AddMonoid.End N :=
+    Module.toAddMonoidEnd (Module.End T N) N
+  have hP :=
+    ((τ.kerProjector_completeOrthogonalIdempotents a hcop hAnn).sum_fiberwise q).map F
+  have hQ := (υ.kerProjector_completeOrthogonalIdempotents b hcop' hAnn').map G
+  apply (hQ.toOrthogonalIdempotents.semiconj_iff_mapsTo_range hP.complete h).mpr
+  intro j x hx
+  obtain ⟨y, rfl⟩ := hx
+  -- Every factor in the fibre kills its own fine-projector value, so the product
+  -- kills the sum of those values.
+  have hzero : τ (∏ i with q i = j, a i)
+      ((∑ i with q i = j, τ.kerProjector a hcop hAnn i : Module.End R M) y) = 0 := by
+    rw [LinearMap.sum_apply, map_sum]
+    apply Finset.sum_eq_zero
+    intro i hi
+    rw [← Finset.prod_erase_mul _ a hi, map_mul, Module.End.mul_apply,
+      LinearMap.mem_ker.mp (τ.kerProjector_mem a hcop hAnn i y), map_zero]
+  have hker : h ((∑ i with q i = j, τ.kerProjector a hcop hAnn i : Module.End R M) y) ∈
+      LinearMap.ker (υ (b j)) := by
+    rw [LinearMap.mem_ker, ← hh j _, hzero, map_zero]
+  rw [← υ.range_kerProjector b hcop' hAnn' j] at hker
+  obtain ⟨z, hz⟩ := LinearMap.mem_range.mp hker
+  exact ⟨z, hz⟩
+
+/-- After an additive map intertwines each fibre-product of fine annihilating factors
+with its target annihilating operator, the underlying target kernel coordinate is
+the sum over that fibre of the mapped underlying fine kernel coordinates.
+The label map need not be injective or surjective, and no scalar-linearity or
+compatibility between the coefficient semirings is required. -/
+theorem linearEquivPiKer_apply_map_fiberwise
+    (υ : B →+* Module.End T N) (b : J → B)
+    (hcop' : Pairwise fun j k ↦ IsCoprime (b j) (b k))
+    (hAnn' : υ (∏ j, b j) = 0)
+    (q : ι → J) (h : M →+ N)
+    (hh : ∀ j, Function.Semiconj h (τ (∏ i with q i = j, a i)) (υ (b j)))
+    (x : M) (j : J) :
+    (υ.linearEquivPiKer b hcop' hAnn' (h x) j : N) =
+      ∑ i with q i = j, h (τ.linearEquivPiKer a hcop hAnn x i : M) := by
+  simpa only [linearEquivPiKer_apply, LinearMap.sum_apply, map_sum] using
+    (τ.semiconj_sum_kerProjector a hcop hAnn υ b hcop' hAnn' q h hh j x).symm
+
+end Fiberwise
+
 /-- An additive map intertwining the labelled annihilating operators intertwines the
 canonical kernel projectors. The coefficient and scalar semirings on the two sides
 are independent; compatibility with other represented elements is not required. -/
@@ -384,21 +456,21 @@ theorem semiconj_kerProjector
     (h : M →+ N) (hh : ∀ i, Function.Semiconj h (τ (a i)) (υ (b i))) :
     ∀ i, Function.Semiconj h
       (τ.kerProjector a hcop hAnn i) (υ.kerProjector b hcop' hAnn' i) := by
-  let F : Module.End R M →+* AddMonoid.End M :=
-    Module.toAddMonoidEnd (Module.End R M) M
-  let G : Module.End T N →+* AddMonoid.End N :=
-    Module.toAddMonoidEnd (Module.End T N) N
-  have hP := (τ.kerProjector_completeOrthogonalIdempotents a hcop hAnn).map F
-  have hQ := (υ.kerProjector_completeOrthogonalIdempotents b hcop' hAnn').map G
-  apply (hQ.toOrthogonalIdempotents.semiconj_iff_mapsTo_range hP.complete h).mpr
-  intro i x hx
-  obtain ⟨y, rfl⟩ := hx
-  have hker : h (τ.kerProjector a hcop hAnn i y) ∈ LinearMap.ker (υ (b i)) := by
-    rw [LinearMap.mem_ker, ← hh i (τ.kerProjector a hcop hAnn i y),
-      LinearMap.mem_ker.mp (τ.kerProjector_mem a hcop hAnn i y), map_zero]
-  rw [← υ.range_kerProjector b hcop' hAnn' i] at hker
-  obtain ⟨z, hz⟩ := LinearMap.mem_range.mp hker
-  exact ⟨z, hz⟩
+  classical
+  have hfid (j : ι) : Finset.univ.filter (fun k : ι ↦ k = j) = {j} := by
+    ext k
+    simp
+  intro i x
+  have hp := τ.semiconj_sum_kerProjector a hcop hAnn υ b hcop' hAnn' _root_.id h
+    (by
+      intro j y
+      change h (τ (∏ k with k = j, a k) y) = υ (b j) (h y)
+      rw [hfid, Finset.prod_singleton]
+      exact hh j y) i x
+  change h ((∑ k with k = i, τ.kerProjector a hcop hAnn k : Module.End R M) x) =
+    υ.kerProjector b hcop' hAnn' i (h x) at hp
+  rw [hfid, Finset.sum_singleton] at hp
+  exact hp
 
 /-- Kernel-equivalence coordinates commute, on their underlying values, with an
 additive map intertwining the labelled annihilating operators. No scalar-linearity
