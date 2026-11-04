@@ -25,6 +25,7 @@ public import CoherentModules.LinearAlgebra.Finsupp.LSum
 public import CoherentModules.LinearAlgebra.FinsuppPi
 public import CoherentModules.LinearAlgebra.KrullSchmidt
 public import CoherentModules.LinearAlgebra.LinearMap.Exact
+public import CoherentModules.LinearAlgebra.Matrix.CoherentModule
 public import CoherentModules.LinearAlgebra.Matrix.CoherentRing
 public import CoherentModules.LinearAlgebra.Matrix.ColumnHom
 public import CoherentModules.LinearAlgebra.Matrix.Entrywise
@@ -139,7 +140,9 @@ Coextension along the opposite algebra, restricted to the base, is linearly equi
 to the original dual and intertwines its translation with these named operators.
 A surjective self-pairing that separates the left slot is nondegenerate in both slots.
 Finite square matrix rings preserve left ring coherence, including empty indices;
-for nonempty finite indices they also reflect it.
+for nonempty finite indices they also reflect it. More generally, finite matrix
+columns preserve coherence of any coefficient module over a ring, and reflect
+it when the index type is nonempty, for the canonical matrix-column action.
 For finite nonempty indices, coordinatewise extension is an additive Hom equivalence
 and an endomorphism semiring equivalence for matrix columns over arbitrary semirings;
 for empty indices it remains surjective.

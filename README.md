@@ -213,6 +213,17 @@ Authors: Formal Frontier Agents
   and arbitrary family index `κ`. Its scalar-restricted kernel has a split
   entry projection onto the coefficient kernel. Reflection needs nonempty `I`:
   the empty matrix ring has one element and is coherent for every `R`.
+  More generally, for any additive commutative monoid `M` with its given
+  `R`-module structure,
+  [`Matrix.Module.instIsCoherent`](CoherentModules/LinearAlgebra/Matrix/CoherentModule.lean)
+  preserves coherence under the canonical finite-sum action of `Matrix I I R`
+  on `I → M`, including empty `I`. For nonempty `I`,
+  `Module.IsCoherent.of_matrixModule` reflects coherence and
+  `Matrix.Module.isCoherent_iff` gives the equivalence with `Module.IsCoherent R M`.
+  No coherence of `R`, Noetherianity, or extra finite-generation premise is
+  required. The index, coefficient and module universes are independent, and
+  `R` may be zero. With empty `I`, every column module is a subsingleton and
+  hence coherent, so nonemptiness is essential for reflection.
 
 - **Left-regular elements in left Artinian rings.** For an arbitrary unital
   `Ring A` with `[IsArtinianRing A]`,
