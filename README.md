@@ -681,10 +681,14 @@ Authors: Formal Frontier Agents
   The five universes are independent and the Hom action is pointwise. No
   `S`-action on `M`, `R`-action on `N`, scalar commutativity or surjectivity
   of `σ` is required. The existing `linearMap` theorem is its same-base
-  commutative-ring specialization. Over a commutative ring,
-  [`tensorProduct`](CoherentModules/TensorProduct.lean) makes the tensor product
-  coherent when the first argument is finitely presented and the second
-  coherent. These are theorems, not global instances, and assume neither
+  commutative-ring specialization. For a commutative base ring `R` and an
+  independent, possibly noncommutative ring `S`,
+  [`tensorProduct_left`](CoherentModules/TensorProduct.lean) makes `M ⊗[R] N`
+  coherent over `S` when `M` is coherent over `S`, `N` is finitely presented
+  over `R`, and the given `R`- and `S`-actions on `M` commute. No `R`-module
+  structure on `S` or `S`-action on `N` is required. The existing `tensorProduct`
+  theorem retains the same-base, finitely-presented-first specialization.
+  These are theorems, not global instances, and assume neither
   coherence nor Noetherianity of an ambient scalar ring.
   [`CoherentModuleCat`](CoherentModules/ModuleCat.lean) is a transparent full
   subcategory with abelian structure obtained through generic category constructions.
@@ -953,7 +957,9 @@ Authors: Formal Frontier Agents
 The foundation, finite-presentation and coherent-module category results allow
 arbitrary `Ring`. Coherent semilinear Hom allows arbitrary source and target
 scalar `Semiring`s with a commuting `Ring` action on the target. Localization
-of coherent modules, coherent tensor closure, and universal coherence use `CommRing`.
+of coherent modules and universal coherence use `CommRing`. Coherent tensor closure
+uses a `CommRing` base but allows an independent, possibly noncommutative `Ring`
+acting on the coherent factor.
 The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
