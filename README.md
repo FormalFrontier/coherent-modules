@@ -592,6 +592,16 @@ Authors: Formal Frontier Agents
   required. `trans_of_algebra` recovers the type and argument order of Mathlib's
   commutative-algebra `Module.FinitePresentation.trans` as a corollary of the
   scalar-tower theorem.
+- **Coherence along quotient coefficients.** For possibly noncommutative rings
+  `R`, `S` and additive commutative monoids `N`, `M` with their given `R`- and
+  `S`-module structures,
+  [`Module.isCoherent_iff_of_bijective_of_fg_ker`](CoherentModules/FinitePresentation.lean)
+  gives `Module.IsCoherent R N ↔ Module.IsCoherent S M` along a bijective
+  semilinear map `f : N →ₛₗ[σ] M`, provided `σ : R →+* S` is surjective and
+  `(RingHom.ker σ).FG`. Kernel finite generation is as a **left** ideal, not
+  merely as a two-sided ideal. The four carrier universes are independent;
+  `σ` need not be injective. No extra action, scalar inverse, coherence of an
+  ambient ring, Noetherianity, flatness or nontriviality hypothesis is required.
 - **Coherence under scalar restriction.** For possibly noncommutative rings `R`
   and `S`, if `S` is coherent as an `R`-module, then
   [`Module.FinitePresentation.isCoherent_restrictScalars`](CoherentModules/FinitePresentation.lean)

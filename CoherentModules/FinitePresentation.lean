@@ -21,7 +21,9 @@ over semirings. Over rings, finite presentation is transitive along scalar tower
 and descends from the base ring when the scalar ring is module-finite, for additive
 commutative monoids with their given compatible actions. A finitely presented
 module over a scalar ring that is coherent over the base ring is coherent for
-its given compatible base action.
+its given compatible base action. Coherence is also equivalent along a bijective
+semilinear map whose coefficient homomorphism is surjective with finitely
+generated kernel as a left ideal.
 The fixed-ring specialization identifies finite presentation with coherence over
 a coherent ring and deduces finite presentation of kernels between them. The
 scalar and module universes are independent. It also gives a five-term
@@ -40,6 +42,9 @@ exact-sequence criterion for finite presentation of the middle module.
   ring is equivalent when the scalar ring is finitely presented over the base.
 * `Module.FinitePresentation.trans_of_algebra`: the commutative-algebra
   specialization of scalar-tower transitivity, with Mathlib's argument order.
+* `Module.isCoherent_iff_of_bijective_of_fg_ker`: coherence is equivalent along a
+  bijective semilinear map over a surjective ring homomorphism with finitely
+  generated left kernel ideal.
 * `Module.FinitePresentation.isCoherent_restrictScalars`: a finitely presented
   module over a scalar ring coherent over the base ring is coherent over the base.
 * `Module.isCoherent_restrictScalars_iff`: coherence over the base and scalar rings
@@ -67,6 +72,9 @@ The finite-presentation scalar-tower results retain the given actions on the
 scalar ring and target, in three independent universes. Additive inverses on
 the target are derived only inside the proofs, with the same additive-monoid
 structure. No coherence or Noetherian hypothesis is used for these results.
+The semilinear coherence equivalence retains the original source and target
+actions in four independent universes; its coefficient homomorphism need not
+be injective.
 
 ## References
 
@@ -80,11 +88,13 @@ fixed-ring finite-product presentations, finite-free surjections, finite
 generation under scalar restriction, and kernel and quotient criteria. The coherence
 results use Mathlib's compatible scalar actions, finite images and first-isomorphism
 equivalence, together with the coherent-module finite-product and quotient APIs.
+The semilinear coherence equivalence combines Mathlib's finite-presentation
+kernel criterion and semilinear submodule images with scalar-tower transitivity.
 -/
 
 @[expose] public section
 
-universe u v w v1 v2 v3 v4 v5
+universe u v w v1 v2 v3 v4 v5 uR uS uN uM
 
 namespace Module
 
@@ -192,6 +202,55 @@ theorem FinitePresentation.trans_of_algebra
     [Module.FinitePresentation R S] [Module.FinitePresentation S N] :
     Module.FinitePresentation R N :=
   Module.FinitePresentation.trans_of_tower R S N
+
+/-- Coherence is equivalent along a bijective semilinear map over a surjective
+ring homomorphism whose kernel is finitely generated as a left ideal.
+
+The source and target retain their given additive-monoid structures and module
+actions. The rings may be noncommutative, the four carrier universes are
+independent, and the coefficient homomorphism need not be injective. -/
+theorem isCoherent_iff_of_bijective_of_fg_ker
+    {R : Type uR} {S : Type uS} {N : Type uN} {M : Type uM}
+    [Ring R] [Ring S] [AddCommMonoid N] [AddCommMonoid M]
+    [Module R N] [Module S M] (σ : R →+* S) (f : N →ₛₗ[σ] M)
+    (hσ : Function.Surjective σ) (hker : (RingHom.ker σ).FG)
+    (hf : Function.Bijective f) :
+    Module.IsCoherent R N ↔ Module.IsCoherent S M := by
+  let _ : RingHomSurjective σ := ⟨hσ⟩
+  constructor
+  · intro h
+    let _ : Module.IsCoherent R N := h
+    exact Module.IsCoherent.of_bijective f hf
+  · intro h
+    let _ : Module.IsCoherent S M := h
+    let : AddCommGroup N := Module.addCommMonoidToAddCommGroup R (M := N)
+    let : AddCommGroup M := Module.addCommMonoidToAddCommGroup S (M := M)
+    let _ : Module R S := Module.compHom S σ
+    let _ : IsScalarTower R S S := SMul.comp.isScalarTower (σ : R → S)
+    let _ : Module.FinitePresentation R S :=
+      Module.finitePresentation_of_surjective (Module.compHom.toLinearMap σ) hσ (by
+        have hk : LinearMap.ker (Module.compHom.toLinearMap σ) = RingHom.ker σ := by
+          ext r
+          simp only [LinearMap.mem_ker, Module.compHom.toLinearMap_apply, RingHom.mem_ker]
+        rwa [hk])
+    refine
+      { finite := (LinearMap.finite_iff_of_bijective f hf).mpr inferInstance
+        finitePresentation_submodule := ?_ }
+    intro P hP
+    let Q : Submodule S M := P.map f
+    let _ : Module.FinitePresentation S Q :=
+      Module.IsCoherent.finitePresentation_submodule Q (hP.map f)
+    -- Restrict scalars on the image while keeping the original action on P.
+    let _ : Module R Q := Module.compHom Q σ
+    let _ : IsScalarTower R S Q := SMul.comp.isScalarTower (σ : R → S)
+    let _ : Module.FinitePresentation R Q :=
+      Module.FinitePresentation.trans_of_tower R S Q
+    let g : P →ₛₗ[σ] Q := f.submoduleMap P
+    have hg : Function.Bijective g :=
+      ⟨LinearMap.submoduleMap_injective hf.injective P, f.submoduleMap_surjective P⟩
+    let e : P ≃ₗ[R] Q :=
+      (AddEquiv.ofBijective g.toAddHom hg).toLinearEquiv fun r p ↦ g.map_smulₛₗ r p
+    exact Module.FinitePresentation.of_equiv e.symm
 
 section Ring
 
