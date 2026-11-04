@@ -847,13 +847,15 @@ Authors: Formal Frontier Agents
   [`kerIdealBaseChange`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
   identifies the projection-base-changed kernel with `M` **without** a finiteness
   assumption; its pure-tensor and inverse formulas are simp lemmas.
-- **Coherent square-zero extensions.** Over a field `k`,
+- **Coherent square-zero extensions.** Over an arbitrary division ring `D`,
+  [`TrivSqZeroExt.isCoherentRing_iff_finite_of_divisionRing`](CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean)
+  characterizes left coherence of `TrivSqZeroExt D M` by `Module.Finite D M`,
+  retaining both given compatible bimodule actions without centrality. The module
+  may be zero, and the two carrier universes are independent. The canonical-field
+  specialization
   [`TrivSqZeroExt.isCoherentRing_iff_finite`](CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean)
-  characterizes coherence of the canonical `TrivSqZeroExt k V` by
-  `Module.Finite k V`: finite generation, equivalently finite dimension, not a
-  finite underlying set. The given left action is retained, and the canonical
-  opposite action is used; the vector space may be zero and the two universes
-  are independent. More generally,
+  retains its given left action and canonical opposite action; finite generation
+  is equivalently finite dimension, not a finite underlying set. More generally,
   `TrivSqZeroExt.finite_of_isCoherentRing_of_injective_smul` deduces left finite
   generation from left coherence of an extension with its given compatible
   bimodule actions and a vector `v` such that `r ↦ r • v` is injective.
@@ -886,8 +888,9 @@ The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
 bimodule actions. The coherent-extension sufficiency and injective-vector necessity
-use `Ring` and `AddCommGroup`, without centrality; the finite-dimensionality
-biconditional uses a field and its canonical opposite action.
+use `Ring` and `AddCommGroup`, without centrality. The finite-generation
+biconditional uses an arbitrary division ring and the given compatible bimodule
+with `AddCommGroup`; its canonical-field specialization gives finite dimensionality.
 The predicate transfer uses `CommRing` and `AddCommGroup`.
 The ideal/product identity and semilinear mono-flatness invariance use
 `CommSemiring` and `AddCommMonoid`; the faithful-flatness criteria use `CommRing`

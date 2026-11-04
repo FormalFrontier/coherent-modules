@@ -17,14 +17,17 @@ A trivial square-zero extension of a left coherent ring by a bimodule that is fi
 presented on the left is left coherent. Conversely, coherence of the extension forces
 finite generation of the coefficient module if scalar multiplication on one vector is
 injective. These results retain the given compatible bimodule actions, without centrality.
-Over a field, the canonical extension is coherent exactly when its coefficient space is
-finite-dimensional, including the zero space.
+Over an arbitrary division ring, the extension is left coherent exactly when its coefficient
+bimodule is finitely generated on the left, including the zero module. The canonical field
+case recovers the finite-dimensionality criterion.
 
 ## Main declarations
 
 * `TrivSqZeroExt.isCoherentRing`: coherence from finite presentation over a coherent ring.
 * `TrivSqZeroExt.finite_of_isCoherentRing_of_injective_smul`: finite generation from
   coherence and one vector with injective scalar multiplication.
+* `TrivSqZeroExt.isCoherentRing_iff_finite_of_divisionRing`: the finite-generation criterion
+  over a division ring, for the given compatible bimodule actions.
 * `TrivSqZeroExt.isCoherentRing_iff_finite`: the finite-dimensionality criterion over a field.
 
 ## Implementation notes
@@ -109,23 +112,26 @@ theorem finite_of_isCoherentRing_of_injective_smul
     infer_instance
   exact Module.Finite.of_surjective (kerFstHomSnd R M) (kerFstHomSnd_surjective R M)
 
-open scoped TrivSqZeroExt in
-/-- The canonical trivial square-zero extension of a field by a vector space is coherent
-exactly when the vector space is finitely generated, equivalently finite-dimensional.
+/-- A trivial square-zero extension of an arbitrary division ring by a compatible bimodule
+is left coherent exactly when the bimodule is finitely generated on the left.
 
-The left action is the given one, and the opposite action is the canonical action induced
-by commutativity. The vector space may be zero; its universe is independent of the field's. -/
-theorem isCoherentRing_iff_finite
-    {k : Type uR} {V : Type uM} [Field k] [AddCommGroup V] [Module k V] :
-    IsCoherentRing (TrivSqZeroExt k V) ↔ Module.Finite k V := by
+Both module structures are the given ones, and their actions need not be central. The
+coefficient module may be zero; its universe is independent of the division ring's.
+The argument specializes `finite_of_isCoherentRing_of_injective_smul` and `isCoherentRing`,
+using that a division ring is left Noetherian. -/
+theorem isCoherentRing_iff_finite_of_divisionRing
+    (D : Type uR) (M : Type uM)
+    [DivisionRing D] [AddCommGroup M] [Module D M] [Module Dᵐᵒᵖ M]
+    [SMulCommClass D Dᵐᵒᵖ M] :
+    IsCoherentRing (TrivSqZeroExt D M) ↔ Module.Finite D M := by
   constructor
   · intro h
-    let _ : IsCoherentRing (TrivSqZeroExt k V) := h
-    rcases subsingleton_or_nontrivial V with hV | hV
-    · let _ : Subsingleton V := hV
+    let _ : IsCoherentRing (TrivSqZeroExt D M) := h
+    rcases subsingleton_or_nontrivial M with hM | hM
+    · let _ : Subsingleton M := hM
       infer_instance
-    · let _ : Nontrivial V := hV
-      obtain ⟨v, hv⟩ := exists_ne (0 : V)
+    · let _ : Nontrivial M := hM
+      obtain ⟨v, hv⟩ := exists_ne (0 : M)
       apply finite_of_isCoherentRing_of_injective_smul v
       intro a b hab
       dsimp only at hab
@@ -137,8 +143,19 @@ theorem isCoherentRing_iff_finite
           rw [← mul_smul, inv_mul_cancel₀ (sub_ne_zero.mpr hne), one_smul]
         _ = 0 := by rw [hz, smul_zero]
   · intro h
-    let _ : Module.Finite k V := h
-    let _ : Module.FinitePresentation k V := Module.finitePresentation_of_finite k V
+    let _ : Module.Finite D M := h
+    let _ : Module.FinitePresentation D M := Module.finitePresentation_of_finite D M
     exact isCoherentRing
+
+open scoped TrivSqZeroExt in
+/-- The canonical trivial square-zero extension of a field by a vector space is coherent
+exactly when the vector space is finitely generated, equivalently finite-dimensional.
+
+The left action is the given one, and the opposite action is the canonical action induced
+by commutativity. The vector space may be zero; its universe is independent of the field's. -/
+theorem isCoherentRing_iff_finite
+    {k : Type uR} {V : Type uM} [Field k] [AddCommGroup V] [Module k V] :
+    IsCoherentRing (TrivSqZeroExt k V) ↔ Module.Finite k V := by
+  exact isCoherentRing_iff_finite_of_divisionRing k V
 
 end TrivSqZeroExt
