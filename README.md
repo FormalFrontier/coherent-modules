@@ -953,6 +953,19 @@ Authors: Formal Frontier Agents
   The base ring may be noncommutative and the right action need not be central.
   The existing `TrivSqZeroExt.isCoherentRing` gives sufficiency for a left
   coherent base and a coefficient bimodule finitely presented on the left.
+- **Opposites of square-zero extensions.**
+  [`TrivSqZeroExt.opEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Opposite.lean)
+  identifies `(TrivSqZeroExt R M)ᵐᵒᵖ` with `TrivSqZeroExt Rᵐᵒᵖ M` by
+  `op (r, m) ↦ (op r, m)`. The target uses the original right action on the
+  left and the original left action pulled back by double `unop` on the right.
+  The equivalence needs only `Add R`, `Mul R`, `AddCommMagma M`, and the two
+  given scalar actions. For a division ring `D` and an `AddCommGroup M` with
+  commuting bimodule actions, the double-opposite module is
+  `Module.compHom M (RingEquiv.opOp D).symm.toRingHom`. The preceding left
+  criterion and coherence transport then give the right-coherence criterion
+  `IsCoherentRing ((TrivSqZeroExt D M)ᵐᵒᵖ) ↔ Module.Finite Dᵐᵒᵖ M`,
+  with finiteness measured using the original right action, without centrality
+  or a comparison of left and right dimensions.
 - **Left Noetherian square-zero extensions.** For a possibly noncommutative
   `Ring R` and an `AddCommMonoid M` with commuting left and right `R`-module
   actions, [`TrivSqZeroExt.isNoetherianRing_iff`](CoherentModules/Algebra/TrivSqZeroExt/Noetherian.lean)
