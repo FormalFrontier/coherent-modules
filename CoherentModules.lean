@@ -38,6 +38,8 @@ public import CoherentModules.LinearAlgebra.Matrix.Reconstruction
 public import CoherentModules.LinearAlgebra.Matrix.ReconstructionCoherence
 public import CoherentModules.LinearAlgebra.Matrix.RowIdeal
 public import CoherentModules.LinearAlgebra.Matrix.Submodule
+public import CoherentModules.LinearAlgebra.Polynomial.Span
+public import CoherentModules.LinearAlgebra.Polynomial.Supported
 public import CoherentModules.LinearAlgebra.Projective.Pure
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
 public import CoherentModules.LinearAlgebra.Prod
