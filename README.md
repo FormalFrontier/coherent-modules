@@ -938,6 +938,23 @@ Authors: Formal Frontier Agents
   [`kerIdealBaseChange`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
   identifies the projection-base-changed kernel with `M` **without** a finiteness
   assumption; its pure-tensor and inverse formulas are simp lemmas.
+- **Full left-ideal lattice of square-zero extensions.** For a possibly
+  noncommutative division semiring `D : Type u` and an additive commutative group
+  `M : Type v` with its given actions `[Module D M]`, `[Module Dᵐᵒᵖ M]` and
+  `[SMulCommClass D Dᵐᵒᵖ M]`,
+  [`TrivSqZeroExt.idealOrderIsoWithTop`](CoherentModules/Algebra/TrivSqZeroExt/Ideal.lean)
+  identifies `Ideal (TrivSqZeroExt D M)` with `WithTop (Submodule D M)` as ordered
+  lattices. The two carrier universes are independent. A coefficient submodule
+  `N` corresponds to `0 × N`, using the original left action. The adjoined top
+  is the whole extension, whereas the coerced internal top is the proper
+  projection kernel
+  `K = RingHom.ker (TrivSqZeroExt.fstHom ℕ D M : TrivSqZeroExt D M →+* D)`,
+  even when `M` is zero. The
+  [coatom client](CoherentModulesTest/Algebra/TrivSqZeroExt/Ideal.lean) derives
+  maximality of this kernel through the order isomorphism. No ring structure on
+  `D`, centrality or finiteness assumption is required. Coefficient submodules
+  can be cones rather than additive subgroups and need not be stable under the
+  right action; this classifies **left** ideals, not only two-sided ideals.
 - **Coherent square-zero extensions.** Over an arbitrary division ring `D`,
   [`TrivSqZeroExt.isCoherentRing_iff_finite_of_divisionRing`](CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean)
   characterizes left coherence of `TrivSqZeroExt D M` by `Module.Finite D M`,
@@ -992,9 +1009,11 @@ uses a `CommRing` base but allows an independent, possibly noncommutative `Ring`
 acting on the coherent factor.
 The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
-square-zero Noetherian criterion allows `Ring` and `AddCommMonoid` with commuting
-bimodule actions. The coherent-extension sufficiency and injective-vector necessity
-use `Ring` and `AddCommGroup`, without centrality. The finite-generation
+full left-ideal classification uses `DivisionSemiring` and `AddCommGroup` with
+both given commuting module actions. The square-zero Noetherian criterion allows
+`Ring` and `AddCommMonoid` with commuting bimodule actions. The coherent-extension
+sufficiency and injective-vector necessity use `Ring` and `AddCommGroup`, without
+centrality. The finite-generation
 biconditional uses an arbitrary division ring and the given compatible bimodule
 with `AddCommGroup`; its canonical-field specialization gives finite dimensionality.
 The predicate transfer uses `CommRing` and `AddCommGroup`.
