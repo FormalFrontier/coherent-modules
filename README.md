@@ -35,6 +35,13 @@ Authors: Formal Frontier Agents
   give the same conclusions for `Finsupp.supported A R J`, using the given
   `R`-action. The [polynomial example](CoherentModulesExamples/PolynomialFaces.lean)
   exhibits a nonzero proper face of a two-generated semimodule over `ℕ[X]`.
+  If `R` is zero-sum-free and has no zero divisors, every
+  [uniformly degree-bounded coefficient face](CoherentModules/LinearAlgebra/Polynomial/CoefficientFace.lean)
+  of a finitely generated submodule of `I →₀ R[X]` is finitely generated over
+  `R`. The allowed coefficient positions may correlate the index and degree;
+  neither `I` nor the allowed set needs to be finite. The whole polynomial
+  submodule need not be finitely generated over `R`, and `R` need not be
+  commutative.
 
 - **Polynomial intertwining.** For an arbitrary semiring `S`, additive commutative
   monoids `M`, `N`, and coefficient representations `σ : S →+* AddMonoid.End M`,
