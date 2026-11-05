@@ -1000,6 +1000,15 @@ Authors: Formal Frontier Agents
   The base ring may be noncommutative and the right action need not be central.
   The existing `TrivSqZeroExt.isCoherentRing` gives sufficiency for a left
   coherent base and a coefficient bimodule finitely presented on the left.
+  For the stock pointwise left module `ι →₀ D` and any given compatible right
+  module, [`TrivSqZeroExt.isCoherentRing_finsupp_iff_finite`](CoherentModules/Algebra/TrivSqZeroExt/Finsupp.lean)
+  identifies left coherence with `Finite ι`, including the empty index type.
+  For a field `k` and infinite `ι`,
+  [`TrivSqZeroExt.finsupp_faithfullyFlat_and_not_isCoherentRing`](CoherentModules/Algebra/TrivSqZeroExt/Finsupp.lean)
+  gives a faithfully flat, noncoherent `k`-algebra: the canonical idealization
+  `TrivSqZeroExt k (ι →₀ k)` with inclusion `a ↦ (a, 0)` and coordinatewise
+  scalar action. Faithful flatness follows from freeness and the nontrivial
+  field coordinate; it does not require the coefficient module to be faithfully flat.
 - **Opposites of square-zero extensions.**
   [`TrivSqZeroExt.opEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Opposite.lean)
   identifies `(TrivSqZeroExt R M)ᵐᵒᵖ` with `TrivSqZeroExt Rᵐᵒᵖ M` by
@@ -1169,6 +1178,10 @@ opposite action is needed. For the square-zero kernel and base-change results, i
 The [finite-idealization client](CoherentModulesTest/Algebra/TrivSqZeroExt/Finite.lean)
 exercises finite nonfree torsion, zero modules, the semiring base-change formulas,
 and independently verified invariance and descent premises for predicate transfer.
+For the finite-support coherence classifier and the faithfully flat noncoherent
+inclusion algebra over a field, import `CoherentModules.Algebra.TrivSqZeroExt.Finsupp`.
+The classifier permits any compatible right action over a division ring; use
+`open scoped TrivSqZeroExt` for the canonical field algebra.
 For the left Noetherian criterion, import
 `CoherentModules.Algebra.TrivSqZeroExt.Noetherian`; its two equivalences also
 apply to noncommutative coefficient rings and noncentral bimodules. For the

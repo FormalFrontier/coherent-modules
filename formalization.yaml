@@ -7,8 +7,9 @@ project:
     Coherent rings and modules, finite-presentation criteria, exact-sequence
     closure, localization and descent, coherent-module categories, universal
     coherence, Hom and tensor-product closure, finite square-zero kernels and
-    projection base change, the finite-dimensionality criterion for coherent
-    idealizations over fields, finite-type ideal/module transfer, left Noetherianity
+    projection base change, coherence criteria for idealizations over division rings,
+    finite-support idealizations and faithfully flat noncoherent algebras over fields,
+    finite-type ideal/module transfer, left Noetherianity
     under scalar clearing, pointwise unimodular finite-generation ascent for
     semilinear maps, generator bounds for semilinear images, Artin–Rees for
     Noetherian modules, finite-submodule adic cofinality, radical colons of
@@ -89,19 +90,30 @@ highlights:
       - declaration: "LinearEquiv.nonempty_of_prod_of_isFiniteLength"
         file: "CoherentModules/LinearAlgebra/KrullSchmidt.lean"
 
-  - title: "Coherence of idealizations over fields"
+  - title: "Coherence of square-zero extensions and finite-support idealizations"
     statement: >-
-      For a field k and its given vector space V in independent universes,
-      the canonical trivial square-zero extension k ⋉ V is coherent if and
-      only if V is finitely generated over k, equivalently finite-dimensional.
-      The zero space is allowed; finite generation does not mean a finite
-      underlying set. More generally, for a possibly noncommutative ring R
-      and a bimodule M with its given commuting left and right actions,
-      left coherence of R ⋉ M implies finite generation of M on the left
-      whenever r ↦ r • v is injective for one vector v. The right action
-      need not be central. Sufficiency holds for a left coherent base and a
-      coefficient bimodule finitely presented on the left.
+      For a division ring D and a bimodule M in independent universes,
+      the trivial square-zero extension D ⋉ M is left coherent if and only
+      if M is finitely generated on the left. Both compatible module actions
+      are retained, without centrality. For the stock pointwise left module
+      ι →₀ D and any compatible right action, this is equivalent to finiteness
+      of ι, including the empty index type. For a field k and infinite ι,
+      the canonical inclusion algebra k → TrivSqZeroExt k (ι →₀ k),
+      a ↦ (a, 0), is faithfully flat but not coherent. The canonical field
+      criterion allows the zero coefficient space; finite generation means
+      finite dimension, not a finite underlying set. More generally, for a
+      possibly noncommutative ring R and a bimodule M with its given commuting
+      left and right actions, left coherence of R ⋉ M implies finite generation
+      of M on the left whenever r ↦ r • v is injective for one vector v.
+      Sufficiency holds for a left coherent base and a coefficient bimodule
+      finitely presented on the left.
     declarations:
+      - declaration: "TrivSqZeroExt.isCoherentRing_iff_finite_of_divisionRing"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean"
+      - declaration: "TrivSqZeroExt.isCoherentRing_finsupp_iff_finite"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Finsupp.lean"
+      - declaration: "TrivSqZeroExt.finsupp_faithfullyFlat_and_not_isCoherentRing"
+        file: "CoherentModules/Algebra/TrivSqZeroExt/Finsupp.lean"
       - declaration: "TrivSqZeroExt.finite_of_isCoherentRing_of_injective_smul"
         file: "CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean"
       - declaration: "TrivSqZeroExt.isCoherentRing_iff_finite"

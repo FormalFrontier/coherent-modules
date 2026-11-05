@@ -50,6 +50,7 @@ public import CoherentModules.Algebra.Category.ModuleCat.Monoidal.Closed
 public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
+public import CoherentModules.Algebra.TrivSqZeroExt.Finsupp
 public import CoherentModules.Algebra.TrivSqZeroExt.Ideal
 public import CoherentModules.Algebra.TrivSqZeroExt.Length
 public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
