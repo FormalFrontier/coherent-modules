@@ -24,6 +24,7 @@ public import CoherentModules.LinearAlgebra.Dual.TensorProduct
 public import CoherentModules.LinearAlgebra.End.Local
 public import CoherentModules.LinearAlgebra.End.StableKernelRange
 public import CoherentModules.LinearAlgebra.Finsupp.LSum
+public import CoherentModules.LinearAlgebra.Finsupp.Supported
 public import CoherentModules.LinearAlgebra.FinsuppPi
 public import CoherentModules.LinearAlgebra.KrullSchmidt
 public import CoherentModules.LinearAlgebra.LinearMap.Exact
@@ -43,6 +44,7 @@ public import CoherentModules.LinearAlgebra.Polynomial.Supported
 public import CoherentModules.LinearAlgebra.Projective.Pure
 public import CoherentModules.LinearAlgebra.Projective.RestrictScalars
 public import CoherentModules.LinearAlgebra.Prod
+public import CoherentModules.LinearAlgebra.Span.Kernel
 public import CoherentModules.LinearAlgebra.ULift
 public import CoherentModules.RingTheory.Ideal.AdicFinitePresentation
 
@@ -51,6 +53,7 @@ public import CoherentModules.Algebra.Category.ModuleCat.Kernels
 public import CoherentModules.Algebra.Category.ModuleCat.Monoidal.Closed
 public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
+public import CoherentModules.Algebra.NoZeroSMulDivisors.Pi
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import CoherentModules.Algebra.TrivSqZeroExt.Finsupp
 public import CoherentModules.Algebra.TrivSqZeroExt.Ideal
@@ -131,6 +134,8 @@ units from left-regular elements in left Artinian rings, semimodule kernels,
 annihilator preservation for finite semimodules under finite-limit-preserving
 scalar extension, the coherent-module category, universal
 coherence, Hom/tensor closure,
+span–kernel generator selection for conical targets without zero scalar divisors,
+finite generation of coordinate-face intersections for such coefficient modules,
 generator bounds for semilinear images, Noetherian scalar extension along
 essentially finite-type algebras, and faithful flatness of tensor products
 and direct sums. Flatness and faithful flatness of ring maps can be tested on

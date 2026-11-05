@@ -10,7 +10,8 @@
         "CoherentModulesExamples.DirectSum",
         "+CoherentModules.RingTheory.Ideal.AdicFinitePresentation",
         "+CoherentModules.RingTheory.Ideal.AdicProducts",
-        "+CoherentModulesTest.RingTheory.Ideal.AdicProducts"
+        "+CoherentModulesTest.RingTheory.Ideal.AdicProducts",
+        "+CoherentModulesExamples.PolynomialFaces"
       ]
     }
   ],

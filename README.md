@@ -23,6 +23,19 @@ Authors: Formal Frontier Agents
 
 ## Headline results
 
+- **Spans, kernels and coordinate faces.** For a linear map of semimodules over
+  any possibly noncommutative semiring, if its target has no nonzero additive
+  summands of zero and has no zero scalar divisors, then
+  `span R S ⊓ ker f = span R (S ∩ ↑(ker f))` for every set `S`.
+  Intersecting a finitely generated submodule with this kernel remains finitely
+  generated. The [image-only corollaries](CoherentModules/LinearAlgebra/Span/Kernel.lean)
+  require these two properties only on `range f`, without changing the kernel.
+  For an arbitrary coefficient module `A` with those properties and arbitrary
+  index and support sets, the [coordinate-face formulas](CoherentModules/LinearAlgebra/Finsupp/Supported.lean)
+  give the same conclusions for `Finsupp.supported A R J`, using the given
+  `R`-action. The [polynomial example](CoherentModulesExamples/PolynomialFaces.lean)
+  exhibits a nonzero proper face of a two-generated semimodule over `ℕ[X]`.
+
 - **Polynomial intertwining.** For an arbitrary semiring `S`, additive commutative
   monoids `M`, `N`, and coefficient representations `σ : S →+* AddMonoid.End M`,
   `τ : S →+* AddMonoid.End N`, an additive map `h : M →+ N` that intertwines
