@@ -929,6 +929,17 @@ Authors: Formal Frontier Agents
   required. Arbitrary localizations of base-universe universally coherent rings are
   universally coherent, with independent localization and target universes. No finite
   denominator family or algebra finite-presentation hypothesis on the localization is needed.
+- **Commutativity of square-zero extensions.** For `Mul R`, `AddZeroClass M`,
+  `IsAddCommutative M`, and two given zero-preserving scalar actions
+  `[SMulZeroClass R M]` and `[SMulZeroClass Rᵐᵒᵖ M]`,
+  [`TrivSqZeroExt.isMulCommutative_iff`](CoherentModules/Algebra/TrivSqZeroExt/Commutativity.lean)
+  characterizes `IsMulCommutative (TrivSqZeroExt R M)` by
+  `IsMulCommutative R ∧ IsCentralScalar R M`. It retains the original
+  multiplication, addition, zero and both actions, with independent carrier
+  universes. No additive associativity, coefficient zero or one, module structure,
+  action compatibility or finiteness is required. This is a criterion for the
+  multiplication alone, not an assertion of a unit or a square-zero ideal at
+  these hypotheses.
 - **Square-zero kernels and projection base change.** For a commutative semiring
   `R` and an additive commutative `R`-module `M`,
   [`TrivSqZeroExt.kerIdealLinearEquiv`](CoherentModules/Algebra/TrivSqZeroExt/Finite.lean)
@@ -1019,7 +1030,8 @@ scalar `Semiring`s with a commuting `Ring` action on the target. Localization
 of coherent modules and universal coherence use `CommRing`. Coherent tensor closure
 uses a `CommRing` base but allows an independent, possibly noncommutative `Ring`
 acting on the coherent factor.
-The square-zero
+The square-zero commutativity criterion uses only `Mul`, `AddZeroClass`,
+`IsAddCommutative` and the two given `SMulZeroClass` actions. The square-zero
 kernel and base-change results use `CommSemiring` and `AddCommMonoid`; the
 full left-ideal classification uses `DivisionSemiring` and `AddCommGroup` with
 both given commuting module actions. The square-zero Noetherian criterion allows
@@ -1141,7 +1153,9 @@ or `Module.IsCoherent.tensorProduct` to `M ⊗[R] N`. The
 [Hom](CoherentModulesTest/Hom.lean), [tensor](CoherentModulesTest/TensorProduct.lean),
 [category](CoherentModulesTest/ModuleCat.lean) and
 [finite-presentation](CoherentModulesTest/FinitePresentationZero.lean) clients
-include degenerate cases. For the square-zero results, import
+include degenerate cases. For the square-zero commutativity criterion, import
+`CoherentModules.Algebra.TrivSqZeroExt.Commutativity`; no scoped choice of an
+opposite action is needed. For the square-zero kernel and base-change results, import
 `CoherentModules.Algebra.TrivSqZeroExt.Finite`; the ideal/module theorem is in
 `CoherentModules.RingTheory.Ideal.FiniteModuleTransfer`. Use
 `open scoped TrivSqZeroExt` for the canonical opposite and central scalar actions.

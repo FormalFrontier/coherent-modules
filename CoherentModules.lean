@@ -10,6 +10,7 @@ public import CoherentModules.RingTheory.Artinian.DirectSum
 public import CoherentModules.Algebra.TrivSqZeroExt.Artinian
 
 public import CoherentModules.Algebra.TrivSqZeroExt.Coherent
+public import CoherentModules.Algebra.TrivSqZeroExt.Commutativity
 public import CoherentModules.LinearAlgebra.Matrix.TwoSidedIdeal
 
 public import CoherentModules.LinearAlgebra.DirectSum.Idempotents
@@ -114,8 +115,10 @@ coherence of finite dependent products over their product coefficient rings,
 canonical binary products with independent coefficient and module universes,
 coherence of annihilator quotients under two commuting scalar actions,
 finite idealization, left Noetherianity of trivial square-zero extensions,
-ideal-to-module transfer, Artin–Rees for Noetherian modules over arbitrary
-commutative rings, submodule adic cofinality with Noetherian-ring and
+commutativity of their multiplication in terms of coefficient commutativity and
+agreement of the given scalar actions, ideal-to-module transfer, Artin–Rees for
+Noetherian modules over arbitrary commutative rings, submodule adic cofinality with
+Noetherian-ring and
 nilpotent-ideal providers and faithfully flat descent, its Krull membership
 characterization and relative annihilator separation and submodule intersection
 theorems,
