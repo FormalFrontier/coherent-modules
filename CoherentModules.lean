@@ -49,6 +49,7 @@ public import CoherentModules.Algebra.Module.Coprime
 public import CoherentModules.Algebra.Module.SpanRank
 public import CoherentModules.Algebra.TrivSqZeroExt.Finite
 public import CoherentModules.Algebra.TrivSqZeroExt.Ideal
+public import CoherentModules.Algebra.TrivSqZeroExt.Length
 public import CoherentModules.Algebra.TrivSqZeroExt.Noetherian
 public import CoherentModules.Algebra.TrivSqZeroExt.Opposite
 public import CoherentModules.Basic
@@ -95,6 +96,7 @@ public import CoherentModules.RingTheory.Ideal.TwoSided
 public import CoherentModules.RingTheory.Idempotents
 public import CoherentModules.RingTheory.Morita.Matrix
 public import CoherentModules.RingTheory.Nakayama
+public import CoherentModules.RingTheory.Length
 public import CoherentModules.RingTheory.Noetherian
 public import CoherentModules.RingTheory.Noetherian.Retraction
 public import CoherentModules.RingTheory.Pi

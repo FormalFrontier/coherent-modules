@@ -49,6 +49,7 @@ public import CoherentModulesTest.RingTheory.Ideal.Operations
 public import CoherentModulesTest.RingTheory.Ideal.Quotient.Annihilator
 public import CoherentModulesTest.RingTheory.Morita.Matrix
 public import CoherentModulesTest.RingTheory.Nakayama
+public import CoherentModulesTest.RingTheory.Length
 public import CoherentModulesTest.RingTheory.TwoSidedIdeal
 public import CoherentModulesTest.TensorProduct
 public import CoherentModulesTest.TensorProduct.FiniteSurjectivity

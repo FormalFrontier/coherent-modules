@@ -955,6 +955,18 @@ Authors: Formal Frontier Agents
   `D`, centrality or finiteness assumption is required. Coefficient submodules
   can be cones rather than additive subgroups and need not be stable under the
   right action; this classifies **left** ideals, not only two-sided ideals.
+- **Module length and square-zero extensions.** For modules over arbitrary rings,
+  [`LinearMap.length_eq_of_bijective`](CoherentModules/RingTheory/Length.lean)
+  preserves length under a bijective semilinear map whose scalar homomorphism is
+  surjective, without requiring that scalar homomorphism to be injective. The
+  rings and modules have four independent universes, and infinite lengths are
+  included. Its [algebra-map specialization](CoherentModulesTest/RingTheory/Length.lean)
+  recovers Mathlib's surjective-algebra comparison under the same hypotheses.
+  For a division ring `D` and the original compatible left/right actions on `M`,
+  [`TrivSqZeroExt.length`](CoherentModules/Algebra/TrivSqZeroExt/Length.lean)
+  computes the regular left-module length as `Module.length D M + 1`, directly
+  from the ideal-lattice classification. Only the finrank corollary adds
+  `[Module.Finite D M]`; neither centrality nor right-finiteness is assumed.
 - **Coherent square-zero extensions.** Over an arbitrary division ring `D`,
   [`TrivSqZeroExt.isCoherentRing_iff_finite_of_divisionRing`](CoherentModules/Algebra/TrivSqZeroExt/Coherent.lean)
   characterizes left coherence of `TrivSqZeroExt D M` by `Module.Finite D M`,
