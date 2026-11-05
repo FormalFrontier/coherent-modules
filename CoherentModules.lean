@@ -8,6 +8,7 @@ module
 public import CoherentModules.RingTheory.Artinian.DirectSum
 
 public import CoherentModules.Algebra.TrivSqZeroExt.Artinian
+public import CoherentModules.Algebra.TrivSqZeroExt.Associativity
 
 public import CoherentModules.Algebra.TrivSqZeroExt.Coherent
 public import CoherentModules.Algebra.TrivSqZeroExt.Commutativity

@@ -929,6 +929,13 @@ Authors: Formal Frontier Agents
   required. Arbitrary localizations of base-universe universally coherent rings are
   universally coherent, with independent localization and target universes. No finite
   denominator family or algebra finite-presentation hypothesis on the localization is needed.
+- **Associative square-zero multiplication.** For a type `R` with multiplication and an
+  additive monoid `M` with distributive left and right actions,
+  [`TrivSqZeroExt.mul_assoc_iff`](CoherentModules/Algebra/TrivSqZeroExt/Associativity.lean)
+  characterizes associativity by coefficient associativity, composition of each action
+  (in reversed coefficient order on the right), and commutation of the two actions.
+  Addition need not commute, the carrier universes are independent, and no coefficient
+  zero, one, or identity law for either action is required.
 - **Commutativity of square-zero extensions.** For `Mul R`, `AddZeroClass M`,
   `IsAddCommutative M`, and two given zero-preserving scalar actions
   `[SMulZeroClass R M]` and `[SMulZeroClass Rᵐᵒᵖ M]`,
